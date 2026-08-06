@@ -103,6 +103,10 @@ dtu/
 # ===== 第三方依赖(自带独立 git 仓库, 不入主仓) =====
 PointTransformerV3/
 
+# ===== 大训练数据文件(超 GitHub 100MB 限制) =====
+*.jsonl
+final_train.jsonl
+
 # ===== Python 缓存 =====
 __pycache__/
 *.pyc
