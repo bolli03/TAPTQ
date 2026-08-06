@@ -77,6 +77,8 @@ miniconda3/
 conda/
 hf_hub/
 data/
+models/
+_snapshot/
 
 # ===== 模型权重 / 大二进制文件 =====
 *.pth
@@ -112,3 +114,10 @@ __pycache__/
 *.pyc
 .ipynb_checkpoints/
 .DS_Store
+
+# Keep Pi3-evaluation Hydra configuration in the repository.
+!Pi3-evaluation/configs/data/
+!Pi3-evaluation/configs/data/**
+!Pi3-evaluation/configs/evaluation/
+!Pi3-evaluation/configs/evaluation/**
+Pi3-evaluation/configs/**/.ipynb_checkpoints/

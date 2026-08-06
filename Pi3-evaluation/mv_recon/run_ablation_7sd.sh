@@ -12,19 +12,11 @@
 
 set -e
 GPU="${GPU:-0}"
-CKPT="${CKPT:-/root/Pi3-evaluation/param/vggt/8scan_w4a8.txt}"
+PI3_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
+CKPT="${CKPT:-${PI3_ROOT}/param/vggt/20scan_w4a8.txt}"
 WHICH="${1:-all}"   # all / base / tail_ratio / tau / rank
 
 # taptq.py 用 "./configs" 这种相对路径, 所以 cwd 必须是 Pi3-evaluation 根。
-# 优先用容器内符号链接, fallback 到 /data 直挂路径。
-if [[ -d /root/Pi3-evaluation/configs ]]; then
-  PI3_ROOT=/root/Pi3-evaluation
-elif [[ -d /data/minimax-dialogue/users/boli/autodl_pull/Pi3-evaluation/configs ]]; then
-  PI3_ROOT=/data/minimax-dialogue/users/boli/autodl_pull/Pi3-evaluation
-else
-  echo "ERROR: 找不到 Pi3-evaluation 根目录 (需要 configs/ 子目录)" >&2
-  exit 1
-fi
 cd "$PI3_ROOT"
 echo "cwd = $PI3_ROOT"
 SCRIPT="mv_recon/taptq.py"

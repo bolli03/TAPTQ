@@ -1,0 +1,219 @@
+7scenes-sparse:
+  cfg:
+    _target_: datasets.sevenscenes.SevenScenes
+    split: test
+    SEVENSCENES_DIR: /root/autodl-tmp/data/7scenes
+    load_img_size: ${load_img_size}
+    cache_file: /root/autodl-tmp/data/dataset_cache/7scenes_mv_recon_cache.npy
+  sampling:
+    strategy: stride
+    kf_every: 200  # ori setting in cut3r
+  seq_id_map: datasets/seq-id-maps/7scenes_mv-recon_seq-id-map-kf200.json
+
+7scenes-dense:
+  cfg:
+    _target_: datasets.sevenscenes.SevenScenes
+    split: test
+    SEVENSCENES_DIR: /root/autodl-tmp/data/7scenes
+    load_img_size: ${load_img_size}
+    cache_file: /root/autodl-tmp/data/dataset_cache/7scenes_mv_recon_cache.npy
+  sampling:
+    strategy: stride
+    kf_every: 40  # our dense setting
+  seq_id_map: datasets/seq-id-maps/7scenes_mv-recon_seq-id-map-kf40.json
+
+NRGBD-sparse:
+  cfg:
+    _target_: datasets.nrgbd.NRGBD
+    NRGBD_DIR: /root/autodl-tmp/data/nrgbd
+    load_img_size: ${load_img_size}
+    cache_file: /root/autodl-tmp/data/dataset_cache/nrgbd_mv_recon_cache.npy
+  sampling:
+    strategy: stride
+    kf_every: 500  # ori setting in cut3r
+    # kf_every: 100
+  seq_id_map: datasets/seq-id-maps/NRGBD_mv-recon_seq-id-map-kf500.json
+
+NRGBD-dense:
+  cfg:
+    _target_: datasets.nrgbd.NRGBD
+    NRGBD_DIR: /root/autodl-tmp/data/nrgbd
+    load_img_size: ${load_img_size}
+    cache_file: /root/autodl-tmp/data/dataset_cache/nrgbd_mv_recon_cache.npy
+  sampling:
+    strategy: stride
+    kf_every: 100  # our dense setting
+  seq_id_map: datasets/seq-id-maps/NRGBD_mv-recon_seq-id-map-kf100.json
+
+# DTU_1:
+#   cfg:
+#     _target_: datasets.dtu.DTU
+#     split: test_1
+#     DTU_DIR: data/dtu_1
+#     load_img_size: ${load_img_size}
+#     cache_file: data/dataset_cache/dtu_mv_recon_cache_1.npy
+#   sampling:
+#     strategy: stride
+#     kf_every: 5
+#   seq_id_map: datasets/seq-id-maps/DTU_mv-recon_seq-id-map-kf5-1.json
+
+DTU:
+  cfg:
+    _target_: datasets.dtu.DTU
+    split: test
+    DTU_DIR: /root/autodl-tmp/data/dtu
+    load_img_size: ${load_img_size}
+    cache_file: /root/autodl-tmp/data/dataset_cache/dtu_mv_recon_cache.npy
+  sampling:
+    strategy: stride
+    kf_every: 5
+  seq_id_map: datasets/seq-id-maps/DTU_mv-recon_seq-id-map-kf5.json
+
+# DTU:
+#   cfg:
+#     _target_: datasets.dtu.DTU
+#     split: test_mid
+#     DTU_DIR: data/dtu_mid
+#     load_img_size: ${load_img_size}
+#     cache_file: data/dataset_cache/dtu_mv_recon_cache_mid.npy
+#   sampling:
+#     strategy: stride
+#     kf_every: 5
+#   seq_id_map: datasets/seq-id-maps/DTU_mv-recon_seq-id-map-kf5-mid.json
+
+DTU_1:
+  cfg:
+    _target_: datasets.dtu.DTU
+    split: test_1
+    DTU_DIR: data/dtu_1
+    load_img_size: ${load_img_size}
+    cache_file: /root/autodl-tmp/data/dataset_cache/dtu_mv_recon_cache_1.npy
+  sampling:
+    strategy: stride
+    kf_every: 5
+  seq_id_map: datasets/seq-id-maps/DTU_mv-recon_seq-id-map-kf5-1.json
+
+
+DTU_kmeans:
+  cfg:
+    _target_: datasets.dtu.DTU
+    split: test_kmeans
+    DTU_DIR: data/dtu_kmeans
+    load_img_size: ${load_img_size}
+    cache_file: /root/autodl-tmp/data/dataset_cache/dtu_mv_recon_cache_kmeans.npy
+  sampling:
+    strategy: stride
+    kf_every: 5
+  seq_id_map: datasets/seq-id-maps/DTU_mv-recon_seq-id-map-kf5-kmeans.json
+
+DTU_train:
+  cfg:
+    _target_: datasets.dtu.DTU
+    split: train_kmeans
+    # DTU_DIR: data/dtu_train_kmeans
+    DTU_DIR: /root/Pi3-evaluation/data/dtu_train_kmeans
+    load_img_size: ${load_img_size}
+    cache_file: /root/autodl-tmp/data/dataset_cache/dtu_mv_recon_cache_kmeans.npy
+  sampling:
+    strategy: stride
+    kf_every: 5
+  seq_id_map: datasets/seq-id-maps/DTUTrain_mv-recon_seq-id-map-kf5-kmeans.json
+
+DTU_train_8:
+  cfg:
+    _target_: datasets.dtu.DTU
+    split: train_8
+    # DTU_DIR: data/dtu_train_kmeans
+    DTU_DIR: /root/Pi3-evaluation/data/dtu_8
+    load_img_size: ${load_img_size}
+    cache_file: /root/autodl-tmp/data/dataset_cache/dtu_mv_recon_cache_8.npy
+  sampling:
+    strategy: stride
+    kf_every: 5
+  seq_id_map: datasets/seq-id-maps/DTUTrain_8_mv-recon_seq-id-map-kf5.json
+
+# Default TAPTQ calibration set: /data/workspace/TAPTQ/data/dtu_20.
+# The existing train map contains exactly these 20 scan IDs.
+DTU_20:
+  cfg:
+    _target_: datasets.dtu.DTU
+    split: train
+    DTU_DIR: ${work_dir}/../data/dtu_20
+    load_img_size: ${load_img_size}
+    cache_file: ${work_dir}/../data/dataset_cache/dtu_20_mv_recon_cache.npy
+  sampling:
+    strategy: stride
+    kf_every: 5
+  seq_id_map: datasets/seq-id-maps/DTUTrain_mv-recon_seq-id-map-kf5.json
+
+DTU_rand_4:
+  cfg:
+    _target_: datasets.dtu.DTU
+    split: train_rand_4
+    DTU_DIR: /root/Pi3-evaluation/data/dtu_rand_4
+    load_img_size: ${load_img_size}
+    cache_file: /root/autodl-tmp/data/dataset_cache/dtu_mv_recon_cache_rand_4.npy
+  sampling:
+    strategy: stride
+    kf_every: 5
+  seq_id_map: datasets/seq-id-maps/DTU_rand_4_mv-recon_seq-id-map-kf5.json
+
+DTU_qvggt_4:
+  cfg:
+    _target_: datasets.dtu.DTU
+    split: train_qvggt_4
+    DTU_DIR: /root/Pi3-evaluation/data/dtu_qvggt_4
+    load_img_size: ${load_img_size}
+    cache_file: /root/autodl-tmp/data/dataset_cache/dtu_mv_recon_cache_qvggt_4.npy
+  sampling:
+    strategy: stride
+    kf_every: 5
+  seq_id_map: datasets/seq-id-maps/DTU_qvggt_4_mv-recon_seq-id-map-kf5.json
+
+DTU_qvggt_8:
+  cfg:
+    _target_: datasets.dtu.DTU
+    split: train_qvggt_8
+    DTU_DIR: /root/Pi3-evaluation/data/dtu_qvggt_8
+    load_img_size: ${load_img_size}
+    cache_file: /root/autodl-tmp/data/dataset_cache/dtu_mv_recon_cache_qvggt_8.npy
+  sampling:
+    strategy: stride
+    kf_every: 5
+  seq_id_map: datasets/seq-id-maps/DTU_qvggt_8_mv-recon_seq-id-map-kf5.json
+
+DTU_rand_8:
+  cfg:
+    _target_: datasets.dtu.DTU
+    split: train_rand_8
+    DTU_DIR: /root/Pi3-evaluation/data/dtu_rand_8
+    load_img_size: ${load_img_size}
+    cache_file: /root/autodl-tmp/data/dataset_cache/dtu_mv_recon_cache_rand_8.npy
+  sampling:
+    strategy: stride
+    kf_every: 5
+  seq_id_map: datasets/seq-id-maps/DTU_rand_8_mv-recon_seq-id-map-kf5.json
+
+DTU_train_new:
+  cfg:
+    _target_: datasets.dtu.DTU
+    split: train_new
+    DTU_DIR: /root/Pi3-evaluation/data/dtu_new_train
+    load_img_size: ${load_img_size}
+    cache_file: /root/autodl-tmp/data/dataset_cache/dtu_train_new_mv_recon_cache.npy
+  sampling:
+    strategy: stride
+    kf_every: 5
+  seq_id_map: datasets/seq-id-maps/DTUTrain_mv-recon_seq-id-map-kf5-new.json
+
+
+ETH3D:
+  cfg:
+    _target_: datasets.eth3d.ETH3D
+    ETH3D_DIR: /root/autodl-tmp/data/eth3d
+    load_img_size: ${load_img_size}
+    cache_file: /root/autodl-tmp/data/dataset_cache/eth3d_mv_recon_cache.npy
+  sampling:
+    strategy: stride
+    kf_every: 5
+  seq_id_map: datasets/seq-id-maps/ETH3D_mv-recon_seq-id-map-kf5.json

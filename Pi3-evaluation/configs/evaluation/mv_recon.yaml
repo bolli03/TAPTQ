@@ -1,0 +1,52 @@
+# @package _global_
+
+defaults:
+  - override /data: mv_recon
+
+name: mv_recon
+
+pi3:
+  pretrained_model_name_or_path: yyfz233/Pi3
+  # pretrained_model_name_or_path: checkpoints/Pi3
+
+# Default calibration/compensation set: 20 DTU scans under ../data/dtu_20.
+# Keep eval_datasets below separate: those are formal evaluation datasets.
+test_datasets:
+  - DTU_20
+
+optim_datasets:
+  - DTU_20
+
+eval_datasets:
+  - 7scenes-sparse
+  - 7scenes-dense
+  # - NRGBD-sparse
+  # - NRGBD-dense
+  - DTU
+  # - ETH3D
+
+no_crop: True
+load_img_size: 518
+
+device: cuda
+
+verbose: False
+
+seed: 42
+
+save_suffix: null
+
+# PTQ (mv_recon/ptq.py): optional Hydra overrides
+# - quant_config_name: configs/<name>.py without .py (e.g. PTQ4ViT_channelwise). Empty/null uses RunConfig.config_name.
+# - linear_channelwise: overrides quant cfg after cfg_modifier; null = do not override.
+#
+# deployment/build_and_save_quant_model.py 额外字段（须在 struct 中声明才能用 key=value 覆盖）:
+#   ptq.model_path / quant_param_file / output_dir / bit_setting / deploy_mode
+ptq:
+  quant_config_name: null
+  linear_channelwise: null
+  model_path: null
+  quant_param_file: null
+  output_dir: null
+  bit_setting: null
+  deploy_mode: null
