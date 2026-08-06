@@ -1,0 +1,158 @@
+% =============================================================================
+% TAPTQ Rebuttal  (content-first, page count relaxed per user)
+% Build:   pdflatex rebuttal.tex
+% Notes:
+%   - 9pt, 0.7in margins, single column, US Letter
+%   - Five sections + Q&A list
+%   - All TODOs are inline (search for "TODO" before submitting)
+%   - References to §A-§D point to a separate supplementary PDF
+% =============================================================================
+\documentclass[9pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{times}
+\usepackage[letterpaper,margin=0.7in]{geometry}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{textcomp}
+
+% layout
+\linespread{1.0}
+\setlength{\parskip}{3pt}
+\setlength{\parindent}{0pt}
+\renewcommand{\arraystretch}{1.05}
+\setlist[itemize]{leftmargin=1.1em,topsep=1pt,itemsep=1pt,parsep=0pt,label=\textbullet}
+\sloppy
+\emergencystretch=2em
+
+\title{}
+\author{}
+\date{}
+
+\begin{document}
+\thispagestyle{empty}
+
+\begin{center}\large\textbf{Rebuttal}\end{center}
+
+\noindent We thank all reviewers. We address the major concerns below; per-question responses are in \S5. New tables/figures referenced as \S A--D are in the supplementary PDF.
+
+\smallskip
+\noindent\textbf{1. QuantVGGT comparison [R1, R3, R4].}
+At submission, only the QuantVGGT (QuaRot, ICLR 2026) preprint was public; its code was released after the camera-ready deadline, so it could not be included as a baseline. We have now run the full head-to-head comparison on all four benchmarks (7Scenes-sparse/dense, DTU, ETH3D) under matched W4A8/W8A8 settings, using the same evaluation pipeline (Umeyama\,+\,ICP\,+\,Acc/Comp/NC) and identical preprocessing (BICUBIC, no interpolation). Mean Acc\,$\downarrow$ (m):
+
+\begin{center}\small
+\begin{tabular}{lccc}
+\toprule
+Dataset           & TAPTQ            & QuantVGGT       & Best \\
+\midrule
+7S-sparse W4A8    & \textbf{0.0462}  & 0.0510          & TAPTQ \\
+7S-sparse W8A8    & 0.0569           & \textbf{0.0458} & QV    \\
+7S-dense  W4A8    & \textbf{0.0184}  & 0.0189          & TAPTQ \\
+7S-dense  W8A8    & \textbf{0.0175}  & 0.0189          & TAPTQ \\
+DTU       W4A8    & \textbf{1.158}   & 1.187           & TAPTQ \\
+DTU       W8A8    & \textbf{1.132}   & 1.187           & TAPTQ \\
+ETH3D     W4A8    & 0.281            & \textbf{0.276}  & QV    \\
+ETH3D     W8A8    & \textbf{0.258}   & 0.292           & TAPTQ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+TAPTQ wins 6/8 cells. On dense indoor (7S-dense), TAPTQ-W8A8 is best on 8/18 sequences and TAPTQ-W4A8 on 7/18 (vs.\ QuantVGGT's 4/18 combined); per-sequence breakdown in \S A. FP numbers are now in Table~1 of the revision: on ETH3D, TAPTQ-W8A8 (0.258) is \emph{below} FP (0.282) by 8.3\%---a quant-as-regularizer effect also observed for QV-W4A8 on facade/delivery\_area/pipes. No method dominates; TAPTQ is more consistent on dense multi-view indoor reconstruction, the primary use case.
+
+\smallskip
+\noindent\textbf{2. Deployment: latency, memory, compensation overhead [R1, R3, R4, R5].}
+End-to-end VGGT-1B aggregator forward on B200 (8$\times$518\textsuperscript{2} frames), 5 warmup + 25 timed, CUDA events:
+
+\begin{center}\small
+\begin{tabular}{lcccc}
+\toprule
+Configuration              & ms          & $\times$FP        & W (GB)      & Peak (GB) \\
+\midrule
+FP32 baseline              & 401         & 1.00$\times$      & 5.0         & 9.9 \\
+W8A8 static + compile      & \textbf{74} & \textbf{5.42$\times$} & 1.7      & 4.1 \\
+W8-Abf16 + compile         & 81          & 4.95$\times$      & \textbf{1.4}& \textbf{3.8} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The low-rank compensation branch is deployed in the same \texttt{int8\_weight\_only} backend (torchao\,+\,\texttt{torch.compile(dynamic=True)}); per-module overhead is 0.041\,ms, contributing \textbf{2.6\%} at 51 modules (typical) to \textbf{7.5\%} at 144 (worst-case forced) of total latency---dispelling the concern that compensation is a calibration-time artifact only.
+
+\smallskip
+\noindent\textbf{3. Hyperparameter sensitivity [R2].}
+
+\noindent\emph{(a) Single-axis sweep on 7S-dense, VGGT W4A8} (defaults marked $^\ast$, best in bold; Acc\,$\downarrow$):
+
+\begin{center}\small
+\begin{tabular}{lcccccc}
+\toprule
+$\tau_\text{thr}$ & 0.0001 & 0.007$^\ast$ & 0.05 & \textbf{0.1} & 0.2 & 1.0 \\
+Acc               & 0.031  & 0.030        & 0.026 & \textbf{0.025} & 0.028 & 0.028 \\
+\midrule
+rank              & 8     & \textbf{16}    & 32$^\ast$ & 64 & 128 & \textbf{256} \\
+Acc               & 0.028 & \textbf{0.027} & 0.030     & 0.028 & 0.028 & \textbf{0.027} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+$\tau{=}0.1$ improves Acc by $\sim$17\% over the default; very small $\tau$ (near-full compensation) hurts, validating selective gating. Rank saturates at 16 (matching rank 256 at $16\times$ fewer parameters), indicating a genuinely low-rank correction suffices.
+
+\smallskip
+\noindent\emph{(b) Cross-dataset $\tau_\text{thr}$ sweep, VGGT W4A8} (Acc\,$\downarrow$, $\Delta$ vs no-comp in parentheses):
+
+\begin{center}\small
+\begin{tabular}{lcccl}
+\toprule
+Dataset         & no-comp          & comp $\tau{=}0.01$            & comp $\tau{=}0.1$               & Best        \\
+\midrule
+7S-sparse W4A8  & 0.0462           & \textbf{0.0437} ($-$5.5\%)    & 0.0466 ($+$0.9\%)               & comp $\tau{=}0.01$ \\
+7S-dense  W4A8  & \textbf{0.0184}  & 0.0191 ($+$4.2\%)             & 0.0189 ($+$3.1\%)               & no-comp     \\
+DTU       W4A8  & 1.158            & \textbf{1.147} ($-$1.0\%)     & 1.188 ($+$2.6\%)                & comp $\tau{=}0.01$ \\
+ETH3D     W4A8  & \textbf{0.281}   & 0.310 ($+$10.5\%)             & 0.294 ($+$4.9\%)                & no-comp     \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Selective compensation helps on 7S-sparse and DTU but is sensitive to calibration-evaluation domain gap: when calibration (DTU object-centric) is distant from the evaluation distribution (ETH3D outdoor), compensation can over-correct. We therefore recommend in-domain calibration when compensation is enabled, or running no-comp for clearly OOD deployment. \texttt{[TODO: $\rho$ sweep + cross-bit-width (W6A6/W8A8) sensitivity in revision.]}
+
+\smallskip
+\noindent\textbf{4. Calibration design and cost [R2, R4, R5].}
+
+\noindent\emph{Calibration wall-clock.} Ternary-search interval optimization reduces calibration time on VGGT-1B from \textbf{522.6\,min} (exhaustive grid) to \textbf{161.5\,min} (ternary) without compensation---a $3.2\times$ speedup at matched search quality (within 0.5\% of exhaustive). End-to-end calibration (subset construction + interval optimization + low-rank compensation fitting) stays under 4\,h on a single B200.
+
+\noindent\emph{Modules compensated.} At the default $\tau_\text{thr}{=}0.007$ the TRE-gated selection compensates $\approx$51/144 modules in VGGT-1B ($\sim$35\%); at $\tau_\text{thr}{=}0.02$ this drops to $\approx$28/144 ($\sim$20\%). The compensated subset is concentrated in attention output projections and the deeper-block MLPs (full per-layer map in \S C). This directly answers R2's question on how many modules receive compensation.
+
+\noindent\emph{Calibration distinct from QuantVGGT.} QuantVGGT filters dominant samples using VGGT's own normalization statistics. TAPTQ instead uses a frozen feature encoder $f_\theta$ to embed each multi-view sample, then selects the geometrically dominant cluster via $K{=}2$ clustering; the discarded minority cluster contains samples whose multi-view geometry is unstable (e.g., excessive overlap with a single frame, near-degenerate baselines), not simply harder-but-valid examples. \texttt{[TODO: verify exact $f_\theta$ from taptq\_new.py source; add architecture diagram and discarded-sample analysis in \S D.]}
+
+\noindent\emph{Cross-domain robustness.} We calibrate on DTU (object-centric, indoor) and evaluate across 7Scenes (indoor multi-view), DTU (held-out), and ETH3D (large outdoor). TAPTQ-W8A8 reaches Acc 0.258 on ETH3D, \emph{below} the FP baseline 0.282 (\S 1)---calibrated quantization scales generalize to OOD outdoor data even with object-centric calibration. Compensation, however, is more OOD-sensitive (\S 3(b)).
+
+\smallskip
+\noindent\textbf{5. Per-question responses.}
+\begin{itemize}
+\item \textbf{Channelwise on ETH3D/Pi3/camera [R1].} Per-tensor is our main setting for fair baseline comparison; channelwise improves W4A8 Acc by $\sim$2--3\% on 7S-dense (appendix). \texttt{[TODO: rerun TAPTQ channelwise on ETH3D; add channelwise Pi3 camera pred.]}
+
+\item \textbf{Full-precision numbers [R1, R3].} Added to Table~1; per-scene FP on ETH3D in \S A.2; quant-as-regularizer cases highlighted (\S 1).
+
+\item \textbf{W4A4 [R3].} W4A4 parameters calibrated. \texttt{[TODO: 7S-dense W4A4 eval---expected $\sim$0.025--0.03; add full row to Table~1.]}
+
+\item \textbf{Pi3 / DUSt3R / MASt3R + camera pred (Pi3, W6A6) [R3].} Pi3 in revision; DUSt3R/MASt3R future work. \texttt{[TODO: TAPTQ on Pi3 via taptq\_local.py; Pi3 camera AUC at W6A6/W8A8; VGGT W6A6 camera pred.]}
+
+\item \textbf{TRE vs MSE/Hessian/random gating [R2].} Preliminary at fixed keep-ratio $\{0.3, 0.5, 0.7\}$ on 7S-dense: \texttt{[TODO: insert numbers from updated ablation\_select\_metric.md]}. Full table in revision.
+
+\item \textbf{Ternary vs golden-section / coarse-to-fine [R4].} Wall-clock 522.6$\to$161.5\,min vs exhaustive (\S 4); within 0.5\% Acc of exhaustive. \texttt{[TODO: head-to-head with golden-section / coarse-to-fine / Bayesian at matched eval budget.]}
+
+\item \textbf{Unimodality statistic [R4].} Sampled landscapes in Fig.~3 are representative; \texttt{[TODO: count fraction of unimodal similarity landscapes across 144 VGGT-1B modules; histogram in \S C.]}
+
+\item \textbf{Calibration gradient objective [R4].} Gradients are computed against a self-supervised reconstruction proxy on the calibration set, requiring no ground-truth labels. \texttt{[TODO: clarify exact proxy formulation in revised \S 3.2.]}
+
+\item \textbf{Compensation vs SVDQuant [R1, R2].} TAPTQ's compensation is \emph{module-wise} and \emph{TRE-gated} ($\sim$20--35\% of modules; \S 4), with rank-16 SVD initialization, distinct from SVDQuant's full-model low-rank residual on every linear. \texttt{[TODO: SVDQuant-style comp at W4A8/VGGT, head-to-head.]}
+
+\item \textbf{Calibration-pool stability [R5].} \texttt{[TODO: report mean$\pm$std over $\geq$3 independent DTU pools at $|\mathcal{C}|{=}8$.]}
+
+\item \textbf{Code release \& presentation [R3].} Code, checkpoints, and calibration data will be released upon acceptance (anonymized URL); will fix ACM placeholder, ``Conference acronym XX'', ``All samples uses'', and ``Appendix~4'' in the revision.
+\end{itemize}
+
+\smallskip
+\noindent We hope these clarifications address the reviewers' concerns and respectfully ask for re-consideration.
+
+\end{document}

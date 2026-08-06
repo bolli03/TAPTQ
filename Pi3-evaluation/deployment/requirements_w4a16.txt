@@ -1,0 +1,8 @@
+# W4A16 部署可选加速: INT4 权重打包与推理
+torchao>=0.5.0
+#
+# 说明:
+# - PLAIN 常依赖可选包 mslk（与 CUDA 主版本绑定；勿随意安装不匹配的 mslk-cuda wheel）。
+# - TILE_PACKED_TO_4D（tinygemm）同样是对 INT4 打包权重做 GEMM；bf16 仅出现在 quantize_ 打包阶段，前向不是 FP 权重 matmul。需 sm>=8。
+# - w4a16_deploy: --torchao-packing auto|plain|tile；--strict-torchao 禁止回退到反量化 FP 权重。
+# - w4a4_deploy: 默认 --torchao-packing tile + 禁止 FP 回退；旧卡可加 --torchao-packing auto 与 --allow-fp-weight-fallback。

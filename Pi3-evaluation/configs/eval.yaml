@@ -1,0 +1,18 @@
+defaults:
+  - general: default
+  - data: depth
+  - evaluation: null
+  - override hydra/job_logging: custom
+  - override hydra/hydra_logging: colorlog
+  - _self_
+
+# PTQ / deployment (build_and_save_quant_model.py): declare keys so Hydra allows ptq.* overrides
+# when evaluation=null. With evaluation=mv_recon, this merges with configs/evaluation/mv_recon.yaml.
+ptq:
+  quant_config_name: null
+  linear_channelwise: null
+  model_path: null
+  quant_param_file: null
+  output_dir: null
+  bit_setting: null
+  deploy_mode: null

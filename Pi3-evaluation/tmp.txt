@@ -1,0 +1,2314 @@
+[
+    {
+        "module": "ChannelwiseBatchingQuantConv2d",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0086]]],\n\n\n        [[[0.0005]]],\n\n\n        [[[0.0013]]],\n\n\n        ...,\n\n\n        [[[0.0076]]],\n\n\n        [[[0.0072]]],\n\n\n        [[[0.0029]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([1.2293e-09], device='cuda:0')",
+        "a_qmax": 2147483648
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0332]]],\n\n\n        [[[0.0332]]],\n\n\n        [[[0.0332]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[1.6688]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0267]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.5193]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0158]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[4.8857]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0287]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[1.0360]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0211]]],\n\n\n        [[[0.0211]]],\n\n\n        [[[0.0211]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.9443]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0252]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.3647]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0225]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.8963]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0207]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[1.4515]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0327]]],\n\n\n        [[[0.0327]]],\n\n\n        [[[0.0327]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.5453]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0317]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2868]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0235]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.5111]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0193]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[18.9591]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0577]]],\n\n\n        [[[0.0577]]],\n\n\n        [[[0.0577]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[1.5248]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0271]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.4655]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0265]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.6900]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0177]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.4298]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0260]]],\n\n\n        [[[0.0260]]],\n\n\n        [[[0.0260]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.9771]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0229]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.3986]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0187]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.3618]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0179]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1768]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0186]]],\n\n\n        [[[0.0186]]],\n\n\n        [[[0.0186]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.5020]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0188]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1412]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0209]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.3073]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0241]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.7190]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0261]]],\n\n\n        [[[0.0261]]],\n\n\n        [[[0.0261]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.7059]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0178]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1542]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0179]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.3377]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0150]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1871]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0249]]],\n\n\n        [[[0.0249]]],\n\n\n        [[[0.0249]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[1.4368]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0133]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1761]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0246]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.3419]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0172]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2448]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0201]]],\n\n\n        [[[0.0201]]],\n\n\n        [[[0.0201]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[1.9328]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0148]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.3030]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0182]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.4282]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0159]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2088]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0227]]],\n\n\n        [[[0.0227]]],\n\n\n        [[[0.0227]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[1.3050]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0130]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1997]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0229]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.5235]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0200]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2854]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0237]]],\n\n\n        [[[0.0237]]],\n\n\n        [[[0.0237]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[1.1348]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0135]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1754]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0215]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.7409]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0384]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[5.0027]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0232]]],\n\n\n        [[[0.0232]]],\n\n\n        [[[0.0232]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[1.0894]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0171]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1381]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0181]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.6458]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0198]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.4116]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0226]]],\n\n\n        [[[0.0226]]],\n\n\n        [[[0.0226]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.9707]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0219]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1724]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0253]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.6911]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0281]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[1.1088]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0157]]],\n\n\n        [[[0.0157]]],\n\n\n        [[[0.0157]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[1.2136]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0142]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2429]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0178]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.7176]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0166]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.3582]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0266]]],\n\n\n        [[[0.0266]]],\n\n\n        [[[0.0266]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[1.5739]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0174]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1756]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0217]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.7622]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0221]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.6458]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0227]]],\n\n\n        [[[0.0227]]],\n\n\n        [[[0.0227]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[1.4513]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0220]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1447]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0302]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.8296]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0239]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.6825]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0189]]],\n\n\n        [[[0.0189]]],\n\n\n        [[[0.0189]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[1.5459]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0226]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1841]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0221]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.6563]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0198]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2543]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0236]]],\n\n\n        [[[0.0236]]],\n\n\n        [[[0.0236]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[1.9845]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0232]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1453]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0146]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.6879]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0184]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.3053]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0217]]],\n\n\n        [[[0.0217]]],\n\n\n        [[[0.0217]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[1.3519]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0158]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1250]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0224]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.9050]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0201]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.4333]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0208]]],\n\n\n        [[[0.0208]]],\n\n\n        [[[0.0208]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[1.0859]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0250]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1404]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0238]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.7149]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0190]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.3232]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0237]]],\n\n\n        [[[0.0237]]],\n\n\n        [[[0.0237]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[1.0474]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0173]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1225]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0262]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.5308]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0154]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2183]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0229]]],\n\n\n        [[[0.0229]]],\n\n\n        [[[0.0229]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[1.1462]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0214]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1455]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0172]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.8080]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0181]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2296]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0182]]],\n\n\n        [[[0.0182]]],\n\n\n        [[[0.0182]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[1.2757]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0380]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1852]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0222]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.6253]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0224]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.3529]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0311]]],\n\n\n        [[[0.0311]]],\n\n\n        [[[0.0311]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.8782]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0199]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1910]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0199]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.5953]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0223]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.4833]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0184]]],\n\n\n        [[[0.0184]]],\n\n\n        [[[0.0184]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1402]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0152]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0849]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0240]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2648]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0247]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.3492]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0173]]],\n\n\n        [[[0.0173]]],\n\n\n        [[[0.0173]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.4864]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0244]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1718]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0152]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.3949]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0125]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2025]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0155]]],\n\n\n        [[[0.0155]]],\n\n\n        [[[0.0155]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.3419]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0135]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1208]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0237]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2586]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0193]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.4427]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0207]]],\n\n\n        [[[0.0207]]],\n\n\n        [[[0.0207]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1081]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0171]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0561]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0170]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2261]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0301]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1708]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0163]]],\n\n\n        [[[0.0163]]],\n\n\n        [[[0.0163]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1308]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0159]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0509]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0166]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2053]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0182]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1651]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0121]]],\n\n\n        [[[0.0121]]],\n\n\n        [[[0.0121]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1434]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0167]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0695]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0178]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2758]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0228]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1829]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0151]]],\n\n\n        [[[0.0151]]],\n\n\n        [[[0.0151]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1196]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0212]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0490]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0145]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2586]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0134]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1888]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0129]]],\n\n\n        [[[0.0129]]],\n\n\n        [[[0.0129]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1552]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0156]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0743]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0195]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2149]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0205]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1796]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0128]]],\n\n\n        [[[0.0128]]],\n\n\n        [[[0.0128]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2538]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0126]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0532]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0147]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2550]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0135]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2475]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0126]]],\n\n\n        [[[0.0126]]],\n\n\n        [[[0.0126]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1166]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0114]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0572]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0194]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2713]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0165]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1902]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0157]]],\n\n\n        [[[0.0157]]],\n\n\n        [[[0.0157]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2403]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0230]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.3421]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0216]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.3703]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0205]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.4145]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0175]]],\n\n\n        [[[0.0175]]],\n\n\n        [[[0.0175]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1831]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0131]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0749]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0223]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.3154]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0142]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1904]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0137]]],\n\n\n        [[[0.0137]]],\n\n\n        [[[0.0137]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1344]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0154]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1029]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0214]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2679]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0152]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1998]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0131]]],\n\n\n        [[[0.0131]]],\n\n\n        [[[0.0131]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2022]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0122]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1176]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0183]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2797]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0190]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1705]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0159]]],\n\n\n        [[[0.0159]]],\n\n\n        [[[0.0159]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1980]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0244]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1424]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0197]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2726]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0162]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1490]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0151]]],\n\n\n        [[[0.0151]]],\n\n\n        [[[0.0151]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1804]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0117]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1053]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0151]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1971]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0119]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1339]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0123]]],\n\n\n        [[[0.0123]]],\n\n\n        [[[0.0123]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2241]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0121]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0545]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0276]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2117]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0113]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2294]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0131]]],\n\n\n        [[[0.0131]]],\n\n\n        [[[0.0131]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1458]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0131]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0575]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0162]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2912]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0148]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1244]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0145]]],\n\n\n        [[[0.0145]]],\n\n\n        [[[0.0145]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1191]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0157]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0439]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0141]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2358]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0148]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1423]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0113]]],\n\n\n        [[[0.0113]]],\n\n\n        [[[0.0113]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1303]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0157]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0408]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0160]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2584]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0174]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.3744]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0132]]],\n\n\n        [[[0.0132]]],\n\n\n        [[[0.0132]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1983]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0132]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0654]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0127]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2471]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0160]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1278]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0134]]],\n\n\n        [[[0.0134]]],\n\n\n        [[[0.0134]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1512]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0100]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0485]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0175]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2152]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0116]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1707]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0117]]],\n\n\n        [[[0.0117]]],\n\n\n        [[[0.0117]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1408]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0143]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0412]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0197]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2549]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0185]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0801]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0195]]],\n\n\n        [[[0.0195]]],\n\n\n        [[[0.0195]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1464]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0146]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0376]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0153]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2817]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0098]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0760]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0331]]],\n\n\n        [[[0.0331]]],\n\n\n        [[[0.0331]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2312]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0216]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0961]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0217]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.3516]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0230]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1692]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0165]]],\n\n\n        [[[0.0165]]],\n\n\n        [[[0.0165]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.3991]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0250]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0633]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0199]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.4130]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0142]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1855]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0167]]],\n\n\n        [[[0.0167]]],\n\n\n        [[[0.0167]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2551]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0172]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0720]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0195]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2948]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0166]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.5300]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0236]]],\n\n\n        [[[0.0236]]],\n\n\n        [[[0.0236]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1670]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0178]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1627]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0265]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2652]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0186]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.5851]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0198]]],\n\n\n        [[[0.0198]]],\n\n\n        [[[0.0198]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1210]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0283]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0490]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0182]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2443]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0214]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1489]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0176]]],\n\n\n        [[[0.0176]]],\n\n\n        [[[0.0176]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1477]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0118]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0582]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0151]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2790]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0244]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1974]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0177]]],\n\n\n        [[[0.0177]]],\n\n\n        [[[0.0177]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1252]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0128]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0731]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0141]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2611]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0127]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1770]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0144]]],\n\n\n        [[[0.0144]]],\n\n\n        [[[0.0144]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2037]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0113]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0692]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0206]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2129]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0191]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1770]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0172]]],\n\n\n        [[[0.0172]]],\n\n\n        [[[0.0172]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2838]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0111]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0538]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0166]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2532]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0132]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2708]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0140]]],\n\n\n        [[[0.0140]]],\n\n\n        [[[0.0140]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1336]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0112]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0894]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0186]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2726]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0151]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2169]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0143]]],\n\n\n        [[[0.0143]]],\n\n\n        [[[0.0143]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1700]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0128]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0874]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0193]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.3810]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0186]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.3233]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0192]]],\n\n\n        [[[0.0192]]],\n\n\n        [[[0.0192]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1379]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0145]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1817]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0199]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.3225]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0155]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1960]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0125]]],\n\n\n        [[[0.0125]]],\n\n\n        [[[0.0125]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1412]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0144]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1980]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0184]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2918]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0164]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2176]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0157]]],\n\n\n        [[[0.0157]]],\n\n\n        [[[0.0157]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1525]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0131]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2267]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0187]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2752]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0204]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1921]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0153]]],\n\n\n        [[[0.0153]]],\n\n\n        [[[0.0153]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1644]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0148]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.4059]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0249]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2361]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0134]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1330]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0226]]],\n\n\n        [[[0.0226]]],\n\n\n        [[[0.0226]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2381]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0173]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1639]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0126]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1947]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0131]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1305]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0159]]],\n\n\n        [[[0.0159]]],\n\n\n        [[[0.0159]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1888]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0138]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2403]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0164]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.3458]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0168]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1471]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0176]]],\n\n\n        [[[0.0176]]],\n\n\n        [[[0.0176]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1256]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0171]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0965]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0167]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2151]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0156]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1484]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0154]]],\n\n\n        [[[0.0154]]],\n\n\n        [[[0.0154]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1393]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0145]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0579]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0114]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2094]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0132]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2366]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0172]]],\n\n\n        [[[0.0172]]],\n\n\n        [[[0.0172]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0815]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0162]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0452]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0177]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2840]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0162]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2045]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0110]]],\n\n\n        [[[0.0110]]],\n\n\n        [[[0.0110]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1027]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0107]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0288]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0139]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2982]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0146]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1558]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0183]]],\n\n\n        [[[0.0183]]],\n\n\n        [[[0.0183]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1243]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0133]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0534]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0122]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1963]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0141]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1072]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0136]]],\n\n\n        [[[0.0136]]],\n\n\n        [[[0.0136]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1028]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0128]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0139]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0141]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2256]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0240]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0305]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0192]]],\n\n\n        [[[0.0192]]],\n\n\n        [[[0.0192]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.1704]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0195]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.0325]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0265]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2098]], device='cuda:0')",
+        "a_qmax": 8
+    },
+    {
+        "module": "PostGeluPTQSLBatchingQuantLinear",
+        "mode": "quant_forward",
+        "w_interval": "tensor([[[[0.0165]]]], device='cuda:0')",
+        "w_qmax": 8,
+        "a_interval": "tensor([[0.2150]], device='cuda:0')",
+        "a_qmax": 8
+    }
+]
