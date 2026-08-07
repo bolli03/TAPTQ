@@ -96,7 +96,7 @@ vis/
 calib_vis*/
 fp_input_module_errors/
 one_batch_module_metrics/
-evaluation/
+/evaluation/
 VGGT-1B/
 co3d_v2_annotations/
 7scenes/

@@ -8,6 +8,7 @@ from __future__ import annotations
 import importlib.util
 import logging
 import statistics
+import tempfile
 import time
 import os
 from dataclasses import dataclass
@@ -112,6 +113,7 @@ class DeployBenchmarkParams:
     linear_channelwise: bool = False
     metric: str = "hessian"
     quant_json: str | None = None
+    quant_checkpoint: str | None = None
     no_quant: bool = False
     checkpoint: str | None = None
     num_views: int = 8
@@ -154,10 +156,13 @@ def run_deploy_benchmark(
     model = VGGT.from_pretrained(params.model_path).to(device).eval()
 
     ram_params_b = state_dict_bytes(model)
-    disk_path = Path("benchmark_vggt_state_dict.tmp.pt")
-    torch.save(model.state_dict(), disk_path)
-    disk_full_b = disk_path.stat().st_size
-    disk_path.unlink(missing_ok=True)
+    with tempfile.NamedTemporaryFile(prefix="benchmark_vggt_", suffix=".pt", delete=False) as f:
+        disk_path = Path(f.name)
+    try:
+        torch.save(model.state_dict(), disk_path)
+        disk_full_b = disk_path.stat().st_size
+    finally:
+        disk_path.unlink(missing_ok=True)
 
     qwet_restored = False
     missing_keys: list[str] = []
@@ -179,10 +184,14 @@ def run_deploy_benchmark(
 
         ptq_mod.wrap_modules_in_net(model, quant_cfg, quantize_aggregator=True)
 
-        if params.quant_json:
+        if params.quant_checkpoint:
+            from mv_recon.taptq import load_checkpoint
+
+            load_checkpoint(model, params.quant_checkpoint)
+        elif params.quant_json:
             ptq_mod.model_load(model, params.quant_json, logger)
         else:
-            logger.warning("No quant_json: wrapped modules are NOT calibrated (random intervals).")
+            logger.warning("No quant checkpoint: wrapped modules are NOT calibrated (random intervals).")
 
         ptq_mod.enable_quant(model)
 
@@ -221,6 +230,7 @@ def run_deploy_benchmark(
         "model_path": params.model_path,
         "forward_target": "aggregator" if params.aggregator_only else "full_model",
         "quant_json": params.quant_json,
+        "quant_checkpoint": params.quant_checkpoint,
         "w_bit": params.w_bit,
         "a_bit": params.a_bit,
         "linear_channelwise": bool(linear_cw) if not params.no_quant else False,

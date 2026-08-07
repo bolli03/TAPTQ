@@ -60,6 +60,12 @@ def main():
         help="HF local snapshot dir (default: VGGT_MODEL_PATH env or hub cache path in code)",
     )
     parser.add_argument("--quant-json", type=str, default=None, help="JSON from ptq save (quant modules + intervals)")
+    parser.add_argument(
+        "--quant-checkpoint",
+        type=str,
+        default=None,
+        help="TAPTQ quant checkpoint (.txt/.json/.pt); supports legacy text records and is preferred over --quant-json",
+    )
     parser.add_argument("--config-name", type=str, default="PTQ4ViT")
     parser.add_argument("--w-bit", type=int, default=4)
     parser.add_argument("--a-bit", type=int, default=8)
@@ -105,6 +111,7 @@ def main():
         linear_channelwise=args.linear_channelwise,
         metric=args.metric,
         quant_json=args.quant_json,
+        quant_checkpoint=args.quant_checkpoint,
         no_quant=args.no_quant,
         checkpoint=args.checkpoint,
         num_views=args.num_views,
