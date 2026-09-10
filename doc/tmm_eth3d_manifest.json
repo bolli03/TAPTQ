@@ -1,0 +1,22 @@
+{
+  "dataset": "ETH3D",
+  "status": "rebuilding_pi3_reference_protocol", 
+  "expected_local_path": "data/eth3d",
+  "required_for_evaluation": ["complete RGB images", "depth/point-cloud ground truth", "camera poses/intrinsics", "official scene split"],
+  "observed": {
+    "local_sequences": 13,
+    "official_archives_sha256": "verified",
+    "rgb_and_calibration": "extracted under images/dslr_images_undistorted and dslr_calibration_undistorted",
+    "gt": "official scan_eval PLY and occlusion meshes extracted; adapter projects sparse COLMAP points into resized per-frame depth",
+    "evaluator_entry": "Pi3-evaluation/datasets/eth3d.py",
+    "pi3_reference_download": "Pi3-evaluation/datasets/preprocess/prepare_eth3d.sh",
+    "pi3_reference_preprocess": "Pi3-evaluation/datasets/preprocess/prepare_eth3d.py",
+    "format_adapter": "Pi3-evaluation/datasets/preprocess/prepare_eth3d_official.py (provisional result only)",
+    "pi3_reference_download_dir": "data/eth3d_pi3_raw (download in progress)",
+    "h800_runs": ["700679076", "700679081", "700679089", "700679099", "700679105", "700679117", "700679132", "700679135"],
+    "result_summary": "mnt/cephfs/pansicheng/tmm-results/eth3d/eth3d_fp_summary.json",
+    "sequence_count": 13,
+    "metrics": {"Acc-mean": 0.07095823622485263, "Comp-mean": 0.1677499747958087, "NC-mean": 0.09175699439787777}
+  },
+  "policy": "Report this as a reproducible sparse-point-projection adapter result; do not present it as the official ETH3D dense-depth benchmark until dense per-frame ground truth conversion is implemented."
+}

@@ -37,7 +37,8 @@ ptqsl_linear_kwargs = {
     "n_V": 1,
     "n_H": 1,
     "n_a": 1,
-    "bias_correction":True # Conventionally I'll not add an actual bias correction in linear
+    "bias_correction":True, # Conventionally I'll not add an actual bias correction in linear
+    "search_mode": "exhaustive",
 }
 ptqsl_matmul_kwargs = {
     "metric": "hessian",

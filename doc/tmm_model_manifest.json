@@ -1,0 +1,165 @@
+{
+  "models": {
+    "VGGT-1B": {
+      "status": "available",
+      "path": "models/hf_hub/models--facebook--VGGT-1B/model.safetensors",
+      "sha256": "f164acf60724910d8fe1578bb499d800850c7bb0948db7555c413f9fbe60467e"
+    },
+    "Pi3": {
+      "status": "adapter_fp_and_requested_nonchannelwise_qwt_completed",
+      "path": "models/hf_hub/models--yyfz233--Pi3/model.safetensors",
+      "quantization": "legacy-aligned encoder/decoder/point_decoder 260-linear scope",
+      "results_7scenes_dense": {
+        "FP": [0.015044, 0.022652, 0.6854],
+        "W4A8_nonchannelwise_QwT": [0.037403, 0.014163, 0.503651]
+      }
+    },
+    "Dust3R": {
+      "status": "five_variant_calibration_complete",
+      "weights": "model-downloads/dust3r/model.safetensors",
+      "weights_sha256": "7c300a89534113436bde52732d3151212bcbd90f0aa3c8d1496f86d84bfe4b42",
+      "code": "vendor/dust3r",
+      "hf_repo": "naver/DUSt3R_ViTLarge_BaseDecoder_512_dpt",
+      "adapter": "Pi3-evaluation/mv_recon/external_taptq.py",
+      "quantization": "288 Transformer linear modules + 120-branch module-level low-rank QwT",
+      "validation": {
+        "smoke_run": "700772337",
+        "mini_run": "700800724",
+        "reload_run": "700808825"
+      },
+      "calibration_runs": {
+        "w4a8_ternary": "700811414",
+        "w4a8_exhaustive": "700900299",
+        "w4a8_channelwise": "700900302",
+        "w6a6_ternary": "700901067",
+        "w8a8_ternary": "700900303"
+      }
+    },
+    "VGGT-Omega-1B-512": {
+      "status": "taptq_adapter_implemented_checkpoint_access_required",
+      "code": "third_party/vggt-omega",
+      "code_repo": "https://github.com/facebookresearch/vggt-omega",
+      "code_commit": "39a0cb8af88554f15ddcb5354cd52bde588fa014",
+      "checkpoint": "models/vggt_omega_1b_512.pt",
+      "checkpoint_url": "https://huggingface.co/facebook/VGGT-Omega/blob/main/vggt_omega_1b_512.pt",
+      "adapter": "Pi3-evaluation/mv_recon/foundation_models.py",
+      "entrypoint": "Pi3-evaluation/mv_recon/taptq.py",
+      "quantization": "288 aggregator qkv/proj/fc1/fc2 Linear modules; heads excluded",
+      "compensation": "generic layer QwT only",
+      "output_adapter": "depth + 9D pose encoding -> E1-compatible world_points",
+      "note": "Official Meta/Oxford code; checkpoint requires approved Hugging Face access."
+    },
+    "OpenD4RT-32CLIP": {
+      "status": "fp_and_w4a8_channelwise_nonchannelwise_completed",
+      "run_id": "702478252",
+      "code": "third_party/open-d4rt",
+      "code_repo": "https://github.com/Lijiaxin0111/Open-d4rt.git",
+      "code_commit": "403290a6e7ea6262a1f20f8c02d5461cd7b6c9b3",
+      "checkpoint_local": "/data/workspace/model-downloads/OpenD4RT_32CLIP_9Dataset_NoAUG/opend4rt.ckpt",
+      "checkpoint_ceph": "/mnt/cephfs/pansicheng/models/OpenD4RT/checkpoints/OpenD4RT_32CLIP_9Dataset_NoAUG/opend4rt.ckpt",
+      "checkpoint_bytes": 13950006682,
+      "checkpoint_sha256": "1f63305422fdc2000b057fbbc1d37459ac1a8063bbfcd0e3b7d473f5485943f5",
+      "adapter": "Pi3-evaluation/mv_recon/foundation_models.py",
+      "entrypoint": "Pi3-evaluation/mv_recon/taptq.py",
+      "quantization": "208 explicit Transformer Linear projections: 40 encoder blocks x 4 plus 8 decoder blocks x 6; query/Fourier/patch embeddings and output heads excluded",
+      "calibration": {
+        "dataset": "DTU_train_8",
+        "seq_id_map": "Pi3-evaluation/datasets/seq-id-maps/DTUTrain_8_mv-recon_seq-id-map-kf5.json",
+        "effective_input": "8 scans x 10 frames = 80 images",
+        "metric": "Hessian",
+        "bits": "W4A8",
+        "search_mode": "ternary",
+        "note": "TAPTQ_CALIB_SIZE=32 was printed as run metadata but does not truncate the calibration iterator"
+      },
+      "validation": "strict checkpoint load; smoke passed with 208 wrapped modules and finite (1,10,420,518,3) output",
+      "artifacts": {
+        "FP": "/mnt/cephfs/pansicheng/tmm-results/eval/d4rt_opend4rt_fp/tre_diff/all_metrics.csv",
+        "W4A8_nonchannelwise": {
+          "checkpoint": "/mnt/cephfs/pansicheng/tmm-results/checkpoints/d4rt_opend4rt_w4a8_noncw.pt",
+          "bytes": 4650149482,
+          "sha256": "8af9f6828e95d80381baf343c7cc825e856be31f4749e38ce10dcb4442feecf9"
+        },
+        "W4A8_channelwise": {
+          "checkpoint": "/mnt/cephfs/pansicheng/tmm-results/checkpoints/d4rt_opend4rt_w4a8_cw.pt",
+          "bytes": 4652604229,
+          "sha256": "0860090629b3187ebb7f22984089324e629e4a365ed66ba5c2c539bf820cf4fd"
+        }
+      },
+      "results_7scenes_dense": {
+        "FP": [0.03915134284582969, 0.049335126247719865, 0.6478537578739485],
+        "W4A8_nonchannelwise": [0.09954131875807719, 0.18279718664194092, 0.5890103505392661],
+        "W4A8_channelwise": [0.03942911221300885, 0.04896956821578571, 0.6459041846482126]
+      },
+      "note": "OpenD4RT is a public trained community implementation, not an official Google DeepMind checkpoint."
+    },
+    "MASt3R": {
+      "status": "five_variant_calibration_and_full18_qwt_validation_completed",
+      "weights": "model-downloads/mast3r/model.safetensors",
+      "weights_sha256": "0a615eb05fa9db654050aa655945ee5696e7c6c1b7f93f1ee8c37249010f6feb",
+      "code": "vendor/mast3r",
+      "hf_repo": "naver/MASt3R_ViTLarge_BaseDecoder_512_catmlpdpt_metric",
+      "adapter": "Pi3-evaluation/mv_recon/external_taptq.py",
+      "quantization": "288 Transformer linear modules + 120-branch module-level low-rank QwT",
+      "validation": {
+        "smoke_run": "700772345",
+        "mini_run": "700800729",
+        "reload_run": "700808834"
+      },
+      "calibration_runs": {
+        "w4a8_ternary": "701272966",
+        "w4a8_exhaustive": "700901068",
+        "w4a8_channelwise": "700900499",
+        "w6a6_ternary": "701272967",
+        "w8a8_ternary": "701272974"
+      },
+      "failed_runs": {
+        "initial_w4a8_ternary": "700811419",
+        "w4a8_ternary_retry": "700901070",
+        "w6a6_ternary": "700901076",
+        "w8a8_ternary": "700901077"
+      },
+      "failed_run_reason": "H800 CUDA initialization error 802 before calibration"
+    }
+  },
+  "baseline_adapters": {
+    "VGGT": {
+      "status": "compensated_eval_and_documented_ablations_completed",
+      "entrypoint": "Pi3-evaluation/mv_recon/taptq.py",
+      "run": "701491027",
+      "rho_ablation_run": "701502460",
+      "gpu_assignment": {
+        "gpu0": "TAPTQ W4A8 ternary + QwT compensation",
+        "gpu1": "TAPTQ W4A8 exhaustive + QwT compensation",
+        "gpu2": "TAPTQ W4A8 channel-wise + QwT compensation",
+        "gpu3": "TAPTQ W6A6 ternary + QwT compensation",
+        "gpu4": "TAPTQ W8A8 ternary + QwT compensation",
+        "gpu5-7": "idle"
+      },
+      "compensation": {
+        "strategy": "module",
+        "rho_tail_ratio": 0.1,
+        "tau_thr": 0.007,
+        "rank": 16,
+        "skip_p": 0.0,
+        "eval_datasets": ["7scenes-dense", "ETH3D"],
+        "dtu_test": "pending_ceph_upload"
+      },
+      "scope": "aggregator qkv/proj/fc1/fc2",
+      "methods": {
+        "RTN": "uniform affine activation + channel-wise weight QDQ",
+        "RepQ": "RTN + LayerNorm/Linear scale reparameterization",
+        "ERQ": "RepQ initialization + Aqer + progressive Wqer"
+      },
+      "calibration": "DTU_train_8",
+      "checkpoint_root": "Pi3-evaluation/param/baselines",
+      "default_settings": {
+        "method": "RTN",
+        "bit": "W4A8",
+        "max_tokens": 512,
+        "erq_linear_group_size": 256
+      },
+      "erq_note": "256-dimensional grouped Aqer/Wqer is the scalable VGGT default; set linear_group_size=0 for exact full-dimensional solves",
+      "note": "This run used DTU_train_8 because the H800 Ceph slot currently has /mnt/cephfs/pansicheng/data/dtu_8 but not the DTU test set. Do not report it as DTU test results."
+    }
+  }
+}

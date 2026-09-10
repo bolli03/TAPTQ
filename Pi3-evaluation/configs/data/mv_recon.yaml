@@ -2,9 +2,9 @@
   cfg:
     _target_: datasets.sevenscenes.SevenScenes
     split: test
-    SEVENSCENES_DIR: /root/autodl-tmp/data/7scenes
+    SEVENSCENES_DIR: ${oc.env:TMM_DATA_ROOT,${work_dir}/../data}/7scenes
     load_img_size: ${load_img_size}
-    cache_file: /root/autodl-tmp/data/dataset_cache/7scenes_mv_recon_cache.npy
+    cache_file: ${oc.env:TMM_CACHE_ROOT,${work_dir}/../data/dataset_cache}/7scenes_mv_recon_cache.npy
   sampling:
     strategy: stride
     kf_every: 200  # ori setting in cut3r
@@ -14,9 +14,9 @@
   cfg:
     _target_: datasets.sevenscenes.SevenScenes
     split: test
-    SEVENSCENES_DIR: /root/autodl-tmp/data/7scenes
+    SEVENSCENES_DIR: ${oc.env:TMM_DATA_ROOT,${work_dir}/../data}/7scenes
     load_img_size: ${load_img_size}
-    cache_file: /root/autodl-tmp/data/dataset_cache/7scenes_mv_recon_cache.npy
+    cache_file: ${oc.env:TMM_CACHE_ROOT,${work_dir}/../data/dataset_cache}/7scenes_mv_recon_cache.npy
   sampling:
     strategy: stride
     kf_every: 40  # our dense setting
@@ -27,7 +27,7 @@ NRGBD-sparse:
     _target_: datasets.nrgbd.NRGBD
     NRGBD_DIR: /root/autodl-tmp/data/nrgbd
     load_img_size: ${load_img_size}
-    cache_file: /root/autodl-tmp/data/dataset_cache/nrgbd_mv_recon_cache.npy
+    cache_file: ${oc.env:TMM_CACHE_ROOT,${work_dir}/../data/dataset_cache}/nrgbd_mv_recon_cache.npy
   sampling:
     strategy: stride
     kf_every: 500  # ori setting in cut3r
@@ -39,7 +39,7 @@ NRGBD-dense:
     _target_: datasets.nrgbd.NRGBD
     NRGBD_DIR: /root/autodl-tmp/data/nrgbd
     load_img_size: ${load_img_size}
-    cache_file: /root/autodl-tmp/data/dataset_cache/nrgbd_mv_recon_cache.npy
+    cache_file: ${oc.env:TMM_CACHE_ROOT,${work_dir}/../data/dataset_cache}/nrgbd_mv_recon_cache.npy
   sampling:
     strategy: stride
     kf_every: 100  # our dense setting
@@ -61,9 +61,9 @@ DTU:
   cfg:
     _target_: datasets.dtu.DTU
     split: test
-    DTU_DIR: /root/autodl-tmp/data/dtu
+    DTU_DIR: ${oc.env:TMM_DATA_ROOT,${work_dir}/../data}/dtu
     load_img_size: ${load_img_size}
-    cache_file: /root/autodl-tmp/data/dataset_cache/dtu_mv_recon_cache.npy
+    cache_file: ${oc.env:TMM_CACHE_ROOT,${work_dir}/../data/dataset_cache}/dtu_mv_recon_cache.npy
   sampling:
     strategy: stride
     kf_every: 5
@@ -87,7 +87,7 @@ DTU_1:
     split: test_1
     DTU_DIR: data/dtu_1
     load_img_size: ${load_img_size}
-    cache_file: /root/autodl-tmp/data/dataset_cache/dtu_mv_recon_cache_1.npy
+    cache_file: ${oc.env:TMM_CACHE_ROOT,${work_dir}/../data/dataset_cache}/dtu_mv_recon_cache_1.npy
   sampling:
     strategy: stride
     kf_every: 5
@@ -100,7 +100,7 @@ DTU_kmeans:
     split: test_kmeans
     DTU_DIR: data/dtu_kmeans
     load_img_size: ${load_img_size}
-    cache_file: /root/autodl-tmp/data/dataset_cache/dtu_mv_recon_cache_kmeans.npy
+    cache_file: ${oc.env:TMM_CACHE_ROOT,${work_dir}/../data/dataset_cache}/dtu_mv_recon_cache_kmeans.npy
   sampling:
     strategy: stride
     kf_every: 5
@@ -113,7 +113,7 @@ DTU_train:
     # DTU_DIR: data/dtu_train_kmeans
     DTU_DIR: /root/Pi3-evaluation/data/dtu_train_kmeans
     load_img_size: ${load_img_size}
-    cache_file: /root/autodl-tmp/data/dataset_cache/dtu_mv_recon_cache_kmeans.npy
+    cache_file: ${oc.env:TMM_CACHE_ROOT,${work_dir}/../data/dataset_cache}/dtu_mv_recon_cache_kmeans.npy
   sampling:
     strategy: stride
     kf_every: 5
@@ -124,9 +124,9 @@ DTU_train_8:
     _target_: datasets.dtu.DTU
     split: train_8
     # DTU_DIR: data/dtu_train_kmeans
-    DTU_DIR: /root/Pi3-evaluation/data/dtu_8
+    DTU_DIR: ${oc.env:TMM_DATA_ROOT,${work_dir}/../data}/dtu_8
     load_img_size: ${load_img_size}
-    cache_file: /root/autodl-tmp/data/dataset_cache/dtu_mv_recon_cache_8.npy
+    cache_file: ${oc.env:TMM_CACHE_ROOT,${work_dir}/../data/dataset_cache}/dtu_mv_recon_cache_8.npy
   sampling:
     strategy: stride
     kf_every: 5
@@ -138,13 +138,13 @@ DTU_20:
   cfg:
     _target_: datasets.dtu.DTU
     split: train
-    DTU_DIR: ${work_dir}/../data/dtu_20
+    DTU_DIR: ${oc.env:TMM_DATA_ROOT,${work_dir}/../data}/dtu_20
     load_img_size: ${load_img_size}
-    cache_file: ${work_dir}/../data/dataset_cache/dtu_20_mv_recon_cache.npy
+    cache_file: ${oc.env:TMM_CACHE_ROOT,${work_dir}/../data/dataset_cache}/dtu_20_mv_recon_cache.npy
   sampling:
     strategy: stride
     kf_every: 5
-  seq_id_map: datasets/seq-id-maps/DTUTrain_mv-recon_seq-id-map-kf5.json
+  seq_id_map: datasets/seq-id-maps/DTUTrain_20_mv-recon_seq-id-map-kf5.json
 
 DTU_rand_4:
   cfg:
@@ -152,7 +152,7 @@ DTU_rand_4:
     split: train_rand_4
     DTU_DIR: /root/Pi3-evaluation/data/dtu_rand_4
     load_img_size: ${load_img_size}
-    cache_file: /root/autodl-tmp/data/dataset_cache/dtu_mv_recon_cache_rand_4.npy
+    cache_file: ${oc.env:TMM_CACHE_ROOT,${work_dir}/../data/dataset_cache}/dtu_mv_recon_cache_rand_4.npy
   sampling:
     strategy: stride
     kf_every: 5
@@ -164,7 +164,7 @@ DTU_qvggt_4:
     split: train_qvggt_4
     DTU_DIR: /root/Pi3-evaluation/data/dtu_qvggt_4
     load_img_size: ${load_img_size}
-    cache_file: /root/autodl-tmp/data/dataset_cache/dtu_mv_recon_cache_qvggt_4.npy
+    cache_file: ${oc.env:TMM_CACHE_ROOT,${work_dir}/../data/dataset_cache}/dtu_mv_recon_cache_qvggt_4.npy
   sampling:
     strategy: stride
     kf_every: 5
@@ -176,7 +176,7 @@ DTU_qvggt_8:
     split: train_qvggt_8
     DTU_DIR: /root/Pi3-evaluation/data/dtu_qvggt_8
     load_img_size: ${load_img_size}
-    cache_file: /root/autodl-tmp/data/dataset_cache/dtu_mv_recon_cache_qvggt_8.npy
+    cache_file: ${oc.env:TMM_CACHE_ROOT,${work_dir}/../data/dataset_cache}/dtu_mv_recon_cache_qvggt_8.npy
   sampling:
     strategy: stride
     kf_every: 5
@@ -188,7 +188,7 @@ DTU_rand_8:
     split: train_rand_8
     DTU_DIR: /root/Pi3-evaluation/data/dtu_rand_8
     load_img_size: ${load_img_size}
-    cache_file: /root/autodl-tmp/data/dataset_cache/dtu_mv_recon_cache_rand_8.npy
+    cache_file: ${oc.env:TMM_CACHE_ROOT,${work_dir}/../data/dataset_cache}/dtu_mv_recon_cache_rand_8.npy
   sampling:
     strategy: stride
     kf_every: 5
@@ -200,7 +200,7 @@ DTU_train_new:
     split: train_new
     DTU_DIR: /root/Pi3-evaluation/data/dtu_new_train
     load_img_size: ${load_img_size}
-    cache_file: /root/autodl-tmp/data/dataset_cache/dtu_train_new_mv_recon_cache.npy
+    cache_file: ${oc.env:TMM_CACHE_ROOT,${work_dir}/../data/dataset_cache}/dtu_train_new_mv_recon_cache.npy
   sampling:
     strategy: stride
     kf_every: 5
@@ -210,9 +210,9 @@ DTU_train_new:
 ETH3D:
   cfg:
     _target_: datasets.eth3d.ETH3D
-    ETH3D_DIR: /root/autodl-tmp/data/eth3d
+    ETH3D_DIR: ${oc.env:TMM_DATA_ROOT,${work_dir}/../data}/eth3d
     load_img_size: ${load_img_size}
-    cache_file: /root/autodl-tmp/data/dataset_cache/eth3d_mv_recon_cache.npy
+    cache_file: ${oc.env:TMM_CACHE_ROOT,${work_dir}/../data/dataset_cache}/eth3d_mv_recon_cache.npy
   sampling:
     strategy: stride
     kf_every: 5

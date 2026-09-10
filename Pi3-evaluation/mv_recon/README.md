@@ -16,7 +16,7 @@ python mv_recon/eval.py
 
 ### TAPTQ 完整流程
 
-`configs/evaluation/mv_recon.yaml` 默认使用 `/data/workspace/TAPTQ/data/dtu_20` 作为校准和补偿数据集，正式评估集仍由 `eval_datasets` 单独控制。
+`configs/evaluation/mv_recon.yaml` 默认使用固定的 `Pi3-evaluation/data/dtu_8`（8 scans × 10 frames）作为校准和补偿数据集，正式评估集仍由 `eval_datasets` 单独控制。
 
 ```bash
 # 校准、量化评估、QwT 补偿、补偿后评估并保存
@@ -96,6 +96,7 @@ mv_recon/
 ├── sampling.py
 ├── taptq.py
 ├── ptq.py                    # benchmark 后端依赖
+├── baseline_quant.py         # VGGT RTN / RepQ / ERQ unified baseline entry
 ├── run_ablation_7sd.sh
 ├── benchmark_common.py
 ├── benchmark_quant_deploy.py

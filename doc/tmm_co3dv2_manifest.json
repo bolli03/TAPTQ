@@ -1,0 +1,26 @@
+{
+  "dataset": "Co3Dv2",
+  "status": "rebuilding_pi3_vggt_reference_test_protocol", 
+  "expected_annotation_path": "projects/QuantVGGT/co3d_v2_annotations",
+  "required_protocol": {
+    "split": "test",
+    "min_num_images": 50,
+    "num_frames": 10,
+    "seed": 0
+  },
+  "observed": {
+    "annotation_directory_exists": true,
+    "test_annotations_generated": 48,
+    "single_sequence_subset_local_size": "17G",
+    "complete_image_data": "single-sequence subset available; not the full Co3Dv2 release",
+    "complete_depth_and_camera_ground_truth": "camera/pose annotations available for the subset; no claim for full release",
+    "official_evaluator": "projects/QuantVGGT/evaluation/run_co3d.py",
+    "h800_run": "700605702, eight disjoint category shards, all exit 0 (provisional subset)",
+    "pi3_reference_seq_id_map": "Pi3-evaluation/datasets/seq-id-maps/CO3Dv2_relpose_seq-id-map_seed42.json",
+    "pi3_reference_sequences": 2506,
+    "pi3_reference_test_categories": ["ball", "book", "couch", "frisbee", "hotdog", "kite", "remote", "sandwich", "skateboard", "suitcase"],
+    "pi3_full_test_download_dir": "data/co3dv2_pi3_full_test (download in progress)",
+    "subset_metrics": {"Auc_30_mean": 0.00020061728395061727, "Auc_15_mean": 0.0, "Auc_5_mean": 0.0, "Auc_3_mean": 0.0}
+  },
+  "policy": "Report subset metrics with explicit subset scope; do not represent them as full Co3Dv2 results."
+}

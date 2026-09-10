@@ -2,6 +2,8 @@
 
 > 本文档针对当前确定的一批实验，按论文写作逻辑组织实验表格、实验矩阵、复现状态和执行顺序。
 >
+> **汇报口径（当前执行优先级）**：正文和阶段性实验汇报以 `7Scenes-dense` 为主结果集；`DTU` 作为校准协议和补充验证集，`ETH3D`、`Co3Dv2` 仅在数据完整且协议统一后加入。所有主表先按 `7Scenes-dense` 排序，不能用 DTU 数字替代 7Scenes 主结果。
+>
 > 当前确定的任务与对象：
 >
 > - 点云重建测试集：`7Scenes-dense`、`ETH3D`、`DTU`（`/data/workspace/TAPTQ/data/dtu`）；
@@ -75,15 +77,15 @@ ETH3D 和 Co3Dv2 在正式启动前必须生成数据 manifest；不能因为代
 | 表格 | 论文位置 | 表格主题 | 回答的问题 |
 |---|---|---|---|
 | Table 1 | Experimental Setup | 任务、模型、数据、指标和硬件协议 | 实验是否公平、可复现？ |
-| Table 2 | FP Baselines | VGGT、Pi3、Dust3R、MASt3R 的 FP 结果 | 不同基础模型本身的能力差异是什么？ |
-| Table 3 | Main Quantization Results | VGGT 上 RTN/PTQ4ViT/ERQ/RepQ/GPTQ/QuantVGGT/TAPTQ | TAPTQ 是否优于量化 baseline？ |
-| Table 4 | Cross-Model Quantization | Pi3 上可复现方法与 TAPTQ | 方法能否迁移到 Pi3？ |
-| Table 5 | Component Ablation | calibration、ternary、TRE、QwT 的逐步加入 | TAPTQ 的收益来自哪些组件？ |
-| Table 6 | Channel-Wise Quantization | ERQ、RepQ、GPTQ、TAPTQ 的额外 channel-wise 结果 | 结论是否依赖 per-tensor 量化？ |
-| Table 7 | Calibration and Search Efficiency | dtu_8/kf5、exhaustive/ternary | 校准效率和搜索方法的精度—时间权衡如何？ |
+| Table 2 | **Primary FP Results (7Scenes-dense)** | VGGT、Pi3 及可复现模型的 FP 结果，主列为 7Scenes-dense | 基础模型在主结果集上的能力差异是什么？ |
+| Table 3 | **Primary Quantization Results (7Scenes-dense)** | VGGT 上 RTN/PTQ4ViT/ERQ/RepQ/GPTQ/QuantVGGT/TAPTQ | TAPTQ 是否优于量化 baseline？ |
+| Table 4 | Cross-Model Quantization | Pi3 上可复现方法与 TAPTQ，主列为 7Scenes-dense | 方法能否迁移到 Pi3？ |
+| Table 5 | Component Ablation | calibration、ternary、TRE、QwT 的逐步加入，主列为 7Scenes-dense | TAPTQ 的收益来自哪些组件？ |
+| Table 6 | Channel-Wise Quantization | ERQ、RepQ、GPTQ、TAPTQ 的额外 channel-wise 结果，主列为 7Scenes-dense | 结论是否依赖 per-tensor 量化？ |
+| Table 7 | Calibration and Search Efficiency | dtu_8/kf5、exhaustive/ternary；精度以 7Scenes-dense 为主 | 校准效率和搜索方法的精度—时间权衡如何？ |
 | Table 8 | Deployment Cost | H800 latency、memory、size、overhead | 量化结果是否具有部署价值？ |
 | Table 9 | Co3Dv2 Camera Prediction | 相机参数预测结果 | 方法能否迁移到相机任务？ |
-| Table 10 | Cross-Architecture Generalization | VGGT、Pi3、Dust3R、MASt3R 综合结果 | 方法是否具有跨架构泛化能力？ |
+| Table 10 | Cross-Architecture Generalization | VGGT、Pi3、Dust3R、MASt3R 综合结果，优先报告 7Scenes-dense | 方法是否具有跨架构泛化能力？ |
 
 如果 TMM 正文篇幅有限，`Table 4`、`Table 7` 和 `Table 10` 可以压缩到 Supplement，但 `Table 1–3、5、6、8、9` 应优先保留。
 
@@ -118,7 +120,7 @@ ETH3D 和 Co3Dv2 在正式启动前必须生成数据 manifest；不能因为代
 
 ### 5.1 点云重建 FP 表
 
-| Model | 7Scenes-dense Acc/Comp/NC | ETH3D Acc/Comp/NC | DTU Acc/Comp/NC | Latency | Peak memory |
+| Model | **7Scenes-dense Acc/Comp/NC (primary)** | DTU Acc/Comp/NC (supplement) | ETH3D Acc/Comp/NC (if available) | Latency | Peak memory |
 |---|---|---|---|---:|---:|
 | VGGT |  |  |  |  |  |
 | Pi3 |  |  |  |  |  |
@@ -151,7 +153,7 @@ VGGT 是当前代码最完整、也是 TMM 主要量化主线。该表建议作�
 - 测试集：7Scenes-dense、ETH3D、DTU；
 - 统一 evaluator。
 
-| Method | W/A | Granularity | Compensation | 7Scenes-dense | ETH3D | DTU |
+| Method | W/A | Granularity | Compensation | **7Scenes-dense (primary)** | DTU (supplement) | ETH3D (if available) |
 |---|---|---|---|---|---|---|
 | FP VGGT | FP | – | – | Acc/Comp/NC | Acc/Comp/NC | Acc/Comp/NC |
 | RTN | W4A8 | Per-tensor | – |  |  |  |
@@ -611,20 +613,21 @@ TQ-5 至 TQ-8 必须等待对应 calibration checkpoint 生成后再启动；如
 
 | 实验 | 初始状态 |
 |---|---|
-| VGGT FP 7Scenes/DTU | `available` |
-| VGGT FP ETH3D | `blocked-data`，待确认 ETH3D 路径 |
-| VGGT RTN/PTQ4ViT | `needs-reproduction` |
-| VGGT ERQ | `needs-reproduction`，当前未发现明确入口 |
-| VGGT RepQ | `needs-reproduction`，当前未发现明确入口 |
-| VGGT GPTQ | `sanity-only`，存在历史参数/旧代码 |
-| VGGT QuantVGGT | `sanity-only`，需统一 evaluator |
-| VGGT TAPTQ 旧参数 | `sanity-only`，不能代替新 TMM calibration |
-| TAPTQ channel-wise | `blocked-channelwise`，需重新生成 checkpoint |
-| Pi3 FP | `needs-reproduction` |
-| Pi3 TAPTQ | `needs-reproduction` |
-| Dust3R FP | `needs-reproduction` |
-| MASt3R FP | `needs-reproduction` |
-| Co3Dv2 全部模型 | `blocked-data`/`needs-reproduction`，需确认完整数据 |
+| VGGT FP 7Scenes/DTU | `completed` |
+| VGGT FP ETH3D | `rebuilding-pi3-reference-protocol`，Pi3 官方 `prepare_eth3d.sh` 原始归档下载中；此前 sparse projection 结果仅作 provisional |
+| VGGT RTN | `available`，统一入口 `mv_recon/baseline_quant.py`，待 H800 重现 |
+| VGGT PTQ4ViT | `baseline candidate`，已有 7Scenes 结果但需统一重现 |
+| VGGT ERQ | `available`，已适配 Aqer + Wqer + RepQ 初始化，待 H800 重现 |
+| VGGT RepQ | `available`，已适配 LayerNorm/Linear scale reparameterization，待 H800 重现 |
+| VGGT GPTQ | `baseline candidate`，已有历史/旧代码结果，需统一重现 |
+| VGGT QuantVGGT | `baseline candidate`，已完成官方 evaluator 的 FP/W4A4/W4A8/W8A8 |
+| VGGT TAPTQ 正式 checkpoint | `completed`，已完成多位宽、补偿和主要 7Scenes/DTU 评估 |
+| TAPTQ channel-wise | `completed`，quant-only 和 compensated 均已生成并评估 |
+| Pi3 FP | `completed`，已有 7Scenes-dense 参考结果 |
+| Pi3 TAPTQ | `blocked-code`，当前主入口仍按 VGGT aggregator 结构适配 |
+| Dust3R FP | `completed-h800-7scenes-dense`，统一 E1 adapter 已跑完 18 序列 |
+| MASt3R FP | `completed-h800-7scenes-dense`，统一 E1 adapter 已跑完 18 序列 |
+| Co3Dv2 camera | `rebuilding-pi3-vggt-reference-protocol`，Pi3 frozen map 有 2506 序列；官方 10 test categories 完整下载中 |
 
 ---
 
@@ -632,12 +635,12 @@ TQ-5 至 TQ-8 必须等待对应 calibration checkpoint 生成后再启动；如
 
 ### 数据和协议
 
-- [ ] `doc/tmm_calibration_manifest.json`；
-- [ ] `doc/tmm_test_manifest.json`；
-- [ ] ETH3D 数据 manifest；
-- [ ] Co3Dv2 数据和类别 manifest；
-- [ ] 统一 evaluator 配置；
-- [ ] 模型输入和帧采样配置。
+- [x] `doc/tmm_calibration_manifest.json`；
+- [x] `doc/tmm_test_manifest.json`；
+- [x] `doc/tmm_eth3d_manifest.json`（blocked-data manifest）；
+- [x] `doc/tmm_co3dv2_manifest.json`（blocked-data manifest）；
+- [ ] 统一 evaluator 配置（TAPTQ 与 QuantVGGT upstream 仍分开）；
+- [x] 模型输入和帧采样配置。
 
 ### 参数和日志
 
@@ -651,16 +654,16 @@ TQ-5 至 TQ-8 必须等待对应 calibration checkpoint 生成后再启动；如
 
 ### 论文表格
 
-- [ ] Table 1：setup；
-- [ ] Table 2：FP baselines；
-- [ ] Table 3：VGGT 主量化比较；
+- [x] Table 1：setup（协议已冻结）；
+- [x] Table 2：FP baselines（VGGT/Pi3/QuantVGGT 部分完成）；
+- [ ] Table 3：VGGT 主量化比较（RTN/ERQ/RepQ 已实现，待统一重现）；
 - [ ] Table 4：Pi3 量化扩展；
-- [ ] Table 5：TAPTQ component ablation；
-- [ ] Table 6：四种方法 channel-wise；
-- [ ] Table 7：校准和搜索效率；
-- [ ] Table 8：H800 deployment；
-- [ ] Table 9：Co3Dv2 camera；
-- [ ] Table 10：cross-architecture；
+- [x] Table 5：TAPTQ component ablation（7Scenes/DTU 部分完成）；
+- [ ] Table 6：四种方法 channel-wise（仅 TAPTQ 完成）；
+- [ ] Table 7：校准和搜索效率（ternary/exhaustive 已完成精度，forward-count 审计仍待补）；
+- [x] Table 8：H800 deployment（fake-quant 路径完成）；
+- [ ] Table 9：Co3Dv2 camera（blocked-data）；
+- [ ] Table 10：cross-architecture（Pi3 FP、Dust3R/MASt3R FP unified E1 已完成；量化语义 adapter 仍 pending）；
 - [ ] Table S1–S16：完整结果、敏感性、失败案例和复现信息。
 
 ---
@@ -906,3 +909,76 @@ Supplement 追加逐 sequence、逐 category、worst-case、failure case、laten
 3. 能在 H800 + E1/官方 Co3D protocol 下运行才进入主表；
 4. 对主结论关键但缺失的 `RTN/ERQ/RepQ` 再按论文补实现；
 5. 不把论文原始数字直接混入 H800 主表。
+
+---
+
+## 22. 当前阶段汇报主表：7Scenes-dense
+
+当前阶段所有实验结果汇报优先使用下表；DTU 仅作为补充验证，不与主表并列抢占叙事位置。表中均为 18 个 7Scenes-dense 序列的 mean 指标，完整逐序列结果位于 `/mnt/cephfs4/josephyou_debug/tmm-dtu8/` 对应目录。
+
+| Setting | Acc-mean ↓ | Comp-mean ↓ | NC-mean ↑ | Status |
+|---|---:|---:|---:|---|
+| FP VGGT | 0.020174 | 0.029582 | 0.679993 | completed |
+| TAPTQ W4A8 quant-only | 0.031895 | 0.045382 | 0.680580 | completed |
+| TAPTQ W4A8 compensated | 0.029494 | 0.040417 | 0.680707 | completed |
+| GPTQ W8A8 | 0.019850 | 0.029038 | 0.681350 | baseline candidate |
+| PTQ4ViT W4A8 | 0.033761 | 0.047767 | 0.680801 | baseline candidate |
+| TAPTQ W8A8 quant-only | 0.019598 | 0.029006 | 0.680987 | completed |
+| TAPTQ W8A8 compensated | 0.019603 | 0.028981 | 0.680953 | completed |
+| TAPTQ W6A6 quant-only | 0.021161 | 0.030383 | 0.682346 | completed |
+| TAPTQ W6A6 compensated | 0.020251 | 0.030469 | 0.680545 | completed |
+| TAPTQ W4A8 channel-wise | 0.019406 | 0.029320 | 0.679974 | completed |
+| TAPTQ W4A8 channel-wise compensated | 0.018932 | 0.033166 | 0.687987 | completed |
+| QuantVGGT FP (official evaluator) | 0.020490 | 0.033834 | 0.676035 | baseline candidate; upstream evaluator |
+| QuantVGGT W4A4 (official evaluator) | 0.020498 | 0.033834 | 0.676302 | baseline candidate; upstream evaluator |
+| QuantVGGT W4A8 (official evaluator) | 0.020489 | 0.033833 | 0.676142 | baseline candidate; upstream evaluator |
+| QuantVGGT W8A8 (official evaluator) | 0.020497 | 0.033838 | 0.676140 | baseline candidate; upstream evaluator |
+| RTN-style W4A8 (official evaluator) | 0.020496 | 0.033840 | 0.676275 | baseline candidate; upstream evaluator |
+| Pi3 FP | 0.021613 | 0.026447 | 0.670970 | cross-model reference |
+
+部署成本基准已在同一 H800 上完成，输入为 8 views × 518 × 518，batch size 1，AMP 开启，5 次 warmup、20 次计时：FP VGGT `243.91 ms`，W4A8 per-tensor `389.88 ms`，W4A8 channel-wise `387.87 ms`，W8A8 `388.04 ms`。这些 fake-quant 数字不等同于真实 INT4/INT8 kernel 延迟，放入 deployment 表而不是精度主表。
+
+主表进入规则：只有代码版本、checkpoint、校准 manifest、evaluator 和逐序列结果齐全的设置进入 `completed`；baseline 若 evaluator 或 calibration protocol 不完全一致，保留为 `baseline candidate` 并在表注中标明，不能伪装成统一公平比较。
+
+## 23. 全部 TODO 执行台账（2026-08-10）
+
+| 计划项 | 当前状态 | 证据/下一步 |
+|---|---|---|
+| 7Scenes-dense 主结果 | completed | VGGT/Pi3/TAPTQ/QuantVGGT 结果已进入本节主表 |
+| DTU 补充验证 | completed | 22-scan 指标和多个 checkpoint 已持久化到 `/mnt/cephfs4/josephyou_debug/tmm-dtu8/` |
+| 固定 `dtu_8` 校准与 QwT | completed | W4A8/W6A6/W8A8、channel-wise quant-only/compensated 已生成 |
+| QuantVGGT FP/W4A4/W4A8/W8A8 | completed as upstream baseline | 结果使用 QuantVGGT upstream evaluator，不能与 unified evaluator 直接混排 |
+| H800 fake-quant deployment | completed | FP/W4A8/channel-wise/W8A8 latency、显存和大小已记录 |
+| RTN-style upstream baseline | completed as upstream baseline | QuantVGGT evaluator 的 `not_smooth + not_rot` W4A8 已运行，需标注协议 |
+| PTQ4ViT/GPTQ unified reproduction | baseline candidate | 已有 7Scenes 结果，仍需统一当前 dtu_8、代码和 evaluator 后才能进公平主表 |
+| ERQ/RepQ | blocked-code | 当前仓库无独立可复现入口，不能用论文数字替代 |
+| Pi3 TAPTQ | blocked-code | 现有 `taptq.py` 的 wrapper 绑定 VGGT `aggregator`，需要独立 Pi3 adapter |
+| Dust3R/MASt3R FP | completed on H800, 18 sequences each | unified E1 输出、坐标、尺度、ICP 和 Acc/Comp/NC 已完成；结果在 `tmm-results/eval/*_7scenes_dense/_all_samples.json` |
+| Dust3R/MASt3R TAPTQ | adapter implemented, full W4A8 running | `external_taptq.py` 量化 enc_blocks/dec_blocks/dec_blocks2 的 288 个 linear，并对 120 个 attention/cross-attention/MLP branch 做低秩 module QwT；smoke、mini calibration、checkpoint reload 均通过 |
+| ETH3D | sparse-point adapter completed, official dense protocol pending | `prepare_eth3d_official.py` 已将官方 COLMAP/稀疏点转换为 TMM per-frame depth layout；13 序列八个单卡 H800 run 已完成，结果见 `eth3d_fp_summary.json` |
+| Co3Dv2 camera | completed subset, full release pending | run `700605702` 八 shard 全部 exit 0，48 valid sequences；AUC@30 mean 0.000201，不能代表 full Co3Dv2 |
+| ternary vs exhaustive | H800 checkpoint/eval completed, audit pending | Linear PTQ search 已支持 `ptq.search_mode=exhaustive/ternary`；两种模式均完成固定 dtu_8 校准和 7Scenes dense 18 序列评估，forward-count 仍需从日志提取 |
+| real ONNX/TensorRT/INT4 | pending-engineering | 当前 benchmark 是 PyTorch fake-quant，不应宣称真实 INT kernel 加速 |
+| QAT、全笛卡尔积和大规模 Co3Dv2 sweep | P2 pending | 在 P0/P1 缺口解决前不优先执行 |
+
+本台账中的 `blocked-*` 不是用空白掩盖结果，而是明确的交付边界：缺数据需通过 Ceph 补齐，缺统一代码需先完成 adapter/evaluator，缺真实 kernel 需单独工程实现。
+
+### 23.2 H800 结果收口（2026-08-11）
+
+- 第二轮八卡矩阵 `run=700551152` 成功完成：VGGT FP、TAPTQ W4A8 ternary/exhaustive、W4A8 channel-wise、W6A6、W8A8 均覆盖 7Scenes dense 18 序列；Dust3R/MASt3R unified E1 各完成 18 序列。
+- 最新统一 evaluator 结果已落在个人 Ceph `pansicheng/tmm-results/eval`，manifest 已记录均值；Dust3R/MASt3R 结果分别为 Acc/Comp/NC = 0.019343/0.029319/0.680308 和 0.025488/0.031090/0.665829。
+- ETH3D 官方三份归档已下载并 SHA256 校验，13 个序列已解压；八个单卡 H800 run `700679076`/`700679081`/`700679089`/`700679099`/`700679105`/`700679117`/`700679132`/`700679135` 完成 sparse COLMAP point projection adapter 评估，Acc/Comp/NC mean = `0.070958/0.167750/0.091757`。该结果不是官方 dense-depth protocol，官方 dense GT 转换仍 pending。
+- Co3dv2 single-sequence subset 已下载约 17G，48 个 test annotation 已生成；Co3Dv2 camera evaluator 已提交八个类别 shard，结果待 run 完成后归档，不能代表完整 Co3Dv2。
+
+### 23.3 Co3Dv2 subset 收口（2026-08-11）
+
+- `run=700605702` 的八个 Co3dv2 camera shard 全部 exit 0，48 个 test annotation/valid sequence 均完成。
+- subset AUC 均值为 AUC@30 `0.000201`、AUC@15/5/3 `0`；这是官方 single-sequence subset 结果，不能代表 full Co3Dv2，也不应直接进入 Table 9 主结果。
+
+### 23.1 本轮工程收口（2026-08-10）
+
+- 已将默认校准集从旧的 `DTU_20` 切换为 authoritative `DTU_train_8`，并修复 `run_calibrate`、`run_compensate_eval`、`run_e2e` 误从测试集取校准样本的问题。
+- 已移除评估和 deployment benchmark 中的 H800 旧绝对模型路径，改为工作区路径并支持 `VGGT_MODEL_PATH`、`PI3_MODEL_PATH`、`TMM_DATA_ROOT`、`TMM_CACHE_ROOT` 覆盖。
+- 已新增 `Pi3-evaluation/mv_recon/external_baselines.py`，统一 DUSt3R/MASt3R 的 E1 输入、native pair inference、global alignment、Sim(3)、ICP 和 Acc/Comp/NC 输出；实际逐序列 H800 运行仍需在有权限的 H800 run 中执行。
+- `PTQSLBatchingQuantLinear` 已支持 `ptq.search_mode=exhaustive|ternary`，记录 weight/activation candidate forward count；Table 7 仍需用固定 `dtu_8` 在 H800 实测。
+- 本轮 AST/py_compile 和 linter 检查通过；当前 CVM 无 PyTorch，且现有 H800 run 所属人为其他用户。新增代码归档已上传至个人 Ceph 的 `pansicheng/tmm-code-update.tar.zst` 并带 SHA256；新 run 预检又被本地 Gemini mount 配置缺少 `JFS_META` 阻断，因此无法从本会话直接执行远端 forward，不把未运行的结果标成 completed。

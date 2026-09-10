@@ -173,8 +173,19 @@ class RotaryPositionEmbedding2D(nn.Module):
         # Compute feature dimension for each spatial direction
         feature_dim = tokens.size(-1) // 2
 
-        # Get frequency components
-        max_position = int(positions.max()) + 1
+        # Get frequency components. CUDA Graph capture cannot synchronize a GPU
+        # scalar back to Python, so reuse the shape-specific cache populated by warmup.
+        if tokens.is_cuda and torch.cuda.is_current_stream_capturing():
+            cached_lengths = [
+                key[1]
+                for key in self.frequency_cache
+                if key[0] == feature_dim and key[2] == tokens.device and key[3] == tokens.dtype
+            ]
+            if not cached_lengths:
+                raise RuntimeError("RoPE frequency cache must be warmed before CUDA Graph capture")
+            max_position = max(cached_lengths)
+        else:
+            max_position = int(positions.max()) + 1
         cos_comp, sin_comp = self._compute_frequency_components(feature_dim, max_position, tokens.device, tokens.dtype)
 
         # Split features for vertical and horizontal processing

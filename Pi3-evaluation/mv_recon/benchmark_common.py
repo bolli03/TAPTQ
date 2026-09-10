@@ -129,7 +129,7 @@ class DeployBenchmarkParams:
 def default_model_path() -> str:
     return os.environ.get(
         "VGGT_MODEL_PATH",
-        "/root/autodl-tmp/hf_hub/models--facebook--VGGT-1B",
+        str(Path(__file__).resolve().parents[2] / "models" / "hf_hub" / "models--facebook--VGGT-1B"),
     )
 
 

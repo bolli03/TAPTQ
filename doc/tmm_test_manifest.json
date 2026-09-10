@@ -1,0 +1,2270 @@
+{
+  "reporting_primary_dataset": "7scenes-dense",
+  "reporting_secondary_datasets": [
+    "DTU",
+    "ETH3D"
+  ],
+  "pointcloud_protocol": "E1",
+  "image_size": 518,
+  "views": 8,
+  "frame_sampling": "dataset-specific frozen seq-id-map",
+  "datasets": {
+    "7scenes-dense": {
+      "path": "data/7scenes",
+      "status": "completed",
+      "sequences": 18
+    },
+    "DTU": {
+      "path": "data/dtu",
+      "status": "completed",
+      "scans": 22,
+      "evaluator": "Pi3-evaluation/mv_recon/taptq.py"
+    },
+    "ETH3D": {
+      "path": "data/eth3d",
+      "status": "auxiliary_e1_adapter_results_available_pdf_protocol_not_aligned",
+      "sequences": 13,
+      "legacy_sparse_projection_metrics": {
+        "Acc-mean": 0.07095823622485263,
+        "Comp-mean": 0.1677499747958087,
+        "NC-mean": 0.09175699439787777
+      },
+      "caveat": "Current per-method E1 adapter results are recorded in their experiment blocks; they are auxiliary and remain different from the paper/PDF reference preprocessing, frame sampling, checkpoint, and evaluator. The metrics here are retained only as a legacy sparse-COLMAP diagnostic.",
+      "reference_script": "Pi3-evaluation/datasets/preprocess/prepare_eth3d.sh",
+      "artifacts": "mnt/cephfs/pansicheng/tmm-results/eth3d/eth3d_fp_summary.json"
+    },
+    "Co3Dv2": {
+      "path": "projects/QuantVGGT/co3d_v2_annotations",
+      "status": "provisional_subset_rebuilding_pi3_vggt_reference_protocol",
+      "categories": 48,
+      "reference_test_categories": [
+        "ball",
+        "book",
+        "couch",
+        "frisbee",
+        "hotdog",
+        "kite",
+        "remote",
+        "sandwich",
+        "skateboard",
+        "suitcase"
+      ],
+      "reference_seq_id_map": "Pi3-evaluation/datasets/seq-id-maps/CO3Dv2_relpose_seq-id-map_seed42.json",
+      "reference_sequences": 2506,
+      "metrics": {
+        "Auc_30_mean": 0.00020061728395061727,
+        "Auc_15_mean": 0.0,
+        "Auc_5_mean": 0.0,
+        "Auc_3_mean": 0.0
+      },
+      "caveat": "previous result used official single-sequence subset only; full Pi3/VGGT reference-category download is now running",
+      "artifacts": "mnt/cephfs/pansicheng/tmm-results/co3d/co3d_shard*.json"
+    }
+  },
+  "primary_7scenes_dense_results": {
+    "status": "legacy_superseded",
+    "superseded_by": "latest_unified_7scenes_dense_results",
+    "sequences": 18,
+    "metrics": "Acc-mean, Comp-mean, NC-mean",
+    "artifact_root": "mnt/cephfs4/josephyou_debug/tmm-dtu8",
+    "fp_vggt": [
+      0.020174,
+      0.029582,
+      0.679993
+    ],
+    "taptq_w4a8_quant_only": [
+      0.031895,
+      0.045382,
+      0.68058
+    ],
+    "taptq_w4a8_compensated": [
+      0.029494,
+      0.040417,
+      0.680707
+    ],
+    "gptq_w8a8": [
+      0.01985,
+      0.029038,
+      0.68135
+    ],
+    "ptq4vit_w4a8": [
+      0.033761,
+      0.047767,
+      0.680801
+    ],
+    "taptq_w8a8_quant_only": [
+      0.019598,
+      0.029006,
+      0.680987
+    ],
+    "taptq_w8a8_compensated": [
+      0.019603,
+      0.028981,
+      0.680953
+    ],
+    "taptq_w6a6_quant_only": [
+      0.021161,
+      0.030383,
+      0.682346
+    ],
+    "taptq_w6a6_compensated": [
+      0.020251,
+      0.030469,
+      0.680545
+    ],
+    "taptq_w4a8_channelwise": [
+      0.019406,
+      0.02932,
+      0.679974
+    ],
+    "taptq_w4a8_channelwise_compensated": [
+      0.018932,
+      0.033166,
+      0.687987
+    ],
+    "quantvggt_fp_official_evaluator": [
+      0.02049,
+      0.033834,
+      0.676035
+    ],
+    "quantvggt_w4a4_official_evaluator": [
+      0.020498,
+      0.033834,
+      0.676302
+    ],
+    "quantvggt_w4a8_official_evaluator": [
+      0.020489,
+      0.033833,
+      0.676142
+    ],
+    "quantvggt_w8a8_official_evaluator": [
+      0.020497,
+      0.033838,
+      0.67614
+    ],
+    "rtn_style_w4a8_official_evaluator": [
+      0.020496,
+      0.03384,
+      0.676275
+    ],
+    "pi3_fp": [
+      0.021613,
+      0.026447,
+      0.67097
+    ]
+  },
+  "new_7scenes_artifacts": {
+    "taptq_w4a8_channelwise_compensated": "mnt/cephfs4/josephyou_debug/tmm-dtu8/eval_channelwise_comp_7scenes/tre_diff/all_metrics.csv",
+    "quantvggt_fp_official_evaluator": "mnt/cephfs4/josephyou_debug/tmm-dtu8/quantvggt_7scenes_fp/40/7scenes/fp_kf40/logs.txt",
+    "quantvggt_w4a4_official_evaluator": "mnt/cephfs4/josephyou_debug/tmm-dtu8/quantvggt_7scenes_w4a4/40/7scenes/a44/logs.txt",
+    "quantvggt_w4a8_official_evaluator": "mnt/cephfs4/josephyou_debug/tmm-dtu8/quantvggt_7scenes_w4a8/40/7scenes/a48/logs.txt",
+    "quantvggt_w8a8_official_evaluator": "mnt/cephfs4/josephyou_debug/tmm-dtu8/quantvggt_7scenes_w8a8/40/7scenes/a88/logs.txt",
+    "rtn_style_w4a8_official_evaluator": "mnt/cephfs4/josephyou_debug/tmm-dtu8/quantvggt_7scenes_rtn_w4a8/40/7scenes/rtn_w4a8/logs.txt",
+    "evaluator_note": "QuantVGGT rows use its upstream evaluator and are not directly interchangeable with the TAPTQ unified evaluator rows."
+  },
+  "new_dtu_results": {
+    "w8a8_quant_only": "mnt/cephfs4/josephyou_debug/tmm-dtu8/eval_w8a8_dtu/tre_diff/all_metrics.csv",
+    "w6a6_quant_only": "mnt/cephfs4/josephyou_debug/tmm-dtu8/eval_w6a6_dtu/tre_diff/all_metrics.csv",
+    "w4a8_channelwise_quant_only": "mnt/cephfs4/josephyou_debug/tmm-dtu8/eval_channelwise_dtu/tre_diff/all_metrics.csv",
+    "w4a8_channelwise_compensated": "mnt/cephfs4/josephyou_debug/tmm-dtu8/eval_channelwise_comp_dtu/tre_diff/all_metrics.csv"
+  },
+  "external_baseline_adapter": {
+    "status": "completed_h800_7scenes_dense",
+    "entrypoint": "Pi3-evaluation/mv_recon/external_baselines.py",
+    "models": [
+      "Dust3R",
+      "MASt3R"
+    ],
+    "protocol": "E1, same sequence/frame IDs/GT/Sim(3)/ICP/Acc-Comp-NC; native models use 512-pixel preprocessing",
+    "weights": {
+      "Dust3R": "model-downloads/dust3r/model.safetensors",
+      "MASt3R": "model-downloads/mast3r/model.safetensors"
+    },
+    "results": {
+      "Dust3R": "mnt/cephfs/pansicheng/tmm-results/eval/dust3r_7scenes_dense/_all_samples.json",
+      "MASt3R": "mnt/cephfs/pansicheng/tmm-results/eval/mast3r_7scenes_dense/_all_samples.json"
+    },
+    "summary": {
+      "Dust3R": {
+        "Acc-mean": 0.01934335134663928,
+        "Comp-mean": 0.02931855400153997,
+        "NC-mean": 0.6803078727460299
+      },
+      "MASt3R": {
+        "Acc-mean": 0.025488255846662478,
+        "Comp-mean": 0.031089993648514336,
+        "NC-mean": 0.6658291291726541
+      }
+    }
+  },
+  "latest_unified_7scenes_dense_results": {
+    "protocol": "E1 unified evaluator, 18 sequences, H800, 518 input",
+    "artifact_root": "mnt/cephfs/pansicheng/tmm-results/eval",
+    "VGGT_FP": {
+      "Acc-mean": 0.0185297264709509,
+      "Comp-mean": 0.031756159706421656,
+      "NC-mean": 0.68945123278603
+    },
+    "TAPTQ_W4A8_ternary": {
+      "Acc-mean": 0.03426073959839279,
+      "Comp-mean": 0.054669260002291976,
+      "NC-mean": 0.6877446468623049
+    },
+    "TAPTQ_W4A8_exhaustive": {
+      "Acc-mean": 0.03112222758105583,
+      "Comp-mean": 0.049532443718204054,
+      "NC-mean": 0.6904513537459487
+    },
+    "TAPTQ_W4A8_channelwise": {
+      "Acc-mean": 0.017626289789690067,
+      "Comp-mean": 0.03121106625267627,
+      "NC-mean": 0.6916793790636517
+    },
+    "TAPTQ_W6A6_ternary": {
+      "Acc-mean": 0.020506691258416282,
+      "Comp-mean": 0.03552299656019964,
+      "NC-mean": 0.6917683124359111
+    },
+    "TAPTQ_W8A8_ternary": {
+      "Acc-mean": 0.018129045326351234,
+      "Comp-mean": 0.031015305324820757,
+      "NC-mean": 0.689911782133454
+    }
+  },
+  "co3dv2_camera_subset_results": {
+    "status": "completed_single_sequence_subset",
+    "run_id": "700605702",
+    "categories": 48,
+    "valid_sequences": 48,
+    "scope": "official single-sequence subset; not full Co3Dv2",
+    "metrics": {
+      "Auc_30_mean": 0.00020061728395061727,
+      "Auc_15_mean": 0.0,
+      "Auc_5_mean": 0.0,
+      "Auc_3_mean": 0.0
+    },
+    "artifacts": "mnt/cephfs/pansicheng/tmm-results/co3d/co3d_shard*.json",
+    "note": "The subset run is reproducible but camera accuracy is effectively zero under this evaluator/checkpoint; do not use as full-release Table 9.",
+    "code": "projects/QuantVGGT/evaluation/run_co3d.py"
+  },
+  "reproduction_metadata": "mnt/cephfs/pansicheng/tmm-results/tmm_reproduction_metadata.json",
+  "requested_four_results": {
+    "run_id": "702478252",
+    "protocol": "E1 unified evaluator, 7Scenes dense full18, Mean Acc/Comp/NC",
+    "artifact_root": "/mnt/cephfs/pansicheng/tmm-results/eval/requested4",
+    "vggt_channelwise_quant_only": {
+      "status": "completed",
+      "configuration": "W4A8 channel-wise, quant-only",
+      "metrics": [
+        0.017626,
+        0.031211,
+        0.691679
+      ],
+      "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/requested4/vggt_channelwise_quant_only/tre_diff/all_metrics.csv"
+    },
+    "pi3_nonchannelwise_qwt": {
+      "status": "completed",
+      "configuration": "W4A8 non-channel-wise + QwT, rho=0.1, tau=0.007, fit_error_max=0.8, rank=16",
+      "metrics": [
+        0.037403,
+        0.014163,
+        0.503651
+      ],
+      "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/requested4/pi3_noncw_qwt/tre_diff/all_metrics.csv"
+    },
+    "dust3r_nonchannelwise_qwt": {
+      "status": "completed",
+      "configuration": "W4A8 non-channel-wise + QwT, rho=0.1, tau=0.007, fit_error_max=0.8, rank=16",
+      "metrics": [
+        0.06201561460853292,
+        0.054772485559145524,
+        0.6461843540456168
+      ],
+      "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/requested4/dust3r_noncw_qwt/_all_samples.json"
+    },
+    "mast3r_nonchannelwise_qwt": {
+      "status": "completed",
+      "configuration": "W4A8 non-channel-wise + QwT, rho=0.1, tau=0.007, fit_error_max=0.8, rank=16",
+      "metrics": [
+        0.04261937836549393,
+        0.7434258039780152,
+        0.49997349257434937
+      ],
+      "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/requested4/mast3r_noncw_qwt/_all_samples.json"
+    }
+  },
+  "deployment_results": {
+    "legacy_fake_quant": {
+      "protocol": "H800, batch=1, 8 views, 518x518, AMP, warmup=5, iters=20, PyTorch fake-quant",
+      "root": "mnt/cephfs4/josephyou_debug/tmm-dtu8/deployment",
+      "fp_mean_ms": 243.908479,
+      "w4a8_per_tensor_mean_ms": 389.875886,
+      "w4a8_channelwise_mean_ms": 387.86665,
+      "w8a8_mean_ms": 388.044435,
+      "note": "Historical fake-quant only; not an INT kernel measurement."
+    },
+    "paper_b200_reference": {
+      "scope": "VGGT-1B aggregator, batch=1, 8 views, 518x518, 5 warmup, 25 CUDA-event timed runs",
+      "fp32_ms": 401,
+      "w8a8_static_compile_ms": 74,
+      "w8a8_speedup": 5.42,
+      "w8_abf16_compile_ms": 81,
+      "w8_abf16_speedup": 4.95,
+      "note": "The paper uses NVIDIA B200, not B300, and does not report deployed W4A8 latency."
+    },
+    "h800_w4a8_optimized": {
+      "status": "completed",
+      "run_id": "702478252",
+      "protocol": "H800, VGGT-1B aggregator, batch=1, 518x518, FP32/BF16/W4A8-FP8, CUDA Graph, warmup=5, iters=20, CUDA events; memory is replay peak after graph preparation",
+      "backend": "216 calibrated W4/A8 Linear layers carried by Hopper E4M3 torch._scaled_mm; 72 dual-scale Post-GELU FC2 layers via one BF16 GEMM; FP32 task heads",
+      "limitation": "PyTorch 2.5 has no native fused INT4xINT8 kernel; FP8 preserves the calibrated integer grid but adds E4M3 representation error and unfused activation/output transforms",
+      "artifact_bytes": 458648854,
+      "fp32_model_storage_bytes": 5026150088,
+      "w4a8_model_storage_bytes": 2607486908,
+      "model_storage_ratio": 0.5187841314618538,
+      "stage_last_cosine": 0.998388946056366,
+      "stage_last_relative_l2": 0.06020117551088333,
+      "geometry_7scenes_full18": {
+        "acc_mean": 0.017336872451781858,
+        "acc_median": 0.007659572172242099,
+        "comp_mean": 0.030804082710672247,
+        "comp_median": 0.014446343859030621,
+        "nc_mean": 0.6898450329711553,
+        "nc_median": 0.7923766797872629,
+        "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/vggt_w4a8_fp8_deploy/tre_diff/all_metrics.csv"
+      },
+      "results": [
+        {
+          "views": 1,
+          "fp32_ms": 98.531,
+          "bf16_ms": 21.46,
+          "w4a8_ms": 44.239,
+          "speedup_vs_fp32": 2.227,
+          "speedup_vs_bf16": 0.485,
+          "w4a8_views_per_second": 22.604,
+          "fp32_peak_gib": 4.998,
+          "bf16_peak_gib": 2.565,
+          "w4a8_peak_gib": 2.681
+        },
+        {
+          "views": 2,
+          "fp32_ms": 194.968,
+          "bf16_ms": 35.403,
+          "w4a8_ms": 79.896,
+          "speedup_vs_fp32": 2.44,
+          "speedup_vs_bf16": 0.443,
+          "w4a8_views_per_second": 25.033,
+          "fp32_peak_gib": 5.253,
+          "bf16_peak_gib": 2.695,
+          "w4a8_peak_gib": 2.808
+        },
+        {
+          "views": 4,
+          "fp32_ms": 412.582,
+          "bf16_ms": 68.166,
+          "w4a8_ms": 168.058,
+          "speedup_vs_fp32": 2.455,
+          "speedup_vs_bf16": 0.406,
+          "w4a8_views_per_second": 23.801,
+          "fp32_peak_gib": 5.762,
+          "bf16_peak_gib": 2.956,
+          "w4a8_peak_gib": 3.063
+        },
+        {
+          "views": 8,
+          "fp32_ms": 925.427,
+          "bf16_ms": 148.751,
+          "w4a8_ms": 338.172,
+          "speedup_vs_fp32": 2.737,
+          "speedup_vs_bf16": 0.44,
+          "w4a8_views_per_second": 23.657,
+          "fp32_peak_gib": 6.78,
+          "bf16_peak_gib": 3.477,
+          "w4a8_peak_gib": 3.572
+        }
+      ],
+      "artifacts": "/mnt/cephfs/pansicheng/tmm-results/deploy/vggt_w4a8_int8/fp8_graph_b1v{1,2,4,8}.json"
+    },
+    "h800_fused_w8a8_triton": {
+      "status": "completed",
+      "run_id": "702478252",
+      "protocol": "H800, VGGT-1B aggregator, batch=1, 518x518, CUDA Graph, warmup=5, iters=20, CUDA events; BF16 comparison measured separately with identical graph protocol",
+      "checkpoint": "/mnt/cephfs/pansicheng/tmm-results/checkpoints/w8a8_ternary.pt",
+      "artifact": "/mnt/cephfs/pansicheng/tmm-results/deploy/vggt_w8a8_triton/w8a8_int8_v2.pt",
+      "artifact_bytes": 911629950,
+      "artifact_v1_equivalent": true,
+      "runtime_int8_weight_bytes": 905969664,
+      "backend": "Triton 3.1.0: producer A8 quant; exact GELU fused into FC2 quant; INT8 Tensor Core GEMM with fused INT32 dequant, per-output scale, bias, and BF16 cast",
+      "single_mode": {
+        "description": "one symmetric INT8 FC2 GEMM; fastest, approximate Post-GELU negative tail",
+        "stage_last_cosine": 0.9912201166152954,
+        "stage_last_relative_l2": 0.13589085638523102,
+        "geometry_7scenes_full18": {
+          "acc_mean": 0.017545784288418242,
+          "acc_median": 0.008016927606575937,
+          "comp_mean": 0.03297619698768017,
+          "comp_median": 0.015590668970550836,
+          "nc_mean": 0.6895139362888235,
+          "nc_median": 0.7920694952241822,
+          "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/vggt_w8a8_triton_single/tre_diff/all_metrics.csv"
+        },
+        "results": [
+          {
+            "views": 1,
+            "bf16_ms": 21.483,
+            "w8a8_ms": 21.506,
+            "speedup_vs_bf16": 0.999,
+            "views_per_second": 46.499
+          },
+          {
+            "views": 2,
+            "bf16_ms": 35.453,
+            "w8a8_ms": 34.259,
+            "speedup_vs_bf16": 1.035,
+            "views_per_second": 58.38
+          },
+          {
+            "views": 4,
+            "bf16_ms": 67.667,
+            "w8a8_ms": 66.85,
+            "speedup_vs_bf16": 1.012,
+            "views_per_second": 59.835
+          },
+          {
+            "views": 8,
+            "bf16_ms": 149.506,
+            "w8a8_ms": 147.225,
+            "speedup_vs_bf16": 1.015,
+            "views_per_second": 54.339
+          }
+        ],
+        "model_storage_bytes": 2305939388,
+        "replay_peak_allocated_bytes": 3399778304
+      },
+      "dual_mode": {
+        "description": "two INT8 accumulators inside one Triton kernel; preserves calibrated positive/negative Post-GELU scales",
+        "stage_last_cosine": 0.9991880655288696,
+        "stage_last_relative_l2": 0.0447053462266922,
+        "geometry_7scenes_full18": {
+          "acc_mean": 0.01833290921888039,
+          "acc_median": 0.007365660298774366,
+          "comp_mean": 0.030943931214369908,
+          "comp_median": 0.014997388441082608,
+          "nc_mean": 0.6872204177469017,
+          "nc_median": 0.789228024160787,
+          "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/vggt_w8a8_triton_dual/tre_diff/all_metrics.csv"
+        },
+        "w8a8_8view_ms": 157.767,
+        "speedup_vs_bf16_8view": 0.948
+      },
+      "code": [
+        "Pi3-evaluation/deployment/w8a8_triton_deploy.py",
+        "Pi3-evaluation/deployment/validate_w8a8_triton.py",
+        "Pi3-evaluation/deployment/evaluate_w8a8_triton.py"
+      ]
+    }
+  },
+  "latest_compensated_batch": {
+    "run_id": "701491027",
+    "status": "completed",
+    "protocol": "E1 unified evaluator, 18 sequences, 518 input",
+    "quantization_checkpoint_root": "mnt/cephfs/pansicheng/tmm-results/checkpoints",
+    "compensation": {
+      "strategy": "module",
+      "rho_tail_ratio": 0.1,
+      "tau_thr": 0.007,
+      "rank": 16,
+      "skip_p": 0.0
+    },
+    "eval_datasets": [
+      "7scenes-dense",
+      "ETH3D"
+    ],
+    "artifact_root": "mnt/cephfs/pansicheng/tmm-results/eval/vggt_taptq_compensated_rho01_tau0007_r16",
+    "compensated_checkpoints": [
+      "w4a8_ternary_comp_rho01_tau0007_r16.pt",
+      "w4a8_exhaustive_comp_rho01_tau0007_r16.pt",
+      "w4a8_channelwise_comp_rho01_tau0007_r16.pt",
+      "w6a6_ternary_comp_rho01_tau0007_r16.pt",
+      "w8a8_ternary_comp_rho01_tau0007_r16.pt"
+    ],
+    "dtu_note": "Formal DTU test still requires uploading data/dtu to Ceph; do not use DTU_train_8 as test",
+    "metrics": {
+      "7scenes-dense": {
+        "w4a8_ternary": {
+          "Acc-mean": 0.025325,
+          "Acc-med": 0.010828,
+          "Comp-mean": 0.045779,
+          "Comp-med": 0.016523,
+          "NC-mean": 0.691264,
+          "NC-med": 0.792966
+        },
+        "w4a8_exhaustive": {
+          "Acc-mean": 0.025559,
+          "Acc-med": 0.010913,
+          "Comp-mean": 0.04498,
+          "Comp-med": 0.016859,
+          "NC-mean": 0.691035,
+          "NC-med": 0.792994
+        },
+        "w4a8_channelwise": {
+          "Acc-mean": 0.018475,
+          "Acc-med": 0.007765,
+          "Comp-mean": 0.03206,
+          "Comp-med": 0.015267,
+          "NC-mean": 0.690933,
+          "NC-med": 0.794041
+        },
+        "w6a6_ternary": {
+          "Acc-mean": 0.020278,
+          "Acc-med": 0.00862,
+          "Comp-mean": 0.034891,
+          "Comp-med": 0.014573,
+          "NC-mean": 0.690415,
+          "NC-med": 0.793453
+        },
+        "w8a8_ternary": {
+          "Acc-mean": 0.018175,
+          "Acc-med": 0.00742,
+          "Comp-mean": 0.031062,
+          "Comp-med": 0.015221,
+          "NC-mean": 0.689673,
+          "NC-med": 0.792565
+        }
+      },
+      "ETH3D": {
+        "w4a8_ternary": {
+          "Acc-mean": 0.737394,
+          "Acc-med": 0.522143,
+          "Comp-mean": 1.871054,
+          "Comp-med": 0.794437,
+          "NC-mean": 0.598173,
+          "NC-med": 0.643395
+        },
+        "w4a8_exhaustive": {
+          "Acc-mean": 0.703874,
+          "Acc-med": 0.5719,
+          "Comp-mean": 1.714639,
+          "Comp-med": 0.846824,
+          "NC-mean": 0.603023,
+          "NC-med": 0.656432
+        },
+        "w4a8_channelwise": {
+          "Acc-mean": 0.57991,
+          "Acc-med": 0.482506,
+          "Comp-mean": 1.35151,
+          "Comp-med": 0.707765,
+          "NC-mean": 0.666858,
+          "NC-med": 0.756049
+        },
+        "w6a6_ternary": {
+          "Acc-mean": 0.631006,
+          "Acc-med": 0.512185,
+          "Comp-mean": 1.446393,
+          "Comp-med": 0.687413,
+          "NC-mean": 0.633204,
+          "NC-med": 0.702324
+        },
+        "w8a8_ternary": {
+          "Acc-mean": 0.614368,
+          "Acc-med": 0.524083,
+          "Comp-mean": 1.472902,
+          "Comp-med": 0.851219,
+          "NC-mean": 0.664082,
+          "NC-med": 0.744015
+        }
+      }
+    }
+  },
+  "active_ablation_runs": {
+    "rho": {
+      "run_id": "701502460",
+      "status": "completed",
+      "values": [
+        0.001,
+        0.005,
+        0.01,
+        0.02,
+        0.05,
+        0.1,
+        0.5,
+        1.0
+      ],
+      "fixed": {
+        "tau": 0.007,
+        "rank": 16
+      },
+      "primary_dataset": "7scenes-dense",
+      "metrics_7scenes_dense": {
+        "0.001": {
+          "Acc-mean": 0.03129,
+          "Acc-med": 0.013556,
+          "Comp-mean": 0.054002,
+          "Comp-med": 0.020365,
+          "NC-mean": 0.686838,
+          "NC-med": 0.785589
+        },
+        "0.005": {
+          "Acc-mean": 0.032472,
+          "Acc-med": 0.013279,
+          "Comp-mean": 0.058019,
+          "Comp-med": 0.020586,
+          "NC-mean": 0.685139,
+          "NC-med": 0.784574
+        },
+        "0.01": {
+          "Acc-mean": 0.028793,
+          "Acc-med": 0.011803,
+          "Comp-mean": 0.051019,
+          "Comp-med": 0.018225,
+          "NC-mean": 0.688277,
+          "NC-med": 0.788356
+        },
+        "0.02": {
+          "Acc-mean": 0.028101,
+          "Acc-med": 0.0124,
+          "Comp-mean": 0.049177,
+          "Comp-med": 0.018192,
+          "NC-mean": 0.688762,
+          "NC-med": 0.789268
+        },
+        "0.05": {
+          "Acc-mean": 0.026571,
+          "Acc-med": 0.011379,
+          "Comp-mean": 0.045859,
+          "Comp-med": 0.015848,
+          "NC-mean": 0.68965,
+          "NC-med": 0.790928
+        },
+        "0.1": {
+          "Acc-mean": 0.025325,
+          "Acc-med": 0.010828,
+          "Comp-mean": 0.045779,
+          "Comp-med": 0.016523,
+          "NC-mean": 0.691264,
+          "NC-med": 0.792966
+        },
+        "0.5": {
+          "Acc-mean": 0.02675,
+          "Acc-med": 0.011279,
+          "Comp-mean": 0.043143,
+          "Comp-med": 0.015477,
+          "NC-mean": 0.68783,
+          "NC-med": 0.788687
+        },
+        "1.0": {
+          "Acc-mean": 0.028978,
+          "Acc-med": 0.012071,
+          "Comp-mean": 0.044269,
+          "Comp-med": 0.015732,
+          "NC-mean": 0.687913,
+          "NC-med": 0.788951
+        }
+      }
+    },
+    "tau": {
+      "run_id": "701507047",
+      "status": "completed_with_invalid_zero_alias",
+      "zero_value_note": "Requested tau=0 was evaluated as tau=0.007 because the runtime used value or 0.007; retain the artifact for provenance but exclude it from ablation conclusions.",
+      "values": [
+        0,
+        0.001,
+        0.003,
+        0.005,
+        0.007,
+        0.01,
+        0.02,
+        0.05
+      ],
+      "fixed": {
+        "rho": 0.1,
+        "rank": 16
+      },
+      "primary_dataset": "7scenes-dense",
+      "metrics_7scenes_dense": {
+        "0": {
+          "Acc-mean": 0.025325,
+          "Acc-med": 0.010828,
+          "Comp-mean": 0.045779,
+          "Comp-med": 0.016523,
+          "NC-mean": 0.691264,
+          "NC-med": 0.792966
+        },
+        "0.001": {
+          "Acc-mean": 0.02778,
+          "Acc-med": 0.011349,
+          "Comp-mean": 0.045384,
+          "Comp-med": 0.015336,
+          "NC-mean": 0.687713,
+          "NC-med": 0.789177
+        },
+        "0.003": {
+          "Acc-mean": 0.029114,
+          "Acc-med": 0.012179,
+          "Comp-mean": 0.045643,
+          "Comp-med": 0.015312,
+          "NC-mean": 0.686996,
+          "NC-med": 0.787027
+        },
+        "0.005": {
+          "Acc-mean": 0.024321,
+          "Acc-med": 0.010059,
+          "Comp-mean": 0.041814,
+          "Comp-med": 0.014438,
+          "NC-mean": 0.689287,
+          "NC-med": 0.79106
+        },
+        "0.007": {
+          "Acc-mean": 0.025325,
+          "Acc-med": 0.010828,
+          "Comp-mean": 0.045779,
+          "Comp-med": 0.016523,
+          "NC-mean": 0.691264,
+          "NC-med": 0.792966
+        },
+        "0.01": {
+          "Acc-mean": 0.027683,
+          "Acc-med": 0.011701,
+          "Comp-mean": 0.053068,
+          "Comp-med": 0.01901,
+          "NC-mean": 0.687786,
+          "NC-med": 0.787751
+        },
+        "0.02": {
+          "Acc-mean": 0.029778,
+          "Acc-med": 0.012919,
+          "Comp-mean": 0.052901,
+          "Comp-med": 0.019817,
+          "NC-mean": 0.688148,
+          "NC-med": 0.787293
+        },
+        "0.05": {
+          "Acc-mean": 0.02903,
+          "Acc-med": 0.012653,
+          "Comp-mean": 0.05164,
+          "Comp-med": 0.019381,
+          "NC-mean": 0.688465,
+          "NC-med": 0.788458
+        }
+      }
+    },
+    "rank": {
+      "run_id": "701507048",
+      "status": "completed",
+      "values": [
+        8,
+        16,
+        32,
+        64,
+        128,
+        256
+      ],
+      "fixed": {
+        "rho": 0.1,
+        "tau": 0.007
+      },
+      "primary_dataset": "7scenes-dense",
+      "auxiliary_dataset": "ETH3D",
+      "metrics": {
+        "7scenes-dense": {
+          "8": {
+            "Acc-mean": 0.027066,
+            "Acc-med": 0.011533,
+            "Comp-mean": 0.045646,
+            "Comp-med": 0.016145,
+            "NC-mean": 0.690162,
+            "NC-med": 0.791503
+          },
+          "16": {
+            "Acc-mean": 0.025325,
+            "Acc-med": 0.010828,
+            "Comp-mean": 0.045779,
+            "Comp-med": 0.016523,
+            "NC-mean": 0.691264,
+            "NC-med": 0.792966
+          },
+          "32": {
+            "Acc-mean": 0.020863,
+            "Acc-med": 0.008915,
+            "Comp-mean": 0.039108,
+            "Comp-med": 0.015731,
+            "NC-mean": 0.692756,
+            "NC-med": 0.795568
+          },
+          "64": {
+            "Acc-mean": 0.01959,
+            "Acc-med": 0.008517,
+            "Comp-mean": 0.037044,
+            "Comp-med": 0.014933,
+            "NC-mean": 0.692338,
+            "NC-med": 0.795237
+          },
+          "128": {
+            "Acc-mean": 0.018886,
+            "Acc-med": 0.008108,
+            "Comp-mean": 0.035867,
+            "Comp-med": 0.014019,
+            "NC-mean": 0.694326,
+            "NC-med": 0.798332
+          },
+          "256": {
+            "Acc-mean": 0.018472,
+            "Acc-med": 0.008117,
+            "Comp-mean": 0.033707,
+            "Comp-med": 0.014021,
+            "NC-mean": 0.694432,
+            "NC-med": 0.798279
+          }
+        },
+        "ETH3D": {
+          "16": {
+            "Acc-mean": 0.737394,
+            "Acc-med": 0.522143,
+            "Comp-mean": 1.871054,
+            "Comp-med": 0.794437,
+            "NC-mean": 0.598173,
+            "NC-med": 0.643395
+          },
+          "32": {
+            "Acc-mean": 0.69621,
+            "Acc-med": 0.564267,
+            "Comp-mean": 1.681153,
+            "Comp-med": 0.857537,
+            "NC-mean": 0.604388,
+            "NC-med": 0.655622
+          }
+        }
+      }
+    }
+  },
+  "rho_001_validation": {
+    "run_id": "701529740",
+    "status": "completed",
+    "settings": [
+      "w4a8_ternary",
+      "w4a8_exhaustive",
+      "w4a8_channelwise",
+      "w6a6_ternary",
+      "w8a8_ternary"
+    ],
+    "compensation": {
+      "rho_tail_ratio": 0.01,
+      "tau_thr": 0.007,
+      "rank": 16,
+      "strategy": "module",
+      "skip_p": 0.0
+    },
+    "eval_datasets": [
+      "7scenes-dense",
+      "ETH3D"
+    ],
+    "artifact_root": "mnt/cephfs/pansicheng/tmm-results/eval/vggt_taptq_compensated_rho001_tau0007_r16",
+    "metrics": {
+      "7scenes-dense": {
+        "w4a8_ternary": {
+          "Acc-mean": 0.028793,
+          "Acc-med": 0.011803,
+          "Comp-mean": 0.051019,
+          "Comp-med": 0.018225,
+          "NC-mean": 0.688277,
+          "NC-med": 0.788356
+        },
+        "w4a8_exhaustive": {
+          "Acc-mean": 0.028761,
+          "Acc-med": 0.012707,
+          "Comp-mean": 0.04913,
+          "Comp-med": 0.018624,
+          "NC-mean": 0.689885,
+          "NC-med": 0.790644
+        },
+        "w4a8_channelwise": {
+          "Acc-mean": 0.019292,
+          "Acc-med": 0.008045,
+          "Comp-mean": 0.033119,
+          "Comp-med": 0.015533,
+          "NC-mean": 0.688289,
+          "NC-med": 0.790698
+        },
+        "w6a6_ternary": {
+          "Acc-mean": 0.018856,
+          "Acc-med": 0.008236,
+          "Comp-mean": 0.033327,
+          "Comp-med": 0.014103,
+          "NC-mean": 0.691428,
+          "NC-med": 0.795128
+        },
+        "w8a8_ternary": {
+          "Acc-mean": 0.018238,
+          "Acc-med": 0.007402,
+          "Comp-mean": 0.031045,
+          "Comp-med": 0.015226,
+          "NC-mean": 0.689731,
+          "NC-med": 0.792637
+        }
+      },
+      "ETH3D": {
+        "w4a8_ternary": {
+          "Acc-mean": 0.664496,
+          "Acc-med": 0.540788,
+          "Comp-mean": 1.68434,
+          "Comp-med": 0.841421,
+          "NC-mean": 0.600869,
+          "NC-med": 0.649329
+        },
+        "w4a8_exhaustive": {
+          "Acc-mean": 0.807569,
+          "Acc-med": 0.553557,
+          "Comp-mean": 1.948984,
+          "Comp-med": 0.861981,
+          "NC-mean": 0.585924,
+          "NC-med": 0.629201
+        },
+        "w4a8_channelwise": {
+          "Acc-mean": 0.570939,
+          "Acc-med": 0.476326,
+          "Comp-mean": 1.326977,
+          "Comp-med": 0.716786,
+          "NC-mean": 0.672358,
+          "NC-med": 0.762319
+        },
+        "w6a6_ternary": {
+          "Acc-mean": 0.643567,
+          "Acc-med": 0.535892,
+          "Comp-mean": 1.507768,
+          "Comp-med": 0.807224,
+          "NC-mean": 0.636344,
+          "NC-med": 0.706843
+        },
+        "w8a8_ternary": {
+          "Acc-mean": 0.612778,
+          "Acc-med": 0.522052,
+          "Comp-mean": 1.487226,
+          "Comp-med": 0.853802,
+          "NC-mean": 0.663678,
+          "NC-med": 0.742042
+        }
+      }
+    }
+  },
+  "combo_selection_run": {
+    "run_id": "701546763",
+    "job_id": "5881390",
+    "owner": "sichengpan",
+    "status": "completed",
+    "primary_dataset": "7scenes-dense",
+    "auxiliary_dataset": "ETH3D",
+    "candidates": [
+      {
+        "gpu": 0,
+        "tag": "w4a8_ternary_rho01_tau005_r256",
+        "setting": "W4A8 ternary",
+        "channelwise": false,
+        "rho": 0.1,
+        "tau": 0.005,
+        "rank": 256
+      },
+      {
+        "gpu": 1,
+        "tag": "w4a8_ternary_rho001_tau005_r256",
+        "setting": "W4A8 ternary",
+        "channelwise": false,
+        "rho": 0.01,
+        "tau": 0.005,
+        "rank": 256
+      },
+      {
+        "gpu": 2,
+        "tag": "w4a8_ternary_rho005_tau005_r128",
+        "setting": "W4A8 ternary",
+        "channelwise": false,
+        "rho": 0.05,
+        "tau": 0.005,
+        "rank": 128
+      },
+      {
+        "gpu": 3,
+        "tag": "w4a8_exhaustive_rho001_tau005_r256",
+        "setting": "W4A8 exhaustive",
+        "channelwise": false,
+        "rho": 0.01,
+        "tau": 0.005,
+        "rank": 256
+      },
+      {
+        "gpu": 4,
+        "tag": "w4a8_channelwise_rho001_tau005_r256",
+        "setting": "W4A8 channel-wise",
+        "channelwise": true,
+        "rho": 0.01,
+        "tau": 0.005,
+        "rank": 256
+      },
+      {
+        "gpu": 5,
+        "tag": "w6a6_rho001_tau005_r256",
+        "setting": "W6A6 ternary",
+        "channelwise": false,
+        "rho": 0.01,
+        "tau": 0.005,
+        "rank": 256
+      },
+      {
+        "gpu": 6,
+        "tag": "w8a8_rho001_tau005_r256",
+        "setting": "W8A8 ternary",
+        "channelwise": false,
+        "rho": 0.01,
+        "tau": 0.005,
+        "rank": 256
+      },
+      {
+        "gpu": 7,
+        "tag": "w4a8_ternary_rho01_tau007_r128",
+        "setting": "W4A8 ternary",
+        "channelwise": false,
+        "rho": 0.1,
+        "tau": 0.007,
+        "rank": 128
+      }
+    ],
+    "artifact_root": "mnt/cephfs/pansicheng/tmm-results/eval/vggt_combo_selection",
+    "metrics": {
+      "w4a8_ternary_rho01_tau005_r256": {
+        "7scenes-dense": {
+          "Acc-mean": 0.01899,
+          "Acc-med": 0.00824,
+          "Comp-mean": 0.034746,
+          "Comp-med": 0.013859,
+          "NC-mean": 0.693951,
+          "NC-med": 0.798042
+        },
+        "ETH3D": {
+          "Acc-mean": 0.658013,
+          "Acc-med": 0.539395,
+          "Comp-mean": 1.58704,
+          "Comp-med": 0.755651,
+          "NC-mean": 0.618117,
+          "NC-med": 0.679991
+        }
+      },
+      "w4a8_ternary_rho001_tau005_r256": {
+        "7scenes-dense": {
+          "Acc-mean": 0.020057,
+          "Acc-med": 0.008472,
+          "Comp-mean": 0.031452,
+          "Comp-med": 0.012909,
+          "NC-mean": 0.692546,
+          "NC-med": 0.797549
+        },
+        "ETH3D": {
+          "Acc-mean": 0.720945,
+          "Acc-med": 0.47051,
+          "Comp-mean": 1.784419,
+          "Comp-med": 0.73521,
+          "NC-mean": 0.631503,
+          "NC-med": 0.700432
+        }
+      },
+      "w4a8_ternary_rho005_tau005_r128": {
+        "7scenes-dense": {
+          "Acc-mean": 0.019426,
+          "Acc-med": 0.008346,
+          "Comp-mean": 0.036389,
+          "Comp-med": 0.014141,
+          "NC-mean": 0.694892,
+          "NC-med": 0.79879
+        },
+        "ETH3D": {
+          "Acc-mean": 0.838353,
+          "Acc-med": 0.507882,
+          "Comp-mean": 1.944112,
+          "Comp-med": 0.953315,
+          "NC-mean": 0.619188,
+          "NC-med": 0.68066
+        }
+      },
+      "w4a8_exhaustive_rho001_tau005_r256": {
+        "7scenes-dense": {
+          "Acc-mean": 0.020061,
+          "Acc-med": 0.008321,
+          "Comp-mean": 0.036617,
+          "Comp-med": 0.014936,
+          "NC-mean": 0.694042,
+          "NC-med": 0.798069
+        },
+        "ETH3D": {
+          "Acc-mean": 0.772398,
+          "Acc-med": 0.50818,
+          "Comp-mean": 1.681983,
+          "Comp-med": 0.648304,
+          "NC-mean": 0.632591,
+          "NC-med": 0.710283
+        }
+      },
+      "w4a8_channelwise_rho001_tau005_r256": {
+        "7scenes-dense": {
+          "Acc-mean": 0.018566,
+          "Acc-med": 0.007794,
+          "Comp-mean": 0.032607,
+          "Comp-med": 0.015484,
+          "NC-mean": 0.689016,
+          "NC-med": 0.791702
+        },
+        "ETH3D": {
+          "Acc-mean": 0.560725,
+          "Acc-med": 0.411231,
+          "Comp-mean": 1.429107,
+          "Comp-med": 0.711722,
+          "NC-mean": 0.682015,
+          "NC-med": 0.780931
+        }
+      },
+      "w6a6_rho001_tau005_r256": {
+        "7scenes-dense": {
+          "Acc-mean": 0.018232,
+          "Acc-med": 0.008394,
+          "Comp-mean": 0.032846,
+          "Comp-med": 0.014855,
+          "NC-mean": 0.691639,
+          "NC-med": 0.794727
+        },
+        "ETH3D": {
+          "Acc-mean": 0.639463,
+          "Acc-med": 0.49853,
+          "Comp-mean": 1.602481,
+          "Comp-med": 0.732495,
+          "NC-mean": 0.652772,
+          "NC-med": 0.732538
+        }
+      },
+      "w8a8_rho001_tau005_r256": {
+        "7scenes-dense": {
+          "Acc-mean": 0.018283,
+          "Acc-med": 0.007335,
+          "Comp-mean": 0.031144,
+          "Comp-med": 0.015311,
+          "NC-mean": 0.689938,
+          "NC-med": 0.793022
+        },
+        "ETH3D": {
+          "Acc-mean": 0.609459,
+          "Acc-med": 0.516592,
+          "Comp-mean": 1.485683,
+          "Comp-med": 0.84211,
+          "NC-mean": 0.665736,
+          "NC-med": 0.744676
+        }
+      },
+      "w4a8_ternary_rho01_tau007_r128": {
+        "7scenes-dense": {
+          "Acc-mean": 0.018886,
+          "Acc-med": 0.008108,
+          "Comp-mean": 0.035867,
+          "Comp-med": 0.014019,
+          "NC-mean": 0.694326,
+          "NC-med": 0.798332
+        },
+        "ETH3D": {
+          "Acc-mean": 0.632187,
+          "Acc-med": 0.420825,
+          "Comp-mean": 1.603074,
+          "Comp-med": 0.645639,
+          "NC-mean": 0.62699,
+          "NC-med": 0.697055
+        }
+      }
+    }
+  },
+  "main_recommended_and_baseline_run": {
+    "run_id": "701579542",
+    "job_id": "5881390",
+    "owner": "sichengpan",
+    "status": "completed",
+    "protocol": "E1 unified evaluator, 518 input",
+    "primary_dataset": "7scenes-dense",
+    "auxiliary_dataset": "ETH3D",
+    "recommended_taptq": {
+      "setting": "W4A8 ternary non-channel-wise",
+      "rho": 0.1,
+      "tau": 0.007,
+      "rank": 128,
+      "source_checkpoint": "w4a8_ternary.pt"
+    },
+    "baseline_tasks": {
+      "FP": "GPU0",
+      "RTN": "GPU1",
+      "RepQ": "GPU2",
+      "ERQ": "GPU3"
+    },
+    "channelwise_ablation": {
+      "GPU5": "W4A8 channel-wise rho=0.01 tau=0.005 rank=256",
+      "GPU6": "W6A6 channel-wise rho=0.01 tau=0.005 rank=256",
+      "GPU7": "W8A8 channel-wise rho=0.01 tau=0.005 rank=256"
+    },
+    "channelwise_hyperparameter_ablation": {
+      "status": "completed_all_12_missing_settings_on_run_702478252",
+      "run_id": "701579542",
+      "completion_run_id": "702478252",
+      "note": "Verified channel-wise artifacts are reported separately from the non-channel-wise sweep; all rho/tau/rank settings are completed",
+      "checkpoint": "mnt/cephfs/pansicheng/tmm-results/checkpoints/w4a8_channelwise.pt",
+      "primary_dataset": "7scenes-dense",
+      "auxiliary_dataset": "ETH3D",
+      "candidates": [
+        {
+          "gpu": 2,
+          "rho": 0.01,
+          "tau": 0.005,
+          "rank": 64,
+          "tag": "channelwise_rho001_tau005_r64"
+        },
+        {
+          "gpu": 3,
+          "rho": 0.01,
+          "tau": 0.005,
+          "rank": 128,
+          "tag": "channelwise_rho001_tau005_r128"
+        },
+        {
+          "gpu": 4,
+          "rho": 0.01,
+          "tau": 0.007,
+          "rank": 128,
+          "tag": "channelwise_rho001_tau007_r128"
+        },
+        {
+          "gpu": 5,
+          "rho": 0.1,
+          "tau": 0.007,
+          "rank": 128,
+          "tag": "channelwise_rho01_tau007_r128"
+        }
+      ],
+      "completed_fixed_setting": {
+        "setting": "W4A8 ternary",
+        "rho": 0.01,
+        "tau": 0.005,
+        "rank": 256
+      },
+      "pending_fixed_settings": [],
+      "artifact_root": "mnt/cephfs/pansicheng/tmm-results/eval/vggt_channelwise_ablation",
+      "completed_sweeps": {
+        "rho": {
+          "fixed": {
+            "tau": 0.005,
+            "rank": 128
+          },
+          "values": [
+            0.001,
+            0.005,
+            0.02,
+            0.05,
+            0.1,
+            0.5,
+            1.0
+          ]
+        },
+        "tau": {
+          "fixed": {
+            "rho": 0.01,
+            "rank": 128
+          },
+          "zero_value_note": "Requested tau=0 was evaluated as tau=0.007 because the runtime used value or 0.007; exclude it from ablation conclusions.",
+          "values": [
+            0,
+            0.001,
+            0.003,
+            0.01,
+            0.02,
+            0.05
+          ]
+        },
+        "rank": {
+          "fixed": {
+            "rho": 0.01,
+            "tau": 0.005
+          },
+          "values": [
+            8,
+            16,
+            32
+          ]
+        },
+        "scheduler": "completed_on_run_702478252"
+      }
+    },
+    "artifact_root": "mnt/cephfs/pansicheng/tmm-results/eval/vggt_main_cw",
+    "metrics": {
+      "FP": {
+        "7scenes-dense": {
+          "Acc-mean": 0.0185297265,
+          "Comp-mean": 0.0317561597,
+          "NC-mean": 0.68945123
+        },
+        "ETH3D": {
+          "Acc-mean": 0.5770895427,
+          "Comp-mean": 1.3951154955,
+          "NC-mean": 0.674189928
+        }
+      },
+      "RTN_W4A8": {
+        "7scenes-dense": {
+          "Acc-mean": 0.0349971404,
+          "Comp-mean": 0.0570185822,
+          "NC-mean": 0.6814971296
+        },
+        "ETH3D": {
+          "Acc-mean": 0.6741235144,
+          "Comp-mean": 1.8031280081,
+          "NC-mean": 0.6031889313
+        }
+      },
+      "RepQ_W4A8": {
+        "7scenes-dense": {
+          "Acc-mean": 0.1142019668,
+          "Comp-mean": 0.269600534,
+          "NC-mean": 0.6135691463
+        },
+        "ETH3D": {
+          "Acc-mean": 0.8546305653,
+          "Comp-mean": 3.2673921849,
+          "NC-mean": 0.5270358804
+        }
+      },
+      "recommended_TAPTQ_W4A8_rho01_tau007_r128": {
+        "7scenes-dense": {
+          "Acc-mean": 0.0188860653,
+          "Comp-mean": 0.0358673714,
+          "NC-mean": 0.6943259266
+        },
+        "ETH3D": {
+          "Acc-mean": 0.6321868679,
+          "Comp-mean": 1.6030737879,
+          "NC-mean": 0.6269899922
+        }
+      },
+      "channelwise_W4A8_rho001_tau005_r256": {
+        "7scenes-dense": {
+          "Acc-mean": 0.018565557,
+          "Comp-mean": 0.0326070212,
+          "NC-mean": 0.6890160742
+        },
+        "ETH3D": {
+          "Acc-mean": 0.5607248158,
+          "Comp-mean": 1.4291065331,
+          "NC-mean": 0.6820147898
+        }
+      },
+      "channelwise_W6A6_rho001_tau005_r256": {
+        "7scenes-dense": {
+          "Acc-mean": 0.019946,
+          "Acc-med": 0.008776,
+          "Comp-mean": 0.034856,
+          "Comp-med": 0.015121,
+          "NC-mean": 0.688285,
+          "NC-med": 0.789994
+        },
+        "ETH3D": {
+          "Acc-mean": 0.650349,
+          "Acc-med": 0.546553,
+          "Comp-mean": 1.630045,
+          "Comp-med": 0.828188,
+          "NC-mean": 0.621792,
+          "NC-med": 0.681915
+        }
+      },
+      "channelwise_W8A8_rho001_tau005_r256": {
+        "7scenes-dense": {
+          "Acc-mean": 0.018563,
+          "Acc-med": 0.007435,
+          "Comp-mean": 0.031442,
+          "Comp-med": 0.015487,
+          "NC-mean": 0.689497,
+          "NC-med": 0.79246
+        },
+        "ETH3D": {
+          "Acc-mean": 0.612714,
+          "Acc-med": 0.518221,
+          "Comp-mean": 1.486071,
+          "Comp-med": 0.83408,
+          "NC-mean": 0.664152,
+          "NC-med": 0.739866
+        }
+      }
+    },
+    "completed": [
+      "FP",
+      "RTN_W4A8",
+      "RepQ_W4A8",
+      "ERQ_W4A8",
+      "recommended_TAPTQ_W4A8_rho01_tau007_r128",
+      "channelwise_W4A8_rho001_tau005_r256",
+      "channelwise_W6A6_rho001_tau005_r256",
+      "channelwise_W8A8_rho001_tau005_r256",
+      "SVDQuant_W4A4_rank32",
+      "SVDQuant_W4A8_rank128"
+    ],
+    "pending": [],
+    "additional_missing_baselines": {
+      "PTQ4ViT_W4A8": {
+        "status": "completed",
+        "run_id": "702478252",
+        "calibration_dataset": "DTU_train_8",
+        "log": "mnt/cephfs/pansicheng/tmm-results/logs/ptq4vit_dtu8_w4a8.log",
+        "artifact_root": "mnt/cephfs/pansicheng/tmm-results/eval/ptq4vit_dtu8_w4a8",
+        "metrics": {
+          "7scenes-dense": {
+            "Acc-mean": 0.0342607395958415,
+            "Acc-med": 0.0152013097375529,
+            "Comp-mean": 0.0546692600048538,
+            "Comp-med": 0.0189705148768534,
+            "NC-mean": 0.6877446541335961,
+            "NC-med": 0.7858752818690926
+          },
+          "ETH3D": {
+            "Acc-mean": 0.7424787483074211,
+            "Acc-med": 0.5717357478596411,
+            "Comp-mean": 1.775613808589076,
+            "Comp-med": 0.8804327059388317,
+            "NC-mean": 0.5861999244204668,
+            "NC-med": 0.6314446123981937
+          }
+        }
+      },
+      "SVDQuant_W4A4_rank32": {
+        "status": "completed",
+        "entrypoint": "Pi3-evaluation/mv_recon/svdquant.py",
+        "implementation": "activation outlier migration + W4A4 fake quant + FP low-rank residual; no fused CUDA kernel",
+        "log": "mnt/cephfs/pansicheng/tmm-results/logs/vggt_svdquant_w4a4_r32.log",
+        "metrics": {
+          "7scenes-dense": {
+            "Acc-mean": 0.100695,
+            "Comp-mean": 0.279415,
+            "NC-mean": 0.625871
+          },
+          "ETH3D": {
+            "Acc-mean": 0.774879,
+            "Comp-mean": 3.532489,
+            "NC-mean": 0.521273
+          }
+        }
+      },
+      "SVDQuant_W4A8_rank128": {
+        "status": "completed",
+        "entrypoint": "Pi3-evaluation/mv_recon/svdquant.py",
+        "implementation": "activation outlier migration + W4A8 fake quant + FP low-rank residual; no fused CUDA kernel",
+        "parameters": {
+          "w_bit": 4,
+          "a_bit": 8,
+          "rank": 128,
+          "alpha": 0.5
+        },
+        "log": "mnt/cephfs/pansicheng/tmm-results/logs/vggt_svdquant_w4a8_r128.log",
+        "metrics": {
+          "7scenes-dense": {
+            "Acc-mean": 0.051505,
+            "Comp-mean": 0.057741,
+            "NC-mean": 0.685049
+          },
+          "ETH3D": {
+            "Acc-mean": 0.704531,
+            "Comp-mean": 1.653232,
+            "NC-mean": 0.583574
+          }
+        }
+      },
+      "GPTQ": {
+        "status": "superseded_by_official_aligned_run_702260369",
+        "run_id": "701579542",
+        "entrypoint": "Pi3-evaluation/mv_recon/baseline_quant.py",
+        "layer": "Pi3-evaluation/PTQ/quant_layers/gptq.py",
+        "parameters": {
+          "w_bit": 4,
+          "a_bit": 8,
+          "damp_percent": 0.01
+        },
+        "scope": "VGGT aggregator qkv/proj/fc1/fc2, 288 linears",
+        "quantization": "per-output-channel affine weight QDQ + layer-wise activation QDQ",
+        "log": "mnt/cephfs/pansicheng/tmm-results/logs/vggt_gptq_w4a8.log",
+        "output_dir": "mnt/cephfs/pansicheng/tmm-results/eval/vggt_main_cw/gptq_w4a8",
+        "reason": "New unified VGGT GPTQ adapter was started, but no final evaluation artifact was produced before the pod was released"
+      }
+    }
+  },
+  "official_aligned_baselines": {
+    "run_id": "702260369",
+    "job_id": "5881390",
+    "owner": "sichengpan",
+    "status": "completed",
+    "protocol": {
+      "model": "VGGT-1B",
+      "scope": "aggregator qkv/proj/fc1/fc2, 288 linears",
+      "calibration_dataset": "DTU_train_8",
+      "primary_dataset": "7scenes-dense",
+      "auxiliary_dataset": "ETH3D",
+      "common_setting": "W4A8",
+      "attention_matmul_quantized": false
+    },
+    "sources": {
+      "RepQ-ViT": {
+        "url": "https://github.com/zkkli/RepQ-ViT",
+        "commit": "a160561b9233945e6680132f129d13041b787318"
+      },
+      "ERQ": {
+        "url": "https://github.com/zysxmu/ERQ",
+        "commit": "2f5b4cee111cef8a099e8c3086e34a36d42e86fd",
+        "status": "official source aligned; core rerun 702327342 and two-part rerun 702384692 completed"
+      },
+      "GPTQ": {
+        "url": "https://github.com/IST-DASLab/gptq",
+        "commit": "2d65066eeb06a5c9ff5184d8cebdf33662c67faf"
+      },
+      "SVDQuant": {
+        "url": "https://github.com/nunchaku-ai/deepcompressor",
+        "commit": "69f3473f5e1c1504bae35cc50c7858ef900a9b17"
+      }
+    },
+    "gpu_assignment": {
+      "GPU0": "RepQ aligned W4A8",
+      "GPU1": "ERQ paper-aligned W4A8",
+      "GPU2": "GPTQ official-core W4A8",
+      "GPU3": "SVDQuant aligned W4A8 rank32",
+      "GPU4": "SVDQuant aligned W4A4 rank32",
+      "GPU5": "RTN official-quantizer W4A8 control",
+      "GPU6": "RepQ aligned W4A4",
+      "GPU7": "ERQ paper-aligned W4A4"
+    },
+    "artifact_root": "mnt/cephfs/pansicheng/tmm-results/eval/vggt_official_aligned",
+    "metrics": {
+      "official_rtn_w4a8": {
+        "7scenes-dense": {
+          "Acc-mean": 0.031663,
+          "Acc-med": 0.012442,
+          "Comp-mean": 0.043327,
+          "Comp-med": 0.01579,
+          "NC-mean": 0.684913,
+          "NC-med": 0.786767
+        },
+        "ETH3D": {
+          "Acc-mean": 0.625811,
+          "Acc-med": 0.490863,
+          "Comp-mean": 1.445871,
+          "Comp-med": 0.635089,
+          "NC-mean": 0.617507,
+          "NC-med": 0.683662
+        }
+      },
+      "official_repq_w4a8": {
+        "7scenes-dense": {
+          "Acc-mean": 0.087162,
+          "Acc-med": 0.048589,
+          "Comp-mean": 0.193871,
+          "Comp-med": 0.089153,
+          "NC-mean": 0.637539,
+          "NC-med": 0.707285
+        },
+        "ETH3D": {
+          "Acc-mean": 0.800381,
+          "Acc-med": 0.712105,
+          "Comp-mean": 2.771863,
+          "Comp-med": 1.382796,
+          "NC-mean": 0.56235,
+          "NC-med": 0.602174
+        }
+      },
+      "official_erq_w4a8": {
+        "run_id": "702327342",
+        "source": "zysxmu/ERQ@2f5b4cee111cef8a099e8c3086e34a36d42e86fd",
+        "two_part": false,
+        "7scenes-dense": {
+          "Acc-mean": 0.077527,
+          "Acc-med": 0.040823,
+          "Comp-mean": 0.149162,
+          "Comp-med": 0.062177,
+          "NC-mean": 0.650189,
+          "NC-med": 0.725127
+        },
+        "ETH3D": {
+          "Acc-mean": 0.723984,
+          "Acc-med": 0.594335,
+          "Comp-mean": 2.355848,
+          "Comp-med": 1.16767,
+          "NC-mean": 0.527638,
+          "NC-med": 0.542057
+        }
+      },
+      "official_erq_twopart_w4a8": {
+        "run_id": "702384692",
+        "source": "zysxmu/ERQ@2f5b4cee111cef8a099e8c3086e34a36d42e86fd",
+        "two_part": true,
+        "two_part_scope": "qkv/fc1 only",
+        "artifact_root": "mnt/cephfs/pansicheng/tmm-results/eval/vggt_erq_two_part/official_zysxmu_erq_twopart_w4a8",
+        "7scenes-dense": {
+          "Acc-mean": 0.03399,
+          "Acc-med": 0.015783,
+          "Comp-mean": 0.036652,
+          "Comp-med": 0.014709,
+          "NC-mean": 0.683896,
+          "NC-med": 0.785659
+        },
+        "ETH3D": {
+          "Acc-mean": 0.713734,
+          "Acc-med": 0.589299,
+          "Comp-mean": 1.591601,
+          "Comp-med": 0.784456,
+          "NC-mean": 0.597714,
+          "NC-med": 0.649529
+        }
+      },
+      "official_gptq_w4a8": {
+        "7scenes-dense": {
+          "Acc-mean": 0.030389,
+          "Acc-med": 0.012739,
+          "Comp-mean": 0.034527,
+          "Comp-med": 0.015208,
+          "NC-mean": 0.686803,
+          "NC-med": 0.789693
+        },
+        "ETH3D": {
+          "Acc-mean": 0.662946,
+          "Acc-med": 0.53758,
+          "Comp-mean": 1.665329,
+          "Comp-med": 0.830651,
+          "NC-mean": 0.620042,
+          "NC-med": 0.680215
+        }
+      },
+      "official_svdquant_w4a8_r32": {
+        "7scenes-dense": {
+          "Acc-mean": 0.017294,
+          "Acc-med": 0.007471,
+          "Comp-mean": 0.031685,
+          "Comp-med": 0.015404,
+          "NC-mean": 0.690436,
+          "NC-med": 0.793734
+        },
+        "ETH3D": {
+          "Acc-mean": 0.628478,
+          "Acc-med": 0.394715,
+          "Comp-mean": 1.558726,
+          "Comp-med": 0.754157,
+          "NC-mean": 0.658262,
+          "NC-med": 0.733969
+        }
+      },
+      "official_repq_w4a4": {
+        "7scenes-dense": {
+          "Acc-mean": 0.091156,
+          "Acc-med": 0.057058,
+          "Comp-mean": 0.396727,
+          "Comp-med": 0.294829,
+          "NC-mean": 0.602914,
+          "NC-med": 0.656186
+        },
+        "ETH3D": {
+          "Acc-mean": 0.723635,
+          "Acc-med": 0.619237,
+          "Comp-mean": 3.567328,
+          "Comp-med": 2.110682,
+          "NC-mean": 0.553392,
+          "NC-med": 0.583904
+        }
+      },
+      "official_erq_w4a4": {
+        "run_id": "702327342",
+        "source": "zysxmu/ERQ@2f5b4cee111cef8a099e8c3086e34a36d42e86fd",
+        "7scenes-dense": {
+          "Acc-mean": 0.099045,
+          "Acc-med": 0.060697,
+          "Comp-mean": 0.272316,
+          "Comp-med": 0.165301,
+          "NC-mean": 0.628182,
+          "NC-med": 0.692219
+        },
+        "ETH3D": {
+          "Acc-mean": 0.736098,
+          "Acc-med": 0.660518,
+          "Comp-mean": 3.680139,
+          "Comp-med": 2.201514,
+          "NC-mean": 0.505074,
+          "NC-med": 0.511692
+        }
+      },
+      "official_svdquant_w4a4_r32": {
+        "7scenes-dense": {
+          "Acc-mean": 0.01793,
+          "Acc-med": 0.008122,
+          "Comp-mean": 0.032902,
+          "Comp-med": 0.01566,
+          "NC-mean": 0.688462,
+          "NC-med": 0.790606
+        },
+        "ETH3D": {
+          "Acc-mean": 0.613718,
+          "Acc-med": 0.514135,
+          "Comp-mean": 1.462092,
+          "Comp-med": 0.803721,
+          "NC-mean": 0.653075,
+          "NC-med": 0.727498
+        }
+      },
+      "official_erq_twopart_dtu20_w4a8": {
+        "run_id": "702472888",
+        "calibration_dataset": "DTU_20",
+        "calibration_scans": 20,
+        "calibration_tokens_per_layer": 4096,
+        "two_part": true,
+        "artifact_root": "mnt/cephfs/pansicheng/tmm-results/eval/vggt_erq_dtu20/official_zysxmu_erq_twopart_dtu20_w4a8",
+        "7scenes-dense": {
+          "Acc-mean": 0.088206,
+          "Acc-med": 0.048638,
+          "Comp-mean": 0.146,
+          "Comp-med": 0.054312,
+          "NC-mean": 0.646577,
+          "NC-med": 0.72357
+        },
+        "ETH3D": {
+          "Acc-mean": 0.735495,
+          "Acc-med": 0.588561,
+          "Comp-mean": 2.665761,
+          "Comp-med": 1.3633,
+          "NC-mean": 0.543135,
+          "NC-med": 0.55859
+        }
+      },
+      "official_erq_twopart_dtu20_w6a6": {
+        "run_id": "702472888",
+        "calibration_dataset": "DTU_20",
+        "calibration_scans": 20,
+        "calibration_tokens_per_layer": 4096,
+        "two_part": true,
+        "artifact_root": "mnt/cephfs/pansicheng/tmm-results/eval/vggt_erq_dtu20/official_zysxmu_erq_twopart_dtu20_w6a6",
+        "7scenes-dense": {
+          "Acc-mean": 0.07838,
+          "Acc-med": 0.041341,
+          "Comp-mean": 0.125551,
+          "Comp-med": 0.044834,
+          "NC-mean": 0.652625,
+          "NC-med": 0.732831
+        },
+        "ETH3D": {
+          "Acc-mean": 0.729353,
+          "Acc-med": 0.624503,
+          "Comp-mean": 2.384169,
+          "Comp-med": 1.070915,
+          "NC-mean": 0.536392,
+          "NC-med": 0.552764
+        }
+      },
+      "official_gptq_w6a6": {
+        "run_id": "702478252",
+        "calibration_dataset": "DTU_train_8",
+        "calibration_tokens_per_layer": 4096,
+        "7scenes-dense": {
+          "Acc-mean": 0.039548,
+          "Acc-med": 0.016853,
+          "Comp-mean": 0.041233,
+          "Comp-med": 0.015108,
+          "NC-mean": 0.679349,
+          "NC-med": 0.777936
+        },
+        "ETH3D": {
+          "Acc-mean": 0.687522,
+          "Acc-med": 0.541173,
+          "Comp-mean": 1.692481,
+          "Comp-med": 0.816184,
+          "NC-mean": 0.603864,
+          "NC-med": 0.663436
+        }
+      },
+      "smoothquant_w4a8_alpha05": {
+        "run_id": "702478252",
+        "calibration_dataset": "DTU_train_8",
+        "calibration_tokens_per_layer": 4096,
+        "alpha": 0.5,
+        "scope": "aggregator qkv/proj/fc1/fc2, 288 linears",
+        "weight_granularity": "per-output-channel",
+        "activation_granularity": "layer-wise",
+        "7scenes-dense": {
+          "Acc-mean": 0.048089,
+          "Acc-med": 0.023292,
+          "Comp-mean": 0.042848,
+          "Comp-med": 0.016567,
+          "NC-mean": 0.685119,
+          "NC-med": 0.782658
+        },
+        "ETH3D": {
+          "Acc-mean": 0.678356,
+          "Acc-med": 0.56219,
+          "Comp-mean": 1.610918,
+          "Comp-med": 0.763441,
+          "NC-mean": 0.587523,
+          "NC-med": 0.640375
+        }
+      },
+      "smoothquant_w6a6_alpha05": {
+        "run_id": "702478252",
+        "calibration_dataset": "DTU_train_8",
+        "calibration_tokens_per_layer": 4096,
+        "alpha": 0.5,
+        "7scenes-dense": {
+          "Acc-mean": 0.034905,
+          "Acc-med": 0.017402,
+          "Comp-mean": 0.047122,
+          "Comp-med": 0.018534,
+          "NC-mean": 0.679549,
+          "NC-med": 0.778883
+        },
+        "ETH3D": {
+          "Acc-mean": 0.677828,
+          "Acc-med": 0.524349,
+          "Comp-mean": 1.915498,
+          "Comp-med": 0.999511,
+          "NC-mean": 0.60382,
+          "NC-med": 0.660733
+        }
+      },
+      "official_erq_twopart_dtu8_w6a6": {
+        "run_id": "702478252",
+        "calibration_dataset": "DTU_train_8",
+        "calibration_tokens_per_layer": 4096,
+        "two_part": true,
+        "7scenes-dense": {
+          "Acc-mean": 0.036203,
+          "Acc-med": 0.016959,
+          "Comp-mean": 0.040491,
+          "Comp-med": 0.015544,
+          "NC-mean": 0.681859,
+          "NC-med": 0.782245
+        },
+        "ETH3D": {
+          "Acc-mean": 0.745798,
+          "Acc-med": 0.631373,
+          "Comp-mean": 1.730803,
+          "Comp-med": 0.860565,
+          "NC-mean": 0.601874,
+          "NC-med": 0.662996
+        }
+      }
+    }
+  },
+  "fp_pi3_unified_e1": {
+    "run_id": "702478252",
+    "model": "Pi3",
+    "protocol": "unified E1, 518 input",
+    "model_path": "models/models--yyfz233--Pi3",
+    "7scenes-dense": {
+      "Acc-mean": 0.015044,
+      "Acc-med": 0.006523,
+      "Comp-mean": 0.022652,
+      "Comp-med": 0.011301,
+      "NC-mean": 0.6854,
+      "NC-med": 0.788494
+    },
+    "ETH3D": {
+      "Acc-mean": 0.436885,
+      "Acc-med": 0.344529,
+      "Comp-mean": 1.018259,
+      "Comp-med": 0.561815,
+      "NC-mean": 0.703833,
+      "NC-med": 0.7998
+    }
+  },
+  "foundation_model_results_702478252": {
+    "run_id": "702478252",
+    "archived_at": "2026-08-19T13:23:00+08:00",
+    "status": "opend4rt_completed_vggt_omega_deferred",
+    "protocol": "E1 unified evaluator, 7Scenes dense full18, Mean/Median Acc/Comp/NC; OpenD4RT native 256 forward with output resized to evaluator resolution",
+    "calibration": {
+      "dataset": "DTU_train_8",
+      "seq_id_map": "Pi3-evaluation/datasets/seq-id-maps/DTUTrain_8_mv-recon_seq-id-map-kf5.json",
+      "scans": 8,
+      "frames_per_scan": 10,
+      "input_images": 80,
+      "sampling_stride": 5,
+      "metadata_calibration_size": 32,
+      "metadata_note": "TAPTQ_CALIB_SIZE=32 is printed in the run summary but does not truncate the calibration iterator"
+    },
+    "quantization": {
+      "bits": "W4A8",
+      "metric": "hessian",
+      "search_mode": "ternary",
+      "wrapped_linear_modules": 208,
+      "nonchannelwise_calibration_minutes": 32.71,
+      "channelwise_calibration_minutes": 35.64
+    },
+    "OpenD4RT": {
+      "source_repo": "https://github.com/Lijiaxin0111/Open-d4rt.git",
+      "source_commit": "403290a6e7ea6262a1f20f8c02d5461cd7b6c9b3",
+      "checkpoint_local": "/data/workspace/model-downloads/OpenD4RT_32CLIP_9Dataset_NoAUG/opend4rt.ckpt",
+      "checkpoint": "/mnt/cephfs/pansicheng/models/OpenD4RT/checkpoints/OpenD4RT_32CLIP_9Dataset_NoAUG/opend4rt.ckpt",
+      "checkpoint_bytes": 13950006682,
+      "checkpoint_sha256": "1f63305422fdc2000b057fbbc1d37459ac1a8063bbfcd0e3b7d473f5485943f5",
+      "smoke": {
+        "status": "passed",
+        "wrapped_modules": 208,
+        "output_shape": [1, 10, 420, 518, 3],
+        "log": "/mnt/cephfs/pansicheng/tmm-results/logs/d4rt_opend4rt_smoke.log"
+      },
+      "FP": {
+        "metrics": {
+          "Acc-mean": 0.03915134284582969,
+          "Acc-med": 0.015880476023690915,
+          "Comp-mean": 0.049335126247719865,
+          "Comp-med": 0.018543280310067734,
+          "NC-mean": 0.6478537578739485,
+          "NC-med": 0.7295444846595438
+        },
+        "log": "/mnt/cephfs/pansicheng/tmm-results/logs/d4rt_opend4rt_fp.log",
+        "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/d4rt_opend4rt_fp/tre_diff/all_metrics.csv"
+      },
+      "W4A8_nonchannelwise": {
+        "metrics": {
+          "Acc-mean": 0.09954131875807719,
+          "Acc-med": 0.06385900887743746,
+          "Comp-mean": 0.18279718664194092,
+          "Comp-med": 0.10382683045641385,
+          "NC-mean": 0.5890103505392661,
+          "NC-med": 0.6362528694847719
+        },
+        "checkpoint": "/mnt/cephfs/pansicheng/tmm-results/checkpoints/d4rt_opend4rt_w4a8_noncw.pt",
+        "checkpoint_bytes": 4650149482,
+        "checkpoint_sha256": "8af9f6828e95d80381baf343c7cc825e856be31f4749e38ce10dcb4442feecf9",
+        "calibration_log": "/mnt/cephfs/pansicheng/tmm-results/logs/d4rt_opend4rt_w4a8_noncw.log",
+        "evaluation_log": "/mnt/cephfs/pansicheng/tmm-results/logs/d4rt_opend4rt_w4a8_noncw_eval.log",
+        "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/d4rt_opend4rt_w4a8_noncw/tre_diff/all_metrics.csv"
+      },
+      "W4A8_channelwise": {
+        "metrics": {
+          "Acc-mean": 0.03942911221300885,
+          "Acc-med": 0.01617816774402922,
+          "Comp-mean": 0.04896956821578571,
+          "Comp-med": 0.018367471123005987,
+          "NC-mean": 0.6459041846482126,
+          "NC-med": 0.726406894741392
+        },
+        "checkpoint": "/mnt/cephfs/pansicheng/tmm-results/checkpoints/d4rt_opend4rt_w4a8_cw.pt",
+        "checkpoint_bytes": 4652604229,
+        "checkpoint_sha256": "0860090629b3187ebb7f22984089324e629e4a365ed66ba5c2c539bf820cf4fd",
+        "calibration_log": "/mnt/cephfs/pansicheng/tmm-results/logs/d4rt_opend4rt_w4a8_cw.log",
+        "evaluation_log": "/mnt/cephfs/pansicheng/tmm-results/logs/d4rt_opend4rt_w4a8_cw_eval.log",
+        "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/d4rt_opend4rt_w4a8_cw/tre_diff/all_metrics.csv"
+      }
+    },
+    "VGGT-Omega": {
+      "status": "deferred_by_user_pending_checkpoint_access",
+      "expected_checkpoint": "models/vggt_omega_1b_512.pt",
+      "checkpoint_url": "https://huggingface.co/facebook/VGGT-Omega/blob/main/vggt_omega_1b_512.pt",
+      "note": "Code and 288-linear TAPTQ adapter are ready; no random-weight accuracy is reported."
+    }
+  },
+  "paper_vggt_w4a8_compensation_budget_sweep_702478252": {
+    "run_id": "702478252",
+    "status": "completed",
+    "protocol": "E1 unified evaluator, VGGT-1B, W4A8, DTU_train_8 calibration, 7Scenes dense full18",
+    "quantization": {
+      "candidate_modules": 144,
+      "tail_ratio": 0.1,
+      "rank": 128,
+      "default_threshold": 0.007,
+      "default_threshold_budget": "62/144",
+      "random_seed": 42
+    },
+    "budgets": {
+      "24/144": {
+        "TRE": {"metrics": [0.025873771253144016, 0.044597321425767784, 0.6882755968459439], "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_tre_24/tre_diff/all_metrics.csv"},
+        "MSE": {"metrics": [0.030371090254906856, 0.04553643979273652, 0.6876315017327117], "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_mse_24/tre_diff/all_metrics.csv"},
+        "Hessian": {"metrics": [0.03050314389639497, 0.04697550237936643, 0.6859332128115783], "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_hessian_24/tre_diff/all_metrics.csv"},
+        "Random": {"metrics": [0.030941127999275928, 0.04692323490606312, 0.6883190746476079], "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_random_24_s42/tre_diff/all_metrics.csv"}
+      },
+      "48/144": {
+        "TRE": {"metrics": [0.021498353058336403, 0.03821112759065515, 0.6927962214191011], "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_tre_48/tre_diff/all_metrics.csv"},
+        "MSE": {"metrics": [0.02247023587929362, 0.038236158438924646, 0.69145382195097], "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_mse_48/tre_diff/all_metrics.csv"},
+        "Hessian": {"metrics": [0.024762779000743338, 0.040114562845523824, 0.6898108493515649], "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_hessian_48/tre_diff/all_metrics.csv"},
+        "Random": {"metrics": [0.022948573351509946, 0.03935506719082171, 0.6891753340511795], "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_random_48_s42/tre_diff/all_metrics.csv"}
+      },
+      "62/144": {
+        "TRE": {"metrics": [0.019822324470129875, 0.03642977402721953, 0.6952646850584212], "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_tre_62/tre_diff/all_metrics.csv"},
+        "MSE": {"metrics": [0.022226954508509048, 0.03782040044316781, 0.690147851251922], "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_mse_62/tre_diff/all_metrics.csv"},
+        "Hessian": {"metrics": [0.020257259224452803, 0.03594656638180618, 0.6924375206401854], "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_hessian_62/tre_diff/all_metrics.csv"},
+        "Random": {"metrics": [0.022524864464618346, 0.04043040857551074, 0.6912736951565971], "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_random_62_s42/tre_diff/all_metrics.csv"}
+      },
+      "72/144": {
+        "TRE": {"metrics": [0.019894586127252444, 0.03586225670693919, 0.6941690907060738], "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_tre_72/tre_diff/all_metrics.csv"},
+        "MSE": {"metrics": [0.020139804363932704, 0.037738886789702775, 0.6929876497718155], "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_mse_72/tre_diff/all_metrics.csv"},
+        "Hessian": {"metrics": [0.01901065649601486, 0.0361156943548818, 0.6947598890293326], "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_hessian_72/tre_diff/all_metrics.csv"},
+        "Random": {"metrics": [0.02139603080952562, 0.038488997555473324, 0.6919646071779589], "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_random_72_s42/tre_diff/all_metrics.csv"}
+      },
+      "96/144": {
+        "TRE": {"metrics": [0.019795373877401247, 0.03471782447574941, 0.6949000984866538], "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_tre_96/tre_diff/all_metrics.csv"},
+        "MSE": {"metrics": [0.01955097613992787, 0.036839049513588976, 0.6928209117624483], "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_mse_96/tre_diff/all_metrics.csv"},
+        "Hessian": {"metrics": [0.02003573455420904, 0.03652875129450265, 0.6927518999424305], "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_hessian_96/tre_diff/all_metrics.csv"},
+        "Random": {"metrics": [0.02436977503469718, 0.04289374246935891, 0.6898808076159733], "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_random_96_s42/tre_diff/all_metrics.csv"}
+      }
+    }
+  },
+  "external_qwt_optimization_702478252": {
+    "updated_at": "2026-08-15T15:41:00+08:00",
+    "status": "completed",
+    "models": [
+      "DUSt3R",
+      "MASt3R"
+    ],
+    "protocol": "W4A8 channel-wise, DTU8 calibration, fixed four-sequence 7Scenes screening",
+    "screening_seq_id_map": "Pi3-evaluation/datasets/seq-id-maps/7scenes_mv-recon_seq-id-map-kf40-qwt-ablation4.json",
+    "completed_diagnostics": {
+      "mast3r_safe_qwt_fit08": {
+        "selected_branches": "3/120",
+        "status": "completed_mixed_result",
+        "7scenes-dense": {
+          "Acc-mean": 0.03239316599025002,
+          "Comp-mean": 0.029135030032885898,
+          "NC-mean": 0.6560564130878357
+        }
+      },
+      "dust3r_safe_qwt_fit08": {
+        "selected_branches": "15/120",
+        "status": "failed",
+        "reason": "OpenCV SQPnP assertion during 7Scenes global alignment"
+      },
+      "dust3r_encoder_only_w4a8": {
+        "status": "completed",
+        "7scenes-dense": {
+          "Acc-mean": 0.019290282585274026,
+          "Comp-mean": 0.029525051984600186,
+          "NC-mean": 0.6806147585156666
+        }
+      }
+    },
+    "archived_diagnostics": {
+      "dust3r_dtu8_512_calibration": "completed",
+      "mast3r_dtu8_512_calibration": "completed",
+      "dust3r_w4a16": "completed",
+      "mast3r_w4a16": "completed",
+      "dust3r_mast3r_dtu20": "completed",
+      "dust3r_scope": "completed"
+    },
+    "searches": {
+      "rank16_rho_tau_initial": {
+        "rho": [
+          0.001,
+          0.01,
+          0.1
+        ],
+        "tau": [
+          0,
+          0.003,
+          0.007,
+          0.02
+        ],
+        "fit_error_max": 0.8,
+        "combinations_both_models": 24,
+        "pids": [
+          434151,
+          434160,
+          434196,
+          434188,
+          434179,
+          434170
+        ]
+      },
+      "rank16_dense_gating": {
+        "rho": [
+          0.001,
+          0.01,
+          0.1
+        ],
+        "tau": [
+          0,
+          0.001,
+          0.003,
+          0.005,
+          0.007,
+          0.01,
+          0.02,
+          0.05
+        ],
+        "fit_error_max": [
+          0.2,
+          0.4,
+          0.6
+        ],
+        "combinations_both_models": 144,
+        "script": "run-external-qwt-filter-sweep.sh",
+        "pids": [
+          538665,
+          538666,
+          538667,
+          538668,
+          538669,
+          538670
+        ]
+      },
+      "high_rank": {
+        "rho": 0.1,
+        "rank": [
+          32,
+          64,
+          128
+        ],
+        "tau": [
+          0.005,
+          0.007
+        ],
+        "fit_error_max": [
+          0.4,
+          0.6,
+          0.8
+        ],
+        "combinations_both_models": 36,
+        "script": "run-external-qwt-rank-sweep.sh",
+        "pids": [
+          620870,
+          620871
+        ]
+      }
+    },
+    "new_or_extended_screening_combinations": 180,
+    "screening_completed": {
+      "dust3r_results": 100,
+      "mast3r_results": 102,
+      "status": "completed"
+    },
+    "full18_validation": {
+      "status": "completed",
+      "artifact_root": "mnt/cephfs/pansicheng/tmm-results/eval/full18",
+      "final_selection": {
+        "dust3r": "qwt_best",
+        "mast3r": "clean_quant_only"
+      },
+      "metrics": {
+        "dust3r_qwt_best": {
+          "Acc-mean": 0.023192409773183924,
+          "Comp-mean": 0.027873593349301548,
+          "NC-mean": 0.6743607174115765
+        },
+        "dust3r_qwt_alt": {
+          "Acc-mean": 0.024533011172959827,
+          "Comp-mean": 0.027304777961916,
+          "NC-mean": 0.6731234223660381
+        },
+        "dust3r_quant_only_clean": {
+          "Acc-mean": 0.024118932798164558,
+          "Comp-mean": 0.027903947427012663,
+          "NC-mean": 0.6735883248595165
+        },
+        "mast3r_qwt_best": {
+          "Acc-mean": 0.03224396436957687,
+          "Comp-mean": 0.028563858863137823,
+          "NC-mean": 0.6543128004000486
+        },
+        "mast3r_qwt_alt": {
+          "Acc-mean": 0.032243964369579596,
+          "Comp-mean": 0.02856385886313281,
+          "NC-mean": 0.654312800399966
+        },
+        "mast3r_quant_only_clean": {
+          "Acc-mean": 0.03224396436972557,
+          "Comp-mean": 0.028563858872167613,
+          "NC-mean": 0.6543128021505098
+        }
+      }
+    },
+    "next_step": "Archive final tables; no additional mandatory experiments remain"
+  },
+  "vggt_7scenes_kf200_verified_714219558": {
+    "run_id": "714219558",
+    "status": "superseded_wrong_protocol",
+    "superseded_by": "vggt_7scenes_pi3_kf40_recheck_714219558",
+    "completed_at": "2026-08-26",
+    "protocol": {
+      "dataset": "7Scenes official test split",
+      "sequences": 18,
+      "sampling": "stride kf=200",
+      "image_size": [518, 392],
+      "rgb_intrinsics": [525.0, 525.0, 320.0, 240.0],
+      "depth": "frame-*.depth.proj.png",
+      "intrinsic_resize": "independent sx and sy with pixel-center correction",
+      "alignment": "Umeyama Sim(3) followed by ICP",
+      "calibration": "DTU_train_8",
+      "artifact_root": "/mnt/cephfs/pansicheng/tmm-results/eval/7scenes_kf200_verified",
+      "summary": "/mnt/cephfs/pansicheng/tmm-results/eval/7scenes_kf200_verified/verified_summary.json"
+    },
+    "validation": {
+      "all_methods_sequences": 18,
+      "ptq4vit_checkpoint_load": "0 missing, 0 unexpected keys for W4A8/W6A6/W8A8",
+      "taptq_checkpoint_load": "0 missing, 0 unexpected keys for W4A8/W6A6/W8A8; QwT rebuilt with mode=compensate_eval",
+      "summary_sha256": "e4e523d23f88b852d2b549b4d59855be649b2348c30e3a0f49ae4252c4a3a676"
+    },
+    "metric_order": ["Acc-mean", "Acc-med", "Comp-mean", "Comp-med", "NC-mean", "NC-med"],
+    "metrics": {
+      "FP": [0.044283989078362535, 0.0243329886413097, 0.06332859092697975, 0.03674892378719162, 0.7621319961137423, 0.8697133845506732],
+      "W4A8": {
+        "RTN": [0.09524866225776875, 0.05697720980410502, 0.16440743514852207, 0.10841768613977507, 0.7025588308681817, 0.783802470137508],
+        "PTQ4ViT": [0.09048984896376232, 0.05939070574207969, 0.16178605054490147, 0.10841158354894909, 0.7121573382527513, 0.794255471675315],
+        "RepQ-ViT": [0.12133792305950249, 0.09605484261767266, 0.36552440582478063, 0.2700571739889386, 0.6339341938720721, 0.6946225714284351],
+        "ERQ": [0.08133317309889024, 0.054833943486032016, 0.14776137108943946, 0.10468715160227941, 0.7105928478686541, 0.7970552286334008],
+        "GPTQ": [0.06698368198938648, 0.03886619279128919, 0.1385667670622782, 0.08814418435517722, 0.7173128762731823, 0.8078353276395221],
+        "SmoothQuant": [0.09877826124130507, 0.06222061659557548, 0.14770085541181321, 0.0954229683450228, 0.7129989282729526, 0.8021239040450955],
+        "QuantVGGT": [0.047273498129011805, 0.025766839395869122, 0.0641091801639245, 0.03831480282276168, 0.7099370820299056, 0.8110199536304836],
+        "TAPTQ": [0.08077075761503034, 0.053512260784670376, 0.14706657832024067, 0.09875777570470322, 0.7172899910478304, 0.8013572327299205]
+      },
+      "W6A6": {
+        "RTN": [0.08179869067534976, 0.04672800985768463, 0.16648619526128494, 0.10772011583297031, 0.708486103915336, 0.7986250595898953],
+        "PTQ4ViT": [0.07876237067647665, 0.05138693658485284, 0.11698230562520563, 0.07864575540507265, 0.734941200528762, 0.832088994974042],
+        "RepQ-ViT": [0.07421349463544759, 0.042104221051433216, 0.16159297671183112, 0.10615366136053486, 0.7035978502551572, 0.7900635101026764],
+        "ERQ": [0.09029130378075928, 0.05787491554560284, 0.1627282795762279, 0.11251739852952682, 0.7115862739427201, 0.8009226182046186],
+        "GPTQ": [0.09540377424356812, 0.06565136952958986, 0.18642976762272248, 0.1331680827535574, 0.6941920642975082, 0.7748046476166395],
+        "SmoothQuant": [0.0923594809620346, 0.052430342307882905, 0.1456073258037911, 0.09650781361625009, 0.7163788799949444, 0.809691551034955],
+        "QuantVGGT": [0.04354650371483202, 0.02477068052362184, 0.06403747296297745, 0.03929372562451633, 0.7116112329523636, 0.8140347191952482],
+        "TAPTQ": [0.08222110060474584, 0.05234973215800597, 0.10505757170879522, 0.062250661490233505, 0.7372134327608223, 0.8347797651312501]
+      },
+      "W8A8": {
+        "RTN": [0.05437525733601055, 0.035168988856744285, 0.08822900917707537, 0.0569333773796649, 0.7490802007776817, 0.8527732706672713],
+        "PTQ4ViT": [0.052095307219764284, 0.025095365045209646, 0.06877844513849683, 0.03555241693525943, 0.7600843624555537, 0.8681716536737626],
+        "RepQ-ViT": [0.07085994925433386, 0.03648671314561937, 0.11891220613623732, 0.07233684978513684, 0.7302827515980508, 0.8265280009128282],
+        "ERQ": [0.07795513034774684, 0.04276526830668442, 0.14060678722846165, 0.08784985364165711, 0.718294983213533, 0.8076830508409633],
+        "GPTQ": [0.0528802153368013, 0.03299906164721738, 0.09297390729137653, 0.06027479539311856, 0.7511236508237639, 0.8565071323294499],
+        "SmoothQuant": [0.06812838001291573, 0.04065061409642344, 0.12393529122176498, 0.07539670352170132, 0.7311816231013154, 0.8260190692355535],
+        "QuantVGGT": [0.04300455088625034, 0.024236227565906775, 0.0635706835313285, 0.03895095952265254, 0.7127434964365378, 0.815742274835693],
+        "TAPTQ": [0.05253092104376638, 0.024642509122070586, 0.06841236628046446, 0.0348249527367381, 0.7605795152367001, 0.8689155309853466]
+      }
+    }
+  },
+  "vggt_7scenes_pi3_kf40_recheck_714219558": {
+    "run_id": "714219558",
+    "status": "completed",
+    "completed_at": "2026-08-27",
+    "protocol": {
+      "dataset": "7Scenes official test split",
+      "sequences": 18,
+      "sampling": "Pi3 evaluation dense stride kf=40",
+      "seq_id_map": "Pi3-evaluation/datasets/seq-id-maps/7scenes_mv-recon_seq-id-map-kf40.json",
+      "image_size": [518, 392],
+      "evaluator": "E1 unified evaluator",
+      "calibration": "DTU_train_8",
+      "artifact_root": "/mnt/cephfs/pansicheng/tmm-results/eval/7scenes_pi3_kf40_recheck"
+    },
+    "validation": {
+      "ptq4vit": "W6A6/W8A8 loaded with 0 missing, 0 unexpected keys",
+      "taptq": "W6A6/W8A8 loaded with 0 missing, 0 unexpected keys and ran mode=compensate_eval with module QwT rank16",
+      "sequence_rows_per_run": 18
+    },
+    "metric_order": ["Acc-mean", "Acc-med", "Comp-mean", "Comp-med", "NC-mean", "NC-med"],
+    "metrics": {
+      "W6A6": {
+        "PTQ4ViT": [0.020506691258415557, 0.009238349622508921, 0.035522996560206785, 0.014349458711147019, 0.6917683127170968, 0.7954773498618725],
+        "TAPTQ": [0.020278328446072726, 0.008619762887588624, 0.034891398119810985, 0.014572724973741394, 0.6904146881776204, 0.7934525700397009]
+      },
+      "W8A8": {
+        "PTQ4ViT": [0.01812904532634753, 0.007393779740674761, 0.031015305324811924, 0.015198388844238957, 0.6899117826834338, 0.7928952418573343],
+        "TAPTQ": [0.01817525266863793, 0.0074201424448729885, 0.031062457508799372, 0.015221198400427509, 0.6896734956821904, 0.7925647799613201]
+      }
+    },
+    "logs": {
+      "ptq4vit_w6a6": "/mnt/cephfs/pansicheng/tmm-results/eval/7scenes_pi3_kf40_recheck/logs/ptq4vit_w6a6.log",
+      "taptq_w6a6": "/mnt/cephfs/pansicheng/tmm-results/eval/7scenes_pi3_kf40_recheck/logs/taptq_w6a6.log",
+      "ptq4vit_w8a8": "/mnt/cephfs/pansicheng/tmm-results/eval/7scenes_pi3_kf40_recheck/logs/ptq4vit_w8a8.log",
+      "taptq_w8a8": "/mnt/cephfs/pansicheng/tmm-results/eval/7scenes_pi3_kf40_recheck/logs/taptq_w8a8.log"
+    }
+  }
+}

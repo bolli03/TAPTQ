@@ -121,3 +121,15 @@ __pycache__/
 !Pi3-evaluation/configs/evaluation/
 !Pi3-evaluation/configs/evaluation/**
 Pi3-evaluation/configs/**/.ipynb_checkpoints/
+
+# ===== 本地外部基线依赖（各自带独立 git 仓库, 不入主仓）=====
+third_party/
+vendor/
+
+# ===== 压缩包 / 临时文件 / LaTeX 构建产物（不入主仓）=====
+dtu-test.tar.zst
+dtu-test.tar.zst.sha256
+*.tmp
+*.aux
+*.log
+doc/Tail_Aware_Post_Training_Quantization_for_3D_Geometry_Models_TMM/

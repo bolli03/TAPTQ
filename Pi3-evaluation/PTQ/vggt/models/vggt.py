@@ -63,28 +63,44 @@ class VGGT(nn.Module, PyTorchModelHubMixin):
         predictions = {}
 
         with torch.cuda.amp.autocast(enabled=False):
+            tokens_by_dtype = {}
+
+            def tokens_for(head):
+                dtype = next(head.parameters()).dtype
+                if dtype not in tokens_by_dtype:
+                    tokens_by_dtype[dtype] = [token.to(dtype) for token in aggregated_tokens_list]
+                return tokens_by_dtype[dtype], dtype
+
             if self.camera_head is not None:
-                pose_enc_list = self.camera_head(aggregated_tokens_list)
+                camera_tokens, _ = tokens_for(self.camera_head)
+                pose_enc_list = self.camera_head(camera_tokens)
                 predictions["pose_enc"] = pose_enc_list[-1]  # pose encoding of the last iteration
                 predictions["pose_enc_list"] = pose_enc_list
                 
             if self.depth_head is not None:
+                depth_tokens, depth_dtype = tokens_for(self.depth_head)
                 depth, depth_conf = self.depth_head(
-                    aggregated_tokens_list, images=images, patch_start_idx=patch_start_idx
+                    depth_tokens, images=images.to(depth_dtype), patch_start_idx=patch_start_idx
                 )
                 predictions["depth"] = depth
                 predictions["depth_conf"] = depth_conf
 
             if self.point_head is not None:
+                point_tokens, point_dtype = tokens_for(self.point_head)
                 pts3d, pts3d_conf = self.point_head(
-                    aggregated_tokens_list, images=images, patch_start_idx=patch_start_idx
+                    point_tokens, images=images.to(point_dtype), patch_start_idx=patch_start_idx
                 )
                 predictions["world_points"] = pts3d
                 predictions["world_points_conf"] = pts3d_conf
 
         if self.track_head is not None and query_points is not None:
+            track_dtype = next(self.track_head.parameters()).dtype
+            track_tokens = [token.to(track_dtype) for token in aggregated_tokens_list]
             track_list, vis, conf = self.track_head(
-                aggregated_tokens_list, images=images, patch_start_idx=patch_start_idx, query_points=query_points
+                track_tokens,
+                images=images.to(track_dtype),
+                patch_start_idx=patch_start_idx,
+                query_points=query_points.to(track_dtype),
             )
             predictions["track"] = track_list[-1]  # track of the last iteration
             predictions["vis"] = vis

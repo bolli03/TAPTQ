@@ -109,7 +109,8 @@ if __name__ == '__main__':
     data_root = 'data/eth3d'
     # sequences = [seq for seq in os.listdir('data/eth3d') if os.path.isdir(os.path.join('data/eth3d', seq))]
     # print(sequences)
-    sequences = ["courtyard", "delivery_area", "electro", "facade", "kicker", "meadow", "office", "pipes", "playground", "relief", "relief_2", "terrace", "terrains"]
+    default_sequences = ["courtyard", "delivery_area", "electro", "facade", "kicker", "meadow", "office", "pipes", "playground", "relief", "relief_2", "terrace", "terrains"]
+    sequences = os.environ.get("ETH3D_SEQUENCES", ",".join(default_sequences)).split(",")
 
     # setup_debug()
 
@@ -138,6 +139,11 @@ if __name__ == '__main__':
             # Assume that the depth map and RGB image file names are similar, just with different extensions
             impath = os.path.join(data_root, seq, 'images', meta['name'])
             depthpath = os.path.join(data_root, seq, 'ground_truth_depth', meta['name']) # 假设是 .bin 文件
+            if not os.path.isfile(depthpath) or os.path.getsize(depthpath) == 0:
+                raise FileNotFoundError(
+                    f'Missing or empty depth for {seq}/{meta["name"]}; '
+                    'refusing to alter the fixed Pi3 frame mapping.'
+                )
 
             # load image and depth
             rgb_image = np.array(Image.open(impath))

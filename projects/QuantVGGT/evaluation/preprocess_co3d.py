@@ -7,16 +7,12 @@ Usage:
         --co3d_v2_dir /path/to/co3d_v2
 """
 import argparse
+import glob
 import gzip
 import json
+import math
 import os
 import os.path as osp
-from glob import glob
-
-# import ipdb
-import matplotlib.pyplot as plt
-import numpy as np
-from tqdm.auto import tqdm
 
 # fmt: off
 CATEGORIES = [
@@ -53,6 +49,12 @@ def process_poses(co3d_dir, category, output_dir, min_quality):
     frame_file = osp.join(category_dir, "frame_annotations.jgz")
     sequence_file = osp.join(category_dir, "sequence_annotations.jgz")
     subset_lists_file = osp.join(category_dir, "set_lists/set_lists_fewview_dev.json")
+    if not osp.exists(subset_lists_file):
+        candidates = sorted(glob.glob(osp.join(category_dir, "set_lists", "set_lists_*_test_*.json")))
+        if not candidates:
+            print(f"Skipping {category}: no Co3Dv2 test split under {osp.dirname(subset_lists_file)}")
+            return
+        subset_lists_file = candidates[0]
 
     # bbox_file = osp.join(output_dir, f"{category}_bbox.jgz")
 
@@ -77,7 +79,8 @@ def process_poses(co3d_dir, category, output_dir, min_quality):
 
     good_quality_sequences = set()
     for seq_data in sequence_data:
-        if seq_data["viewpoint_quality_score"] > min_quality:
+        score = seq_data["viewpoint_quality_score"]
+        if (not math.isfinite(score)) or score > min_quality:
             good_quality_sequences.add(seq_data["sequence_name"])
 
     for subset in ["train", "test"]:

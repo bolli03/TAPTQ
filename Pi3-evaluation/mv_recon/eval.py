@@ -2,12 +2,11 @@ import os
 import json
 import torch
 import numpy as np
-import open3d as o3d
 import os.path as osp
 import hydra
 import logging
 
-from omegaconf import DictConfig
+from omegaconf import DictConfig, OmegaConf
 
 import rootutils
 root = rootutils.setup_root(__file__, indicator=".project-root", pythonpath=True)
@@ -22,18 +21,26 @@ from utils.vis_utils import save_image_grid_auto
 
 @hydra.main(version_base="1.2", config_path="../configs", config_name="eval")
 def main(hydra_cfg: DictConfig):
+    import open3d as o3d
 
     all_eval_datasets: DictConfig = hydra_cfg.eval_datasets  # see configs/evaluation/mv_recon.yaml
     all_data_info: DictConfig     = hydra_cfg.data           # see configs/data
-    # pretrained_model_name_or_path: str = hydra_cfg.vggt.pretrained_model_name_or_path  # see configs/evaluation/relpose-angular.yaml
-    pretrained_model_name_or_path: str = hydra_cfg.pi3.pretrained_model_name_or_path  # see configs/evaluation/relpose-angular.yaml
-
-    # 0. create model
-    pretrained_model_name_or_path = "/root/autodl-tmp/hf_hub/models--facebook--VGGT-1B"
-    model = VGGT.from_pretrained(pretrained_model_name_or_path).to(hydra_cfg.device).eval()
-    # model = Pi3.from_pretrained(pretrained_model_name_or_path).to(hydra_cfg.device).eval()
+    model_name = str(OmegaConf.select(hydra_cfg, "model_name") or "vggt").lower()
+    if model_name == "pi3":
+        pretrained_model_name_or_path = os.environ.get(
+            "PI3_MODEL_PATH", hydra_cfg.pi3.pretrained_model_name_or_path
+        )
+        model = Pi3.from_pretrained(pretrained_model_name_or_path).to(hydra_cfg.device).eval()
+    elif model_name == "vggt":
+        pretrained_model_name_or_path = os.environ.get(
+            "VGGT_MODEL_PATH",
+            osp.join(root, "..", "models", "hf_hub", "models--facebook--VGGT-1B"),
+        )
+        model = VGGT.from_pretrained(pretrained_model_name_or_path).to(hydra_cfg.device).eval()
+    else:
+        raise ValueError(f"Unsupported model_name={model_name}; expected vggt or pi3")
     logger = logging.getLogger("mv_recon-eval")
-    logger.info(f"Loaded Pi3 from {pretrained_model_name_or_path}")
+    logger.info(f"Loaded {model_name.upper()} from {pretrained_model_name_or_path}")
 
     for idx_dataset, dataset_name in enumerate(all_eval_datasets, start=1):
         # 1.1 look up dataset config from configs/data, decide the dataset name, and load the dataset

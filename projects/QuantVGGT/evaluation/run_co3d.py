@@ -18,10 +18,6 @@ from vggt.utils.geometry import closed_form_inverse_se3
 import argparse
 import logging
 
-from quarot.utils import quarot_smooth_quant_model
-from quarot.args_utils import get_config
-
-
 logging.getLogger("dinov2").setLevel(logging.WARNING)
 warnings.filterwarnings("ignore", message="xFormers is available")
 warnings.filterwarnings("ignore", message="dinov2")
@@ -207,6 +203,8 @@ def setup_args():
     """Set up command-line arguments for the CO3D evaluation script."""
     parser = argparse.ArgumentParser(description='Test VGGT on CO3D dataset')
     parser.add_argument('--class_mode', type=str, default='all', help='Categories for calibration dataset')
+    parser.add_argument('--categories', type=str, default=None, help='Comma-separated category shard override')
+    parser.add_argument('--results_path', type=str, default=None, help='Write per-category AUC results as JSON')
     parser.add_argument('--use_ba', action='store_true', default=False, help='Enable bundle adjustment')
     parser.add_argument('--fast_eval', action='store_true', default=False, help='Only evaluate 20 sequences per category')
     parser.add_argument('--min_num_images', type=int, default=50, help='Minimum number of images for a sequence')
@@ -434,23 +432,24 @@ def load_model(device, each_nsamples = 0,min_num_images=0, num_frames=0,category
         save_model_structure_to_json(model, out_path)
 
     calib_data = None
-    if dtype in['raw']:
-        if os.path.exists(cache_path):
+    if dtype in ['raw']:
+        if cache_path and os.path.exists(cache_path):
             print(f"Calib cache exists in: {cache_path}")
             calib_data = torch.load(cache_path)
-
-        elif not os.path.exists(cache_path):
-            print(f" Calib cache not exist")
-            calib_data, calib_data_num = get_simple_calibration_data(device, min_num_images,num_frames,
-                                                co3d_dir,co3d_anno_dir, category, each_nsamples, cache_path=cache_path)
-            
+        elif cache_path:
+            print("Calib cache not exist")
+            calib_data, _ = get_simple_calibration_data(
+                device, min_num_images, num_frames, co3d_dir, co3d_anno_dir,
+                category, each_nsamples, cache_path=cache_path,
+            )
         if calib_data is not None:
             print(f"Calib cache is loaded,{len(calib_data)}")
-        
-        return model,calib_data
+        return model, calib_data
 
 
     if dtype in ["quarot_w4a4","quarot_w6a6","quarot_w4a8","quarot_w8a8"]:
+        from quarot.utils import quarot_smooth_quant_model
+        from quarot.args_utils import get_config
         import re
         wbit = re.search(r'w(\d+)', dtype)
         abit = re.search(r'a(\d+)', dtype)
@@ -686,6 +685,10 @@ def main():
         "teddybear", "toaster", "toilet", "toybus", "toyplane",
         "toytrain", "toytruck", "tv", "umbrella", "vase", "wineglass",
     ]
+    if args.categories:
+        SEEN_CATEGORIES = [item.strip() for item in args.categories.split(",") if item.strip()]
+        if not SEEN_CATEGORIES:
+            raise ValueError("--categories must contain at least one category")
 
     model , _ = load_model(device,args.each_nsamples,
                        min_num_images =args.min_num_images, num_frames =  args.num_frames,category =SEEN_CATEGORIES,co3d_anno_dir = args.co3d_anno_dir,co3d_dir = args.co3d_dir, 
@@ -794,6 +797,19 @@ def main():
     mean_AUC_5 = np.mean([per_category_results[category]["Auc_5"] for category in per_category_results])
     mean_AUC_3 = np.mean([per_category_results[category]["Auc_3"] for category in per_category_results])
     print(f"Mean AUC: {mean_AUC_30:.4f} (AUC@30), {mean_AUC_15:.4f} (AUC@15), {mean_AUC_5:.4f} (AUC@5), {mean_AUC_3:.4f} (AUC@3)")
+    if args.results_path:
+        os.makedirs(os.path.dirname(args.results_path) or ".", exist_ok=True)
+        serializable = {}
+        for category, values in per_category_results.items():
+            serializable[category] = {
+                key: (value.tolist() if isinstance(value, np.ndarray) else float(value))
+                for key, value in values.items()
+            }
+        with open(args.results_path, "w", encoding="utf-8") as handle:
+            json.dump({"categories": SEEN_CATEGORIES, "results": serializable, "mean": {
+                "Auc_30": float(mean_AUC_30), "Auc_15": float(mean_AUC_15),
+                "Auc_5": float(mean_AUC_5), "Auc_3": float(mean_AUC_3),
+            }}, handle, indent=2)
     print("⭐ Evaluation End ！")
     return 
 if __name__ == "__main__":

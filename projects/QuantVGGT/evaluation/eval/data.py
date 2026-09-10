@@ -1,7 +1,9 @@
+import json
 import os
 import cv2
 import numpy as np
 import os.path as osp
+from PIL import Image
 from collections import deque
 from eval.base import BaseStereoViewDataset
 import eval.dataset_utils.cropping as cropping
@@ -130,7 +132,7 @@ class SevenScenes(BaseStereoViewDataset):
         while len(imgs_idxs) > 0:
             im_idx = imgs_idxs.popleft()
             impath = osp.join(self.ROOT, scene_id, f"frame-{im_idx}.color.png")
-            depthpath = osp.join(self.ROOT, scene_id, f"frame-{im_idx}.depth.png")
+            depthpath = osp.join(self.ROOT, scene_id, f"frame-{im_idx}.depth.proj.png")
             posepath = osp.join(self.ROOT, scene_id, f"frame-{im_idx}.pose.txt")
 
             rgb_image = imread_cv2(impath)
@@ -175,6 +177,110 @@ class SevenScenes(BaseStereoViewDataset):
                     instance=impath,
                 )
             )
+        return views
+
+
+class DTU(BaseStereoViewDataset):
+    """DTU test split with the mv-recon stride-kf5 protocol."""
+
+    TEST_SCANS = [1, 4, 9, 10, 11, 12, 13, 15, 23, 24, 29, 32, 33, 34, 48, 49, 62, 75, 77, 110, 114, 118]
+
+    def __init__(self, *, ROOT, kf_every=5, **kwargs):
+        self.ROOT = ROOT
+        self.kf_every = kf_every
+        super().__init__(**kwargs)
+        self.scene_list = [f"scan{scan}" for scan in self.TEST_SCANS]
+
+    def __len__(self):
+        return len(self.scene_list)
+
+    @staticmethod
+    def _load_cam(path):
+        words = open(path, "r").read().split()
+        extrinsic = np.array([[float(words[4 * i + j + 1]) for j in range(4)] for i in range(4)], dtype=np.float32)
+        intrinsic = np.array([[float(words[3 * i + j + 18]) for j in range(3)] for i in range(3)], dtype=np.float32)
+        return intrinsic, extrinsic
+
+    def _get_views(self, idx, resolution, rng):
+        scene_id = self.scene_list[idx]
+        scene_root = osp.join(self.ROOT, scene_id)
+        image_root = osp.join(scene_root, "images")
+        depth_root = osp.join(scene_root, "depths")
+        mask_root = osp.join(scene_root, "binary_masks")
+        if not osp.isdir(mask_root):
+            mask_root = osp.join(scene_root, "masks")
+        cam_root = osp.join(scene_root, "cams")
+        frame_ids = list(range(0, len(os.listdir(image_root)), self.kf_every))
+        views = []
+        for frame_id in frame_ids:
+            image_path = osp.join(image_root, f"{frame_id:08d}.jpg")
+            depth_path = osp.join(depth_root, f"{frame_id:08d}.npy")
+            mask_path = osp.join(mask_root, f"{frame_id:08d}.png")
+            cam_path = osp.join(cam_root, f"{frame_id:08d}_cam.txt")
+            image = Image.open(image_path).convert("RGB")
+            depthmap = np.nan_to_num(np.load(depth_path).astype(np.float32), nan=0.0)
+            mask = cv2.imread(mask_path, cv2.IMREAD_UNCHANGED).astype(np.float32) / 255.0
+            mask = (cv2.erode((mask > 0.5).astype(np.uint8), np.ones((10, 10), np.uint8), iterations=1) > 0)
+            mask = cv2.resize(mask.astype(np.uint8), (depthmap.shape[1], depthmap.shape[0]), interpolation=cv2.INTER_NEAREST).astype(bool)
+            depthmap *= mask
+            if image.size != depthmap.shape[::-1]:
+                image = image.resize(depthmap.shape[::-1], Image.Resampling.LANCZOS)
+            intrinsic, extrinsic = self._load_cam(cam_path)
+            image, depthmap, intrinsic = self._crop_resize_if_necessary(
+                image, depthmap, intrinsic, resolution, rng=rng, info=image_path
+            )
+            camera_pose = np.linalg.inv(extrinsic).astype(np.float32)
+            views.append(dict(
+                img=image,
+                depthmap=depthmap,
+                camera_pose=camera_pose,
+                camera_intrinsics=intrinsic,
+                dataset="DTU",
+                label=osp.join(scene_id, f"{frame_id:08d}"),
+                instance=image_path,
+            ))
+        return views
+
+
+class ETH3D(BaseStereoViewDataset):
+    """Pi3-compatible ETH3D sequences with frozen kf=5 frame indices."""
+
+    def __init__(self, *, ROOT, seq_id_map, **kwargs):
+        self.ROOT = ROOT
+        with open(seq_id_map) as f:
+            self.seq_id_map = json.load(f)
+        super().__init__(**kwargs)
+        self.scene_list = sorted(self.seq_id_map.keys())
+
+    def __len__(self):
+        return len(self.scene_list)
+
+    def _get_views(self, idx, resolution, rng):
+        seq = self.scene_list[idx]
+        image_root = osp.join(self.ROOT, seq, "images", "custom_undistorted")
+        image_names = sorted(name for name in os.listdir(image_root) if name.endswith(".JPG"))
+        views = []
+        for frame_id in self.seq_id_map[seq]:
+            name = image_names[frame_id]
+            image = Image.open(osp.join(image_root, name)).convert("RGB")
+            width, height = image.size
+            depth_path = osp.join(self.ROOT, seq, "ground_truth_depth", "custom_undistorted", name)
+            depthmap = np.fromfile(depth_path, dtype=np.float32).reshape(height, width)
+            camera = np.load(osp.join(self.ROOT, seq, "custom_undistorted_cam", name.replace(".JPG", ".npz")))
+            intrinsic = camera["intrinsics"].astype(np.float32)
+            camera_pose = np.linalg.inv(camera["extrinsics"]).astype(np.float32)
+            image, depthmap, intrinsic = self._crop_resize_if_necessary(
+                image, depthmap, intrinsic, resolution, rng=rng, info=depth_path
+            )
+            views.append(dict(
+                img=image,
+                depthmap=depthmap,
+                camera_pose=camera_pose,
+                camera_intrinsics=intrinsic,
+                dataset="eth3d",
+                label=osp.join(seq, name),
+                instance=depth_path,
+            ))
         return views
 
 

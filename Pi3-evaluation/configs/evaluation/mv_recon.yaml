@@ -4,25 +4,33 @@ defaults:
   - override /data: mv_recon
 
 name: mv_recon
+model_name: null
+mode: e2e
 
 pi3:
   pretrained_model_name_or_path: yyfz233/Pi3
-  # pretrained_model_name_or_path: checkpoints/Pi3
 
-# Default calibration/compensation set: 20 DTU scans under ../data/dtu_20.
-# Keep eval_datasets below separate: those are formal evaluation datasets.
+# Shared options for VGGT-Omega and the community D4RT adapter.
+foundation:
+  image_resolution: null
+  temporal_size: 10
+  query_grid: 16
+  variant: base
+  # D4RT has no official public checkpoint; random init is smoke-only and must be explicit.
+  allow_random_init: false
+
+# Authoritative TMM protocol: fixed dtu_8 is used only for calibration/QwT;
+# formal reporting remains controlled independently by eval_datasets.
 test_datasets:
-  - DTU_20
+  - DTU_train_8
 
 optim_datasets:
-  - DTU_20
+  - DTU_train_8
 
 eval_datasets:
-  - 7scenes-sparse
   - 7scenes-dense
-  # - NRGBD-sparse
-  # - NRGBD-dense
-  - DTU
+  # DTU is a supplementary dataset; enable explicitly when needed.
+  # - DTU
   # - ETH3D
 
 no_crop: True
@@ -37,16 +45,40 @@ seed: 42
 save_suffix: null
 
 # PTQ (mv_recon/ptq.py): optional Hydra overrides
-# - quant_config_name: configs/<name>.py without .py (e.g. PTQ4ViT_channelwise). Empty/null uses RunConfig.config_name.
-# - linear_channelwise: overrides quant cfg after cfg_modifier; null = do not override.
-#
-# deployment/build_and_save_quant_model.py 额外字段（须在 struct 中声明才能用 key=value 覆盖）:
-#   ptq.model_path / quant_param_file / output_dir / bit_setting / deploy_mode
+ckpt:
+  path: null
+  save_path: null
+  fmt: pt
+
 ptq:
   quant_config_name: null
+  bit: null
   linear_channelwise: null
   model_path: null
   quant_param_file: null
   output_dir: null
   bit_setting: null
+  search_mode: null
   deploy_mode: null
+
+# Unified VGGT baseline adapter (mv_recon/baseline_quant.py)
+baseline:
+  method: rtn
+  bit: [4, 8]
+  # zysxmu/ERQ default coe=20000; 3D Transformer inputs use ridge=0.1*coe=2000.
+  ridge: 2000.0
+  max_tokens: 4096
+  scale_candidates: 20
+  rounding_iterations: 100
+  row_batch_size: 500
+  linear_group_size: 0
+  # Official ERQ uses two weight ranges for frequent outlier columns in qkv/fc1.
+  erq_two_part: false
+  # SmoothQuant migration defaults.
+  smoothquant_alpha: 0.5
+  smoothquant_eps: 1.0e-5
+  # IST-DASLab GPTQ defaults.
+  damp_percent: 0.01
+  gptq_block_size: 128
+  gptq_group_size: -1
+  gptq_act_order: false

@@ -165,10 +165,15 @@ def infer_mv_pointclouds(filelist: str, model: Pi3, hydra_cfg: DictConfig, data_
         with torch.amp.autocast(hydra_cfg.device, dtype=dtype):
             pred = model(imgs)
     
-    if isinstance(model, Pi3):
-        global_points = pred['points'][0]  # (N, h, w, 3)
-    elif isinstance(model, VGGT):
-        global_points = pred['world_points'][0]  # (N, h, w, 3)
+    if isinstance(pred, dict) and "world_points" in pred:
+        global_points = pred["world_points"][0]
+    elif isinstance(pred, dict) and "points" in pred:
+        global_points = pred["points"][0]
+    else:
+        raise ValueError(
+            f"Model {type(model).__name__} did not return points/world_points: "
+            f"{list(pred) if isinstance(pred, dict) else type(pred)}"
+        )
     global_points = F.interpolate(
         global_points.permute(0, 3, 1, 2), data_size,
         mode="bilinear", align_corners=False, antialias=True

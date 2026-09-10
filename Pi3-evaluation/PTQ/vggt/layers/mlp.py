@@ -138,8 +138,9 @@ class Mlp(nn.Module):
 
     def forward(self, x: Tensor) -> Tensor:
         x = self.fc1(x)
+        if not self.training and isinstance(self.act, nn.GELU) and self.act.approximate == "none" and hasattr(self.fc2, "forward_from_gelu"):
+            return self.fc2.forward_from_gelu(x)
         x = self.act(x)
-        # save_feature_histogram(x, title="mlp_activations")
         x = self.drop(x)
         x = self.fc2(x)
         x = self.drop(x)

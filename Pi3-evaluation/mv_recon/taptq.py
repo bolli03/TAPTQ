@@ -6,12 +6,17 @@ Three modes, switched via Hydra `mode=...`:
     mode=e2e     calibrate + compensate + eval + save  (original pipeline)
 
 Examples:
-    # original behaviour
+    # VGGT default behaviour
     python taptq.py
-    # calibrate only, save as torch ckpt
-    python taptq.py mode=calib ckpt.path=outputs/vggt_w4a8.pt ckpt.fmt=pt
+    # Pi3, using the same encoder/decoder/point_decoder linear scope as legacy ptq4pi3.py
+    python taptq.py model_name=pi3 ptq.bit=[4,8] mode=calib \\
+        ckpt.path=outputs/pi3_w4a8_ternary.pt ptq.search_mode=ternary
+    # Pi3 W4A8 channel-wise calibration
+    python taptq.py model_name=pi3 ptq.bit=[4,8] mode=calib \\
+        ckpt.path=outputs/pi3_w4a8_channelwise.pt \\
+        ptq.search_mode=ternary ptq.linear_channelwise=true
     # load and test
-    python taptq.py mode=test ckpt.path=outputs/vggt_w4a8.pt
+    python taptq.py ++mode=test ++ckpt.path=outputs/vggt_w4a8.pt
 """
 
 import json
@@ -27,7 +32,6 @@ from itertools import product
 
 import hydra
 import numpy as np
-import open3d as o3d
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -197,7 +201,9 @@ class _QwTBase(nn.Module):
         if linear_init and (r2_score > 0):
             self.lora_weight.data.copy_(W)
             self.lora_bias.data.copy_(b)
-            self.A, self.B = svd_low_rank(W, self.rank)
+            A, B = svd_low_rank(W, self.rank)
+            self.register_buffer("A", A)
+            self.register_buffer("B", B)
             self.QwT_enabled = True
             del self.lora_weight
         else:
@@ -776,6 +782,8 @@ _COMPENSATE_STRATEGIES = {
 
 
 def evaluate(hydra_cfg, model, logger):
+    import open3d as o3d
+
     all_eval_datasets = hydra_cfg.eval_datasets
     all_data_info = hydra_cfg.data
 
@@ -1034,6 +1042,20 @@ def _apply_quant_records(model, records, dev):
             if v is None and raw is not None:
                 skipped.append((name, attr, repr(raw)[:60]))
             elif v is not None:
+                if attr == "w_interval" and all(
+                    hasattr(module, key) for key in ("n_V", "n_H", "crb_rows", "crb_cols", "weight")
+                ):
+                    expected_shape = (module.n_V, 1, module.n_H, 1)
+                    actual_shape = tuple(v.shape)
+                    if actual_shape != expected_shape:
+                        raise ValueError(
+                            f"Quant checkpoint granularity mismatch for {name}: "
+                            f"w_interval has shape {actual_shape}, but the wrapped module "
+                            f"expects {expected_shape} (weight={tuple(module.weight.shape)}, "
+                            f"n_V={module.n_V}, n_H={module.n_H}). "
+                            "Recalibrate and save a checkpoint with the same "
+                            "ptq.linear_channelwise setting."
+                        )
                 setattr(module, attr, v)
     if name_warnings:
         logging.info(
@@ -1129,9 +1151,40 @@ def compute_quantized_params(model):
 # ============================================================================
 
 MODEL_REGISTRY = {
-    "vggt": "/root/autodl-tmp/hf_hub/models--facebook--VGGT-1B",
-    "pi3": "/root/autodl-tmp/hf_hub/models--yyfz233--Pi3",
-    # "da3": "xxx/DA3",  # TODO
+    "vggt": os.environ.get(
+        "VGGT_MODEL_PATH",
+        osp.join(root, "..", "models", "hf_hub", "models--facebook--VGGT-1B"),
+    ),
+    "pi3": os.environ.get(
+        "PI3_MODEL_PATH",
+        osp.join(root, "..", "models", "hf_hub", "models--yyfz233--Pi3"),
+    ),
+    "vggt_omega": os.environ.get(
+        "VGGT_OMEGA_MODEL_PATH",
+        osp.join(root, "..", "models", "vggt_omega_1b_512.pt"),
+    ),
+    "d4rt": os.environ.get("D4RT_MODEL_PATH", ""),
+}
+
+# Keep this scope identical to the historical Pi3 PTQ entrypoint. Heads,
+# patch embedding, and attention matmuls are intentionally outside this scope.
+MODEL_QUANT_SCOPE = {
+    "vggt": ("aggregator",),
+    "pi3": ("encoder", "decoder", "point_decoder"),
+    "vggt_omega": ("aggregator",),
+    "d4rt": ("backbone",),
+}
+MODEL_QUANT_LEAF_NAMES = {
+    "vggt": {"qkv", "proj", "fc1", "fc2", "matmul1", "matmul2", "reduction", "head"},
+    "pi3": {"qkv", "proj", "fc1", "fc2"},
+    "vggt_omega": {"qkv", "proj", "fc1", "fc2"},
+    "d4rt": {"qkv", "proj", "q_proj", "k_proj", "v_proj", "fc1", "fc2"},
+}
+MODEL_QUANT_EXCLUDE_PATTERNS = {
+    "vggt": (),
+    "pi3": (),
+    "vggt_omega": (),
+    "d4rt": ("decoder.fourier_embed", "decoder.patch_embed"),
 }
 
 
@@ -1181,21 +1234,87 @@ def _resolve_quant_cfg(hydra_cfg):
     lc_hydra = OmegaConf.select(hydra_cfg, "ptq.linear_channelwise")
     if lc_hydra is not None:
         quant_cfg.linear_channelwise = bool(lc_hydra)
+    search_mode = OmegaConf.select(hydra_cfg, "ptq.search_mode")
+    if search_mode is not None:
+        if search_mode not in ("exhaustive", "ternary"):
+            raise ValueError(f"ptq.search_mode must be exhaustive or ternary, got {search_mode}")
+        quant_cfg.ptqsl_linear_kwargs["search_mode"] = str(search_mode)
     return quant_cfg, config_name
 
 
+def _validate_and_summarize_scope(model_name, wrapped_modules, logger):
+    allowed_top_levels = MODEL_QUANT_SCOPE[model_name]
+    allowed_leaf_names = MODEL_QUANT_LEAF_NAMES[model_name]
+    invalid = []
+    counts = {level: 0 for level in allowed_top_levels}
+    for module_name in wrapped_modules:
+        parts = module_name.split(".")
+        top_level = parts[0]
+        leaf = parts[-1]
+        if top_level not in allowed_top_levels or leaf not in allowed_leaf_names:
+            invalid.append(module_name)
+        else:
+            counts[top_level] += 1
+    if invalid:
+        raise RuntimeError(
+            f"{model_name} quantization scope mismatch; unexpected modules: {invalid[:8]}"
+        )
+    logger.info("Quantization scope for %s: %s", model_name.upper(), counts)
+    return counts
+
+
 def build_model_and_wrap(hydra_cfg, logger):
-    """Instantiate VGGT (or registered alt), wrap quant modules, return (model, wrapped_modules, quant_cfg, config_name)."""
+    """Load VGGT/Pi3 and wrap the legacy-aligned linear quantization scope."""
     name = current_run_config.name
     if name not in MODEL_REGISTRY:
         raise ValueError(f"Unknown model name: {name}, supported: {list(MODEL_REGISTRY.keys())}")
     pretrained = MODEL_REGISTRY[name]
-    model = VGGT.from_pretrained(pretrained).to(hydra_cfg.device).eval()
-    logger.info(f"Loaded {name.upper()} from {pretrained}")
+    if name == "vggt":
+        model = VGGT.from_pretrained(pretrained).to(hydra_cfg.device).eval()
+    elif name == "pi3":
+        from pi3.models.pi3 import Pi3
+        model = Pi3.from_pretrained(pretrained).to(hydra_cfg.device).eval()
+    elif name in ("vggt_omega", "d4rt"):
+        from mv_recon.foundation_models import load_foundation_model
+
+        model = load_foundation_model(
+            name,
+            pretrained or None,
+            hydra_cfg.device,
+            image_resolution=int(OmegaConf.select(hydra_cfg, "foundation.image_resolution") or (512 if name == "vggt_omega" else 256)),
+            temporal_size=int(OmegaConf.select(hydra_cfg, "foundation.temporal_size") or 10),
+            query_grid=int(OmegaConf.select(hydra_cfg, "foundation.query_grid") or 16),
+            variant=str(OmegaConf.select(hydra_cfg, "foundation.variant") or "base"),
+            allow_random_init=bool(OmegaConf.select(hydra_cfg, "foundation.allow_random_init") or False),
+        )
+    else:
+        raise ValueError(f"Unsupported model name={name}")
+    logger.info("Loaded %s from %s", name.upper(), pretrained)
 
     quant_cfg, config_name = _resolve_quant_cfg(hydra_cfg)
-    # NOTE alternative: wrap point_head too via quantize_point_head=True
-    wrapped_modules = wrap_modules_in_net(model, quant_cfg, quantize_aggregator=True)
+    wrapped_modules = wrap_modules_in_net(
+        model,
+        quant_cfg,
+        quantize_aggregator=(name in ("vggt", "vggt_omega")),
+        quantize_scope=MODEL_QUANT_SCOPE[name],
+        exclude_patterns=MODEL_QUANT_EXCLUDE_PATTERNS[name],
+    )
+    if not wrapped_modules:
+        raise RuntimeError(f"No quantizable modules were wrapped for model={name}")
+    counts = _validate_and_summarize_scope(name, wrapped_modules, logger)
+    logger.info("Wrapped %d quantization modules for %s", len(wrapped_modules), name.upper())
+    if name == "pi3" and counts != {"encoder": 96, "decoder": 144, "point_decoder": 20}:
+        raise RuntimeError(
+            "Pi3 legacy-aligned scope must contain 96 encoder + 144 decoder + "
+            f"20 point_decoder linear modules, got {counts}"
+        )
+    if name == "vggt_omega" and counts != {"aggregator": 288}:
+        raise RuntimeError(f"VGGT-Omega aggregator must contain 288 qkv/proj/fc1/fc2 modules, got {counts}")
+    if name == "d4rt" and counts != {"backbone": 208}:
+        raise RuntimeError(
+            "OpenD4RT scope must contain 40 encoder blocks × 4 projections and "
+            f"8 decoder blocks × 6 projections, got {counts}"
+        )
     return model, wrapped_modules, quant_cfg, config_name
 
 
@@ -1226,6 +1345,11 @@ def _ckpt_default_path(name, quant_cfg, fmt):
 def _apply_compensation(hydra_cfg, model, wrapped_modules, dataset, seq_id_map, logger):
     """Dispatch QwT compensation per `compensate.strategy` with CLI param wiring."""
     strategy = OmegaConf.select(hydra_cfg, "compensate.strategy") or "module"
+    if current_run_config.name in ("vggt_omega", "d4rt") and strategy != "layer":
+        raise ValueError(
+            f"{current_run_config.name} currently supports compensate.strategy=layer only; "
+            "module/block QwT relies on VGGT-specific block internals"
+        )
     if strategy not in _COMPENSATE_STRATEGIES:
         raise ValueError(f"Unknown compensate strategy: {strategy}, supported: {list(_COMPENSATE_STRATEGIES)}")
     compensate_fn = _COMPENSATE_STRATEGIES[strategy]
@@ -1258,20 +1382,33 @@ def _apply_compensation(hydra_cfg, model, wrapped_modules, dataset, seq_id_map, 
     return compensate_fn(model, dataset, seq_id_map)
 
 
-def run_calibrate(hydra_cfg, *, run_compensate=False, save_ckpt=True):
-    """Calibrate (and optionally compensate), then save a ckpt. No evaluation.
+def _calibration_dataset(hydra_cfg):
+    """Return the frozen calibration dataset and sequence map.
 
-    The first entry in `hydra_cfg.test_datasets` is used for calibration sampling.
+    Calibration must come from ``optim_datasets`` (the authoritative TMM
+    setting is ``DTU_train_8``), never from the evaluation list.
     """
+    names = OmegaConf.select(hydra_cfg, "optim_datasets")
+    if not names:
+        names = OmegaConf.select(hydra_cfg, "test_datasets")
+    if not names:
+        raise ValueError("No calibration dataset configured in optim_datasets/test_datasets")
+    dataset_name = str(names[0])
+    if dataset_name not in hydra_cfg.data:
+        raise ValueError(f"Unknown calibration dataset: {dataset_name}")
+    dataset_info = hydra_cfg.data[dataset_name]
+    dataset = hydra.utils.instantiate(dataset_info.cfg)
+    with open(dataset_info.seq_id_map, "r", encoding="utf-8") as f:
+        seq_id_map = json.load(f)
+    return dataset_name, dataset_info, dataset, seq_id_map
+
+
+def run_calibrate(hydra_cfg, *, run_compensate=False, save_ckpt=True):
+    """Calibrate (and optionally compensate), then save a ckpt. No evaluation."""
     logger = logging.getLogger("taptq")
     model, wrapped_modules, quant_cfg, config_name = build_model_and_wrap(hydra_cfg, logger)
 
-    # Sample calibration data from the first test dataset
-    dataset_name = hydra_cfg.test_datasets[0]
-    dataset_info = hydra_cfg.data[dataset_name]
-    dataset = hydra.utils.instantiate(dataset_info.cfg)
-    with open(dataset_info.seq_id_map, "r") as f:
-        seq_id_map = json.load(f)
+    dataset_name, dataset_info, dataset, seq_id_map = _calibration_dataset(hydra_cfg)
     logger.info(f"Calibrating on {dataset_name} (sampling: {dataset_info.sampling.strategy})")
 
     t0 = time.time()
@@ -1295,6 +1432,39 @@ def run_calibrate(hydra_cfg, *, run_compensate=False, save_ckpt=True):
         )
         save_checkpoint(model, path, fmt=fmt)
     return model
+
+
+def run_smoke(hydra_cfg):
+    """Build/wrap a model and run one raw forward without calibration."""
+    logger = logging.getLogger("taptq")
+    model, wrapped_modules, _quant_cfg, _config_name = build_model_and_wrap(hydra_cfg, logger)
+    dataset_name, _dataset_info, dataset, seq_id_map = _calibration_dataset(hydra_cfg)
+    sequence_name, ids = next(iter(seq_id_map.items()))
+    data = dataset.get_data(sequence_name=sequence_name, ids=ids)
+    images = data["images"].to(hydra_cfg.device)
+    disable_quant(model)
+    with torch.no_grad():
+        output = model(images)
+    if not isinstance(output, dict) or "world_points" not in output:
+        raise RuntimeError(f"Smoke output must contain world_points, got {type(output)}")
+    points = output["world_points"]
+    if not torch.isfinite(points).all():
+        raise RuntimeError("Smoke forward produced non-finite world points")
+    logger.info(
+        "Smoke passed: model=%s dataset=%s wrapped=%d shape=%s",
+        current_run_config.name,
+        dataset_name,
+        len(wrapped_modules),
+        tuple(points.shape),
+    )
+
+
+def run_fp_eval(hydra_cfg):
+    """Run the full evaluation protocol with quantizers disabled."""
+    logger = logging.getLogger("taptq")
+    model, _wrapped, _quant_cfg, _config_name = build_model_and_wrap(hydra_cfg, logger)
+    disable_quant(model)
+    evaluate(hydra_cfg, model, logger)
 
 
 def run_test(hydra_cfg):
@@ -1331,12 +1501,8 @@ def run_compensate_eval(hydra_cfg):
     enable_quant(model)
     logger.info(f"Loaded calibrated ckpt from {path}")
 
-    # Dataset for the compensation forward pass (same convention as run_calibrate).
-    dataset_name = hydra_cfg.test_datasets[0]
-    dataset_info = hydra_cfg.data[dataset_name]
-    dataset = hydra.utils.instantiate(dataset_info.cfg)
-    with open(dataset_info.seq_id_map, "r") as f:
-        seq_id_map = json.load(f)
+    # Compensation uses the same frozen dtu_8 set as calibration.
+    dataset_name, dataset_info, dataset, seq_id_map = _calibration_dataset(hydra_cfg)
     logger.info(f"Compensation forward sampled from {dataset_name}")
 
     model = _apply_compensation(hydra_cfg, model, wrapped_modules, dataset, seq_id_map, logger)
@@ -1354,43 +1520,30 @@ def run_e2e(hydra_cfg):
     logger = logging.getLogger("taptq")
     model, wrapped_modules, quant_cfg, config_name = build_model_and_wrap(hydra_cfg, logger)
 
-    # Calibrate on each test dataset (matches the original loop)
-    for idx_dataset, dataset_name in enumerate(hydra_cfg.test_datasets, start=1):
-        if dataset_name not in hydra_cfg.data:
-            raise ValueError(f"Unknown dataset: {dataset_name}")
-        dataset_info = hydra_cfg.data[dataset_name]
-        dataset = hydra.utils.instantiate(dataset_info.cfg)
-        logger.info(f"[{idx_dataset}/{len(hydra_cfg.test_datasets)}] Calibrating on {dataset_name}...")
-        logger.info(f"Sampling strategy: {dataset_info.sampling.strategy}")
-        with open(dataset_info.seq_id_map, "r") as f:
-            seq_id_map = json.load(f)
+    dataset_name, dataset_info, dataset, seq_id_map = _calibration_dataset(hydra_cfg)
+    logger.info(f"Calibrating on {dataset_name} (sampling: {dataset_info.sampling.strategy})")
 
-        t0 = time.time()
-        calibrator = HessianQuantCalibrator(
-            model, wrapped_modules, dataset, seq_id_map,
-            sequential=False, batch_size=1, device=hydra_cfg.device, logger=logger,
-        )
-        calibrator.batching_quant_calib()
-        _print_quant_summary(current_run_config.name, current_run_config.calib_size,
-                             config_name, quant_cfg, time.time() - t0)
-        enable_quant(model)
-        logger.info("Quant-only eval (no compensation):")
-        evaluate(hydra_cfg, model, logger)
+    t0 = time.time()
+    calibrator = HessianQuantCalibrator(
+        model, wrapped_modules, dataset, seq_id_map,
+        sequential=False, batch_size=1, device=hydra_cfg.device, logger=logger,
+    )
+    calibrator.batching_quant_calib()
+    _print_quant_summary(current_run_config.name, current_run_config.calib_size,
+                         config_name, quant_cfg, time.time() - t0)
+    enable_quant(model)
+    logger.info("Quant-only eval (no compensation):")
+    evaluate(hydra_cfg, model, logger)
 
-        # Compensation
-        model = _apply_compensation(hydra_cfg, model, wrapped_modules, dataset, seq_id_map, logger)
-        # qb = compute_quantized_params(model)
-        # logger.info(f"Compensated model bit-budget: {qb:.2f} MB")
+    model = _apply_compensation(hydra_cfg, model, wrapped_modules, dataset, seq_id_map, logger)
+    logger.info("Post-compensation eval:")
+    evaluate(hydra_cfg, model, logger)
 
-        logger.info("Post-compensation eval:")
-        evaluate(hydra_cfg, model, logger)
-
-        # Persist
-        fmt = OmegaConf.select(hydra_cfg, "ckpt.fmt") or "json"
-        path = OmegaConf.select(hydra_cfg, "ckpt.path") or _ckpt_default_path(
-            current_run_config.name, quant_cfg, fmt
-        )
-        save_checkpoint(model, path, fmt=fmt)
+    fmt = OmegaConf.select(hydra_cfg, "ckpt.fmt") or "json"
+    path = OmegaConf.select(hydra_cfg, "ckpt.path") or _ckpt_default_path(
+        current_run_config.name, quant_cfg, fmt
+    )
+    save_checkpoint(model, path, fmt=fmt)
 
     del model
     torch.cuda.empty_cache()
@@ -1398,6 +1551,8 @@ def run_e2e(hydra_cfg):
 
 
 _MODE_HANDLERS = {
+    "smoke": run_smoke,
+    "fp_eval": run_fp_eval,
     "calib": lambda cfg: run_calibrate(cfg, run_compensate=False, save_ckpt=True),
     "calib_compensate": lambda cfg: run_calibrate(cfg, run_compensate=True, save_ckpt=True),
     "compensate_eval": run_compensate_eval,
@@ -1410,6 +1565,13 @@ _MODE_HANDLERS = {
 def main(hydra_cfg: DictConfig):
     if current_run_config is None:
         raise ValueError("RunConfig must be set before invoking main()")
+
+    model_name = OmegaConf.select(hydra_cfg, "model_name")
+    if model_name not in (None, ""):
+        model_name = str(model_name).lower()
+        if model_name not in MODEL_REGISTRY:
+            raise ValueError(f"model_name must be one of {sorted(MODEL_REGISTRY)}, got {model_name}")
+        current_run_config.name = model_name
 
     mode = OmegaConf.select(hydra_cfg, "mode") or "e2e"
     if mode not in _MODE_HANDLERS:
@@ -1460,12 +1622,15 @@ class cfg_modifier:
 # ============================================================================
 
 if __name__ == "__main__":
-    names = ["vggt"]
-    metrics = ["hessian"]
+    names = [os.environ.get("TAPTQ_MODEL", "vggt")]
+    metrics = [os.environ.get("TAPTQ_METRIC", "hessian")]
     linear_ptq_settings = [(1, 1, 1)]  # n_V, n_H, n_a
-    calib_sizes = [32]
-    bit_settings = [(4, 8)]  # weight, activation
-    config_names = ["PTQ4ViT"]
+    calib_sizes = [int(os.environ.get("TAPTQ_CALIB_SIZE", "32"))]
+    bits = os.environ.get("TAPTQ_BITS", "4,8").split(",")
+    if len(bits) != 2:
+        raise ValueError("TAPTQ_BITS must be W,A, e.g. 4,8")
+    bit_settings = [(int(bits[0]), int(bits[1]))]
+    config_names = [os.environ.get("TAPTQ_CONFIG", "PTQ4ViT")]
 
     cfg_list = []
     for name, metric, linear_ptq_setting, calib_size, bit_setting, config_name in product(

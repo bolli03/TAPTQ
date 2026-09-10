@@ -241,10 +241,14 @@ class PTQSLQuantLinear(MinMaxQuantLinear):
         a_bit = 8,
         bias_bit = None,
         bias_correction = False,
-        metric="L2_norm", search_round=1, eq_alpha=0, eq_beta=1, eq_n=100, parallel_eq_n=10, n_H=1, n_V=1, n_a=1, init_layerwise=False):
+        metric="L2_norm", search_round=1, eq_alpha=0, eq_beta=1, eq_n=100, parallel_eq_n=10, n_H=1, n_V=1, n_a=1, init_layerwise=False, search_mode="exhaustive"):
         super().__init__(in_features, out_features, bias=bias, mode=mode, w_bit=w_bit, a_bit=a_bit, bias_bit=bias_bit, bias_correction=bias_correction)
+        if search_mode not in ("exhaustive", "ternary"):
+            raise ValueError(f"search_mode must be exhaustive or ternary, got {search_mode}")
         self.metric = metric
         self.search_round = search_round
+        self.search_mode = search_mode
+        self.search_stats = {"mode": search_mode, "weight_evaluations": 0, "activation_evaluations": 0}
         self.eq_alpha = eq_alpha
         self.eq_beta = eq_beta
         self.eq_n = eq_n
@@ -407,9 +411,9 @@ class PostGeluPTQSLQuantLinear(PTQSLQuantLinear):
         a_bit = 8,
         bias_bit = None,
         bias_correction = False,
-        metric="L2_norm", search_round=1, eq_alpha=0, eq_beta=1, eq_n=100, parallel_eq_n=10, n_H=1, n_V=1, n_a=1, init_layerwise=False):
+        metric="L2_norm", search_round=1, eq_alpha=0, eq_beta=1, eq_n=100, parallel_eq_n=10, n_H=1, n_V=1, n_a=1, init_layerwise=False, search_mode="exhaustive"):
         super().__init__(in_features, out_features, bias=bias, mode=mode, w_bit=w_bit, a_bit=a_bit, bias_bit=bias_bit, bias_correction=bias_correction,
-                         metric=metric, search_round=search_round, eq_alpha=eq_alpha, eq_beta=eq_beta, eq_n=eq_n, parallel_eq_n=parallel_eq_n, n_H=n_H, n_V=n_V, n_a=n_a, init_layerwise=init_layerwise)
+                         metric=metric, search_round=search_round, eq_alpha=eq_alpha, eq_beta=eq_beta, eq_n=eq_n, parallel_eq_n=parallel_eq_n, n_H=n_H, n_V=n_V, n_a=n_a, init_layerwise=init_layerwise, search_mode=search_mode)
     
     def quant_input(self, x):
         """
@@ -494,8 +498,8 @@ class PTQSLBatchingQuantLinear(PTQSLQuantLinear):
         a_bit = 8,
         bias_bit = None,
         bias_correction = False,
-        metric="L2_norm", search_round=1, eq_alpha=0, eq_beta=1, eq_n=100, parallel_eq_n=10, n_H=1, n_V=1, n_a=1, init_layerwise=False):
-        super().__init__(in_features, out_features, bias=bias, mode=mode, w_bit=w_bit, a_bit=a_bit, bias_bit=bias_bit, bias_correction=bias_correction, metric=metric, search_round=search_round, eq_alpha=eq_alpha, eq_beta=eq_beta, eq_n=eq_n, parallel_eq_n=parallel_eq_n, n_H=n_H, n_V=n_V, n_a=n_a, init_layerwise=init_layerwise)
+        metric="L2_norm", search_round=1, eq_alpha=0, eq_beta=1, eq_n=100, parallel_eq_n=10, n_H=1, n_V=1, n_a=1, init_layerwise=False, search_mode="exhaustive"):
+        super().__init__(in_features, out_features, bias=bias, mode=mode, w_bit=w_bit, a_bit=a_bit, bias_bit=bias_bit, bias_correction=bias_correction, metric=metric, search_round=search_round, eq_alpha=eq_alpha, eq_beta=eq_beta, eq_n=eq_n, parallel_eq_n=parallel_eq_n, n_H=n_H, n_V=n_V, n_a=n_a, init_layerwise=init_layerwise, search_mode=search_mode)
         self.calib_size = None
         self.calib_batch_size = None
         self.calib_need_batching = False
@@ -591,83 +595,84 @@ class PTQSLBatchingQuantLinear(PTQSLQuantLinear):
         return similarity
 
     def _search_best_w_interval(self, weight_interval_candidates):
+        """Search weight intervals and record candidate-forward counts.
+
+        ``exhaustive`` evaluates every candidate. ``ternary`` evaluates two
+        interior candidates per round and exhausts the final three-point
+        bracket. The latter is intentionally approximate because PTQ error is
+        not guaranteed to be unimodal; the protocol records the mode and count
+        so the trade-off is auditable.
         """
-        与 linear_old / PTQSLQuantLinear 对齐：parallel_eq_n 遍历 eq_n，各校准 batch 的 (1,eq_n,n_V) 先 cat 再 sum 得 (eq_n,n_V)，
-        对每个 v 独立 argmax。激活搜索仍为三分，见 _search_best_a_interval。
-        """
-        tmp_w_interval = self.w_interval.unsqueeze(0)  # shape: 1,n_V,1,n_H,1
+        tmp_w_interval = self.w_interval.unsqueeze(0)
+        candidate_count = weight_interval_candidates.shape[0]
+        device = self.weight.device
+
         for h in range(self.n_H):
-            batch_similarities = []
-            for b_st in range(0, self.calib_size, self.calib_batch_size):
-                b_ed = min(self.calib_size, b_st + self.calib_batch_size)
-                x = self.raw_input[b_st:b_ed].cuda()
-                raw_out_expanded = self.raw_out[b_st:b_ed].cuda().unsqueeze(-2)
-                raw_out_expanded = torch.cat(
-                    torch.chunk(raw_out_expanded.unsqueeze(-2), chunks=self.n_V, dim=-1),
-                    dim=-2,
-                )
-                raw_grad = (
-                    self.raw_grad[b_st:b_ed].cuda()
-                    if self.raw_grad is not None
-                    else None
-                )
-                similarities = []
-                for p_st in range(0, self.eq_n, self.parallel_eq_n):
-                    p_ed = min(self.eq_n, p_st + self.parallel_eq_n)
-                    cur_w_interval = tmp_w_interval.repeat(p_ed - p_st, 1, 1, 1, 1)
-                    cur_w_interval[:, :, :, h : h + 1, :] = weight_interval_candidates[
-                        p_st:p_ed, :, :, h : h + 1, :
-                    ]
-                    w_sim = self.weight.view(
-                        self.n_V, self.crb_rows, self.n_H, self.crb_cols
-                    ).unsqueeze(0)
-                    w_sim = (
-                        (w_sim / cur_w_interval)
-                        .round_()
-                        .clamp_(-self.w_qmax, self.w_qmax - 1)
-                        .mul_(cur_w_interval)
+            def evaluate(indices):
+                indices = list(indices)
+                if not indices:
+                    return torch.empty(0, self.n_V, device=device)
+                batch_scores = []
+                for b_st in range(0, self.calib_size, self.calib_batch_size):
+                    b_ed = min(self.calib_size, b_st + self.calib_batch_size)
+                    x = self.raw_input[b_st:b_ed].to(device)
+                    raw_out_expanded = self.raw_out[b_st:b_ed].to(device).unsqueeze(-2)
+                    raw_out_expanded = torch.cat(
+                        torch.chunk(raw_out_expanded.unsqueeze(-2), chunks=self.n_V, dim=-1), dim=-2
                     )
-                    w_sim = w_sim.view(-1, self.in_features)
-                    bias_sim = (
-                        self.bias.repeat(p_ed - p_st) if self.bias is not None else None
-                    )
-                    x_sim = self.quant_input(x)
-                    out_sim = F.linear(x_sim, w_sim, bias_sim)
-                    out_sim = torch.cat(
-                        torch.chunk(
-                            out_sim.unsqueeze(-2), chunks=p_ed - p_st, dim=-1
-                        ),
-                        dim=-2,
-                    )
-                    out_sim = torch.cat(
-                        torch.chunk(out_sim.unsqueeze(-2), chunks=self.n_V, dim=-1),
-                        dim=-2,
-                    )
-                    if self.metric != "pearson":
-                        similarity = self._get_similarity(
-                            raw_out_expanded, out_sim, self.metric, raw_grad
-                        )
-                        if len(similarity.shape) > 3:
-                            similarity = torch.mean(
-                                similarity,
-                                dim=list(
-                                    range(1, len(similarity.shape) - 2)
-                                ),
-                            )
+                    raw_grad = self.raw_grad[b_st:b_ed].to(device) if self.raw_grad is not None else None
+                    scores = []
+                    for p_st in range(0, len(indices), self.parallel_eq_n):
+                        chunk = indices[p_st:p_st + self.parallel_eq_n]
+                        p_ed = len(chunk)
+                        cur_w_interval = tmp_w_interval.repeat(p_ed, 1, 1, 1, 1)
+                        candidate = weight_interval_candidates[chunk, :, :, h:h + 1, :]
+                        cur_w_interval[:, :, :, h:h + 1, :] = candidate
+                        w_sim = self.weight.view(self.n_V, self.crb_rows, self.n_H, self.crb_cols).unsqueeze(0)
+                        w_sim = (w_sim / cur_w_interval).round_().clamp_(-self.w_qmax, self.w_qmax - 1).mul_(cur_w_interval)
+                        w_sim = w_sim.view(-1, self.in_features)
+                        bias_sim = self.bias.repeat(p_ed) if self.bias is not None else None
+                        out_sim = F.linear(self.quant_input(x), w_sim, bias_sim)
+                        out_sim = torch.cat(torch.chunk(out_sim.unsqueeze(-2), chunks=p_ed, dim=-1), dim=-2)
+                        out_sim = torch.cat(torch.chunk(out_sim.unsqueeze(-2), chunks=self.n_V, dim=-1), dim=-2)
+                        if self.metric != "pearson":
+                            similarity = self._get_similarity(raw_out_expanded, out_sim, self.metric, raw_grad)
+                            if len(similarity.shape) > 3:
+                                similarity = similarity.mean(dim=list(range(1, len(similarity.shape) - 2)))
+                        else:
+                            similarity = self._get_pearson_w(raw_out_expanded, out_sim)
+                        scores.append(similarity.sum(dim=0))
+                    batch_scores.append(torch.cat(scores, dim=0))
+                    self.search_stats["weight_evaluations"] += len(indices)
+                return torch.stack(batch_scores).sum(dim=0)
+
+            if self.search_mode == "exhaustive":
+                visited = list(range(candidate_count))
+                scores = evaluate(visited)
+            else:
+                left, right = 0, candidate_count - 1
+                visited = []
+                while right - left > 2:
+                    m1 = left + (right - left) // 3
+                    m2 = right - (right - left) // 3
+                    pair = [m1, m2]
+                    pair_scores = evaluate(pair)
+                    visited.extend(pair)
+                    if pair_scores.mean(dim=1)[0] < pair_scores.mean(dim=1)[1]:
+                        left = m1
                     else:
-                        similarity = self._get_pearson_w(raw_out_expanded, out_sim)
-                    similarity = similarity.sum(dim=0, keepdim=True)
-                    similarities.append(similarity)
-                similarities = torch.cat(similarities, dim=1)
-                batch_similarities.append(similarities)
-            batch_similarities = torch.cat(batch_similarities, dim=0).sum(
-                dim=0, keepdim=False
-            )
-            h_best_index = batch_similarities.argmax(dim=0).reshape(1, -1, 1, 1, 1)
-            tmp_w_interval[:, :, :, h : h + 1, :] = torch.gather(
-                weight_interval_candidates[:, :, :, h : h + 1, :],
-                dim=0,
-                index=h_best_index,
+                        right = m2
+                tail = list(range(left, right + 1))
+                tail_scores = evaluate(tail)
+                visited.extend(tail)
+                visited = list(dict.fromkeys(visited))
+                scores = evaluate(visited)
+
+            best = scores.argmax(dim=0).reshape(1, -1, 1, 1, 1)
+            selected = torch.tensor(visited, device=device, dtype=torch.long)[best.squeeze(-1).squeeze(-1).squeeze(-1)]
+            selected = selected.reshape(1, -1, 1, 1, 1)
+            tmp_w_interval[:, :, :, h:h + 1, :] = torch.gather(
+                weight_interval_candidates[:, :, :, h:h + 1, :], dim=0, index=selected
             )
         self.w_interval = tmp_w_interval.squeeze(dim=0)
 
@@ -679,13 +684,13 @@ class PTQSLBatchingQuantLinear(PTQSLQuantLinear):
                 mid1 = (2 * left_idx + right_idx) // 3
                 mid2 = (left_idx + 2 * right_idx) // 3
                 indices = [mid1, mid2]
-                similarities_sum = torch.zeros(len(indices), device="cuda")
+                similarities_sum = torch.zeros(len(indices), device=self.weight.device)
 
                 for b_st in range(0, self.calib_size, self.calib_batch_size):
                     b_ed = min(self.calib_size, b_st + self.calib_batch_size)
-                    x = self.raw_input[b_st:b_ed].cuda()
-                    raw_out_expanded = self.raw_out[b_st:b_ed].cuda().unsqueeze(-2)
-                    raw_grad = self.raw_grad[b_st:b_ed].cuda()
+                    x = self.raw_input[b_st:b_ed].to(self.weight.device)
+                    raw_out_expanded = self.raw_out[b_st:b_ed].to(self.weight.device).unsqueeze(-2)
+                    raw_grad = self.raw_grad[b_st:b_ed].to(self.weight.device) if self.raw_grad is not None else None
                     w_sim, bias_sim = self.quant_weight_bias()
 
                     for i, mid in enumerate(indices):
@@ -702,7 +707,16 @@ class PTQSLBatchingQuantLinear(PTQSLQuantLinear):
                         sim = self._get_similarity(raw_out_expanded, out_sim, self.metric, raw_grad)
                         similarities_sum[i] += sim.mean()
 
+                self.search_stats["activation_evaluations"] += len(indices) * (
+                    (self.calib_size + self.calib_batch_size - 1) // self.calib_batch_size
+                )
                 return similarities_sum
+
+            if self.search_mode == "exhaustive":
+                scores = [eval_a_interval_range(i, i)[0] for i in range(input_interval_candidates.shape[-1])]
+                best_idx = int(torch.stack(scores).argmax().item())
+                tmp_a_interval[a:a+1, :, :] = input_interval_candidates[a:a+1, :, best_idx:best_idx+1]
+                continue
 
             left, right = 0, input_interval_candidates.shape[-1] - 1
             while right - left > 2:
@@ -756,9 +770,9 @@ class PostGeluPTQSLBatchingQuantLinear(PTQSLBatchingQuantLinear):
         a_bit = 8,
         bias_bit = None,
         bias_correction = False,
-        metric="L2_norm", search_round=1, eq_alpha=0, eq_beta=1, eq_n=100, parallel_eq_n=10, n_H=1, n_V=1, n_a=1, init_layerwise=False):
+        metric="L2_norm", search_round=1, eq_alpha=0, eq_beta=1, eq_n=100, parallel_eq_n=10, n_H=1, n_V=1, n_a=1, init_layerwise=False, search_mode="exhaustive"):
         super().__init__(in_features, out_features, bias=bias, mode=mode, w_bit=w_bit, a_bit=a_bit, bias_bit=bias_bit, bias_correction=bias_correction,
-                         metric=metric, search_round=search_round, eq_alpha=eq_alpha, eq_beta=eq_beta, eq_n=eq_n, parallel_eq_n=parallel_eq_n, n_H=n_H, n_V=n_V, n_a=n_a, init_layerwise=init_layerwise)
+                         metric=metric, search_round=search_round, eq_alpha=eq_alpha, eq_beta=eq_beta, eq_n=eq_n, parallel_eq_n=parallel_eq_n, n_H=n_H, n_V=n_V, n_a=n_a, init_layerwise=init_layerwise, search_mode=search_mode)
         self.a_neg_interval = 0.16997124254703522/self.a_qmax
 
     def _initialize_intervals(self):

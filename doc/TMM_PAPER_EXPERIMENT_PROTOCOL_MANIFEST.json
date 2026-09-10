@@ -1,0 +1,70 @@
+{
+  "status": "paper_experiment_restructure_supporting_artifacts",
+  "created_at": "2026-08-19T16:42:00+08:00",
+  "updated_at": "2026-08-19T19:25:00+08:00",
+  "run_id": "702478252",
+  "primary_protocol": {
+    "model": "VGGT-1B",
+    "evaluation": "E1 unified evaluator, 7Scenes dense full18",
+    "calibration": "DTU_train_8, 8 scans x 10 frames",
+    "scope": "288 VGGT aggregator qkv/proj/fc1/fc2 Linear modules",
+    "metrics": ["Acc-mean", "Acc-med", "Comp-mean", "Comp-med", "NC-mean", "NC-med"]
+  },
+  "w8a8_new_baselines": {
+    "RTN": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_w8a8/rtn/tre_diff/all_metrics.csv", "metrics": [0.021560152042787925, 0.035301535819195345, 0.6877645093643152]},
+    "RepQ-ViT": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_w8a8/repq/tre_diff/all_metrics.csv", "metrics": [0.041271336541938396, 0.04099144240902961, 0.681695787947224]},
+    "ERQ_two_part": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_w8a8/erq_twopart/tre_diff/all_metrics.csv", "metrics": [0.03353609506504677, 0.03626029201595297, 0.6850375927597857]},
+    "GPTQ": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_w8a8/gptq/tre_diff/all_metrics.csv", "metrics": [0.021315488737491298, 0.035499351021205834, 0.6879713354238127]},
+    "SmoothQuant_alpha_0_3": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_w8a8/smoothquant_a03/tre_diff/all_metrics.csv", "metrics": [0.022975261707426267, 0.03668252443650827, 0.6859086848923958]},
+    "PTQ4ViT": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_w8a8/ptq4vit/tre_diff/all_metrics.csv", "metrics": [0.01812904532635076, 0.0310153053248134, 0.6899117826835012]},
+    "SVDQuant": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_w8a8/svdquant/tre_diff/all_metrics.csv", "metrics": [0.018588594068668786, 0.031790343624198, 0.689259784101955]}
+  },
+  "w4a8_new_svdquant": {
+    "artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_w4a8/svdquant/tre_diff/all_metrics.csv",
+    "metrics": [0.017095192838242904, 0.03228907332865956, 0.6926164295746702]
+  },
+  "w4a8_compensation_budget_sweep": {
+    "status": "completed",
+    "configuration": "VGGT W4A8; 144 candidate attention/MLP modules; tail ratio 0.1; rank 128; DTU_train_8 calibration; 7Scenes dense full18",
+    "selection_metrics": ["tre", "mse", "hessian", "random"],
+    "random_seed": 42,
+    "default_threshold_budget": "62/144 at tau=0.007",
+    "budgets": {
+      "24/144": {
+        "TRE": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_tre_24/tre_diff/all_metrics.csv", "metrics": [0.025873771253144016, 0.044597321425767784, 0.6882755968459439]},
+        "MSE": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_mse_24/tre_diff/all_metrics.csv", "metrics": [0.030371090254906856, 0.04553643979273652, 0.6876315017327117]},
+        "Hessian": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_hessian_24/tre_diff/all_metrics.csv", "metrics": [0.03050314389639497, 0.04697550237936643, 0.6859332128115783]},
+        "Random": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_random_24_s42/tre_diff/all_metrics.csv", "metrics": [0.030941127999275928, 0.04692323490606312, 0.6883190746476079]}
+      },
+      "48/144": {
+        "TRE": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_tre_48/tre_diff/all_metrics.csv", "metrics": [0.021498353058336403, 0.03821112759065515, 0.6927962214191011]},
+        "MSE": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_mse_48/tre_diff/all_metrics.csv", "metrics": [0.02247023587929362, 0.038236158438924646, 0.69145382195097]},
+        "Hessian": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_hessian_48/tre_diff/all_metrics.csv", "metrics": [0.024762779000743338, 0.040114562845523824, 0.6898108493515649]},
+        "Random": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_random_48_s42/tre_diff/all_metrics.csv", "metrics": [0.022948573351509946, 0.03935506719082171, 0.6891753340511795]}
+      },
+      "62/144": {
+        "TRE": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_tre_62/tre_diff/all_metrics.csv", "metrics": [0.019822324470129875, 0.03642977402721953, 0.6952646850584212]},
+        "MSE": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_mse_62/tre_diff/all_metrics.csv", "metrics": [0.022226954508509048, 0.03782040044316781, 0.690147851251922]},
+        "Hessian": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_hessian_62/tre_diff/all_metrics.csv", "metrics": [0.020257259224452803, 0.03594656638180618, 0.6924375206401854]},
+        "Random": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_random_62_s42/tre_diff/all_metrics.csv", "metrics": [0.022524864464618346, 0.04043040857551074, 0.6912736951565971]}
+      },
+      "72/144": {
+        "TRE": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_tre_72/tre_diff/all_metrics.csv", "metrics": [0.019894586127252444, 0.03586225670693919, 0.6941690907060738]},
+        "MSE": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_mse_72/tre_diff/all_metrics.csv", "metrics": [0.020139804363932704, 0.037738886789702775, 0.6929876497718155]},
+        "Hessian": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_hessian_72/tre_diff/all_metrics.csv", "metrics": [0.01901065649601486, 0.0361156943548818, 0.6947598890293326]},
+        "Random": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_random_72_s42/tre_diff/all_metrics.csv", "metrics": [0.02139603080952562, 0.038488997555473324, 0.6919646071779589]}
+      },
+      "96/144": {
+        "TRE": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_tre_96/tre_diff/all_metrics.csv", "metrics": [0.019795373877401247, 0.03471782447574941, 0.6949000984866538]},
+        "MSE": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_mse_96/tre_diff/all_metrics.csv", "metrics": [0.01955097613992787, 0.036839049513588976, 0.6928209117624483]},
+        "Hessian": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_hessian_96/tre_diff/all_metrics.csv", "metrics": [0.02003573455420904, 0.03652875129450265, 0.6927518999424305]},
+        "Random": {"artifact": "/mnt/cephfs/pansicheng/tmm-results/eval/paper_vggt_gate_matched/w4a8_random_96_s42/tre_diff/all_metrics.csv", "metrics": [0.02436977503469718, 0.04289374246935891, 0.6898808076159733]}
+      }
+    }
+  },
+  "scope_caveats": [
+    "The W4A8 main-table baselines remain a mixture of existing artifact families; the new SVDQuant result aligns its DTU_train_8/4096-token budget with the primary protocol.",
+    "The W4/A8 hardware result is a calibrated FP8/BF16 hybrid backend, not a native fused INT4xINT8 kernel.",
+    "Calibration-subset and ternary-search ablations have not yet been re-archived under this frozen primary protocol and are excluded from the draft main text."
+  ]
+}

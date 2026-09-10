@@ -36,10 +36,38 @@ def fold_bn_into_conv(conv_module, bn_module):
     conv_module.weight.data = w.data
 
 
-def wrap_modules_in_net(net, cfg, quantize_aggregator=True, quantize_camera_head=False, quantize_point_head=False, quantize_depth_head=False, quantize_track_head=False):
+def wrap_modules_in_net(
+    net,
+    cfg,
+    quantize_aggregator=True,
+    quantize_camera_head=False,
+    quantize_point_head=False,
+    quantize_depth_head=False,
+    quantize_track_head=False,
+    quantize_scope=None,
+    module_types_override=None,
+    exclude_patterns=None,
+):
+    """Replace selected Transformer primitives with calibrated PTQ modules.
+
+    ``quantize_scope`` is an optional iterable of allowed top-level module names.
+    It is used by external architectures (DUSt3R/MASt3R) to prevent accidental
+    quantization of task heads while preserving the historical VGGT/Pi3 rules.
+    """
     wrapped_modules = {}
     module_dict = {}
-    module_types = {"qkv": "qlinear_qkv", "proj": 'qlinear_proj', 'fc1': 'qlinear_MLP_1', 'fc2': "qlinear_MLP_2", 'head': 'qlinear_classifier', 'matmul1': "qmatmul_qk", 'matmul2': "qmatmul_scorev", "reduction": "qlinear_reduction"}
+    module_types = {
+        "qkv": "qlinear_qkv", "proj": "qlinear_proj",
+        "projq": "qlinear_proj", "projk": "qlinear_proj", "projv": "qlinear_proj",
+        "q_proj": "qlinear_proj", "k_proj": "qlinear_proj", "v_proj": "qlinear_proj",
+        "fc1": "qlinear_MLP_1", "fc2": "qlinear_MLP_2",
+        "head": "qlinear_classifier", "matmul1": "qmatmul_qk",
+        "matmul2": "qmatmul_scorev", "reduction": "qlinear_reduction",
+    }
+    if module_types_override:
+        module_types.update(module_types_override)
+    explicit_scope = set(quantize_scope) if quantize_scope is not None else None
+    excluded_paths = tuple(exclude_patterns or ())
 
     # 定义VGGT的5个主模块名及其量化开关
     quantize_flags = {
@@ -57,21 +85,20 @@ def wrap_modules_in_net(net, cfg, quantize_aggregator=True, quantize_camera_head
         if idx == -1:
             idx = 0
         father_name = name[:idx]
-        # 只量化被选中的主模块及其子模块
-        if hasattr(net, 'aggregator'):
-            top_level = name.split('.')[0] if '.' in name else name
+        # Only quantize selected backbone scopes. Explicit scope takes priority;
+        # otherwise preserve the historical VGGT/Pi3 behavior.
+        top_level = name.split('.')[0] if '.' in name else name
+        if any(pattern in name for pattern in excluded_paths):
+            continue
+        if explicit_scope is not None:
+            if top_level not in explicit_scope:
+                continue
+        elif hasattr(net, 'aggregator'):
             if top_level in quantize_flags and not quantize_flags[top_level]:
                 continue
-            # 其它非主模块也跳过
             if top_level not in quantize_flags:
                 continue
-        if father_name in module_dict:
-            father_module = module_dict[father_name]
-        else:
-            raise RuntimeError(f"father module {father_name} not found")
-        if hasattr(net, 'encoder'):
-            # pi3
-            top_level = name.split('.')[0] if '.' in name else name
+        elif hasattr(net, 'encoder'):
             if top_level not in ['encoder', 'decoder', 'point_decoder']:
                 continue
         if father_name in module_dict:

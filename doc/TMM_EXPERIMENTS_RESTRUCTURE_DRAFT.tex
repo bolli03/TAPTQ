@@ -1,0 +1,492 @@
+\documentclass[journal]{Tail_Aware_Post_Training_Quantization_for_3D_Geometry_Models_TMM/IEEEtran}
+
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{makecell}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{colortbl}
+
+\newcommand{\taptq}{\textsc{TAPTQ}}
+\graphicspath{{Tail_Aware_Post_Training_Quantization_for_3D_Geometry_Models_TMM/figs/}}
+
+\begin{document}
+
+\title{Experimental Section Restructuring Draft for Tail-Aware Post-Training Quantization}
+\author{Internal Draft---Not for Submission}
+\maketitle
+
+% Standalone draft. It does not modify main.tex or secs/4_exp.tex.
+% The experiment section follows the requested A--E organization.
+
+\section{Experiments}
+
+\subsection{A. Experimental and Evaluation Setting}
+
+\paragraph{Base Model.}
+We evaluate several pretrained 3D geometry foundation models, including VGGT-1B, Pi3, DUSt3R, MASt3R, and OpenD4RT. All models are quantized directly from their pretrained full-precision checkpoints without retraining. VGGT-1B serves as the primary model for the unified quantitative comparison, and its results are reported in the main-result section. The remaining models are used to assess the transferability of \taptq{} across architectures.
+
+\paragraph{Tasks and Datasets.}
+We focus primarily on point-cloud reconstruction. For calibration, we randomly draw 20 samples from the DTU training split and select 8 of them using our progressive calibration-set construction strategy. The resulting calibration set is fixed and shared across all experiments. We evaluate point-cloud reconstruction on 7Scenes and ETH3D, and further assess cross-task robustness through camera-parameter prediction on Co3Dv2. DTU is used as the source of calibration samples rather than as a replacement for the ETH3D test benchmark.
+
+\paragraph{Quantization Settings.}
+We evaluate three representative low-bit configurations, namely W4A8, W6A6, and W8A8, where W$b$A$a$ denotes $b$-bit weight quantization and $a$-bit activation quantization. W4A8 and W6A6 are the primary settings in the manuscript; W8A8 is retained as an auxiliary validation setting until its protocol-aligned ETH3D result is finalized.
+
+\paragraph{Baseline Methods.}
+We compare TAPTQ with representative post-training quantization methods, including round-to-nearest (RTN), PTQ4ViT, RepQ-ViT, ERQ, GPTQ, SmoothQuant, and QuantVGGT. Unless otherwise stated, the baselines reimplemented within our evaluation framework use the same calibration data, inference settings, and geometry-evaluation protocol as TAPTQ. For each method, we retain its original quantization objective and apply the architecture-specific adaptations required for VGGT. Detailed implementation settings, including quantizer configurations and adaptation strategies, are provided in Appendix~\ref{app:implementation_details}. Results obtained under different evaluation protocols are reported separately and are not used for direct quantitative comparison.
+
+\paragraph{Metrics.}
+For point-cloud reconstruction, we report Acc. and Comp. (lower is better) and N.C. (higher is better). For camera-parameter prediction on Co3Dv2, we report AUC at multiple thresholds (A@30/A@15/A@5/A@3; higher is better).
+
+The table format follows the original manuscript: each row identifies the model, bit-width, and method, followed by mean/median Acc., Comp., and N.C. Lower Acc./Comp. indicate better reconstruction quality, whereas higher N.C. indicates better normal consistency.
+
+\subsection{B. Main Results}
+
+\paragraph{Quantitative Comparison.}
+We evaluate TAPTQ on point-cloud reconstruction under the primary W4A8 and W6A6 settings. Table~\ref{tab:vggt_main_results} follows the Pi3 evaluation protocol on 7Scenes and the repaired ETH3D 13-sequence $k_f=5$ protocol. Lower Acc. and Comp. indicate better reconstruction quality, while higher N.C. reflects improved normal consistency.
+
+\begin{table*}[t]
+\caption{VGGT reconstruction on 7Scenes dense under the Pi3 evaluation protocol ($\mathrm{kf}=40$) and ETH3D ($\mathrm{kf}=5$, 13 sequences). W4A8/W6A6 are the primary settings; W8A8 is auxiliary. Each cell reports mean/median. Lower Acc./Comp. and higher N.C. are better. ETH3D TAPTQ entries use the dataset-specific selected configuration; the associated hyperparameters are listed in Table~\ref{tab:eth3d_channelwise}.}
+\label{tab:vggt_main_results}
+\centering
+\fontsize{6.4}{7.5}\selectfont
+\setlength{\tabcolsep}{2.0pt}
+\renewcommand{\arraystretch}{1.08}
+\begin{tabular}{@{}cl|rrrrrr|rrrrrr@{}}
+\toprule
+& & \multicolumn{6}{c}{\textbf{7Scenes dense ($\mathrm{kf}=40$)}} & \multicolumn{6}{c}{\textbf{ETH3D ($\mathrm{kf}=5$)}} \\
+\cmidrule(lr){3-8}\cmidrule(lr){9-14}
+\multirow{2}{*}{Bit} & \multirow{2}{*}{Method}
+& \multicolumn{2}{c}{Acc.$\downarrow$} & \multicolumn{2}{c}{Comp.$\downarrow$} & \multicolumn{2}{c}{N.C.$\uparrow$}
+& \multicolumn{2}{c}{Acc.$\downarrow$} & \multicolumn{2}{c}{Comp.$\downarrow$} & \multicolumn{2}{c}{N.C.$\uparrow$} \\
+\cmidrule(lr){3-4}\cmidrule(lr){5-6}\cmidrule(lr){7-8}\cmidrule(lr){9-10}\cmidrule(lr){11-12}\cmidrule(lr){13-14}
+& & Mean & Med. & Mean & Med. & Mean & Med. & Mean & Med. & Mean & Med. & Mean & Med. \\
+\midrule
+\multirow{9}{*}{W4A8}
+& FP          & 0.0185 & 0.0156 & 0.0318 & 0.0272 & 0.6895 & 0.6859 & 0.2909 & 0.1985 & 0.3628 & 0.2266 & 0.8433 & 0.9359 \\
+& RTN         & 0.0317 & 0.0124 & 0.0433 & 0.0158 & 0.6849 & 0.7868 & 0.5522 & 0.4284 & 0.6585 & 0.4059 & 0.7456 & 0.8581 \\
+& PTQ4ViT     & 0.0343 & 0.0152 & 0.0547 & 0.0190 & 0.6877 & 0.7859 & 0.5813 & 0.4490 & 0.7346 & 0.4119 & 0.7290 & 0.8403 \\
+& RepQ-ViT    & 0.0872 & 0.0486 & 0.1939 & 0.0892 & 0.6375 & 0.7073 & 0.8464 & 0.7299 & 2.0768 & 1.5578 & 0.5511 & 0.5829 \\
+& ERQ         & 0.0340 & 0.0158 & 0.0367 & 0.0147 & 0.6839 & 0.7857 & 0.5867 & 0.4540 & 0.7044 & 0.3986 & 0.7388 & 0.8470 \\
+& GPTQ        & 0.0304 & 0.0127 & 0.0345 & 0.0152 & 0.6868 & 0.7897 & 0.4322 & 0.3052 & 0.5030 & 0.3082 & 0.7779 & 0.8947 \\
+& SmoothQuant & 0.0337 & 0.0131 & 0.0398 & \textbf{0.0139} & 0.6883 & 0.7914 & 0.6618 & 0.5428 & 0.8113 & 0.5057 & 0.7167 & 0.8182 \\
+& QuantVGGT   & 0.0207 & 0.0082 & \textbf{0.0342} & 0.0176 & 0.6739 & 0.7595 & \textbf{0.2765} & \textbf{0.1978} & \textbf{0.3557} & 0.2339 & \textbf{0.8405} & \textbf{0.9364} \\
+\rowcolor{yellow!15}
+& \taptq{}    & 0.0189 & \textbf{0.0081} & 0.0359 & 0.0140 & \textbf{0.6943} & \textbf{0.7983} & 0.2816 & \textbf{0.1929} & \textbf{0.3457} & \textbf{0.1921} & 0.8371 & \textbf{0.9367} \\
+\midrule
+\multirow{9}{*}{W6A6}
+& FP          & 0.0185 & 0.0156 & 0.0318 & 0.0272 & 0.6895 & 0.6859 & 0.2909 & 0.1985 & 0.3628 & 0.2266 & 0.8433 & 0.9359 \\
+& RTN         & 0.0420 & 0.0179 & 0.0403 & 0.0157 & 0.6775 & 0.7754 & 0.5261 & 0.4035 & 0.6172 & 0.3913 & 0.7581 & 0.8597 \\
+& PTQ4ViT     & 0.0205 & 0.0092 & 0.0355 & 0.0143 & \textbf{0.6918} & \textbf{0.7955} & 0.4036 & 0.2869 & 0.4991 & 0.3136 & 0.7886 & 0.8951 \\
+& RepQ-ViT    & 0.0429 & 0.0186 & 0.0455 & 0.0157 & 0.6799 & 0.7788 & 0.5841 & 0.4404 & 0.6938 & 0.3752 & 0.7406 & 0.8457 \\
+& ERQ         & 0.0364 & 0.0173 & 0.0407 & 0.0158 & 0.6825 & 0.7830 & 0.5614 & 0.4335 & 0.6615 & 0.3596 & 0.7558 & 0.8631 \\
+& GPTQ        & 0.0404 & 0.0172 & 0.0416 & 0.0150 & 0.6774 & 0.7752 & 0.4758 & 0.3594 & 0.6833 & 0.4487 & 0.7518 & 0.8518 \\
+& SmoothQuant & 0.0328 & 0.0163 & 0.0455 & 0.0178 & 0.6806 & 0.7813 & 0.6009 & 0.4515 & 0.7800 & 0.4911 & 0.7280 & 0.8258 \\
+& QuantVGGT   & \textbf{0.0203} & \textbf{0.0082} & \textbf{0.0339} & 0.0171 & 0.6749 & 0.7650 & 0.2929 & 0.2035 & 0.3674 & 0.2321 & 0.8434 & 0.9363 \\
+\rowcolor{yellow!15}
+& \taptq{}    & 0.0203 & 0.0086 & 0.0349 & \textbf{0.0146} & 0.6904 & 0.7935 & \textbf{0.2811} & \textbf{0.1814} & \textbf{0.3287} & \textbf{0.1955} & \textbf{0.8434} & \textbf{0.9441} \\
+\midrule
+\multirow{9}{*}{W8A8}
+& FP          & 0.0185 & 0.0156 & 0.0318 & 0.0272 & 0.6895 & 0.6859 & 0.2909 & 0.1985 & 0.3628 & 0.2266 & 0.8433 & 0.9359 \\
+& RTN         & 0.0216 & 0.0089 & 0.0353 & 0.0166 & 0.6878 & 0.7899 & 0.3572 & 0.2593 & 0.5105 & 0.3423 & 0.7844 & 0.8819 \\
+& PTQ4ViT     & \textbf{0.0181} & \textbf{0.0074} & \textbf{0.0310} & \textbf{0.0152} & 0.6899 & 0.7929 & \textbf{0.2759} & \textbf{0.1779} & \textbf{0.3111} & \textbf{0.1863} & \textbf{0.8456} & \textbf{0.9470} \\
+& RepQ-ViT    & 0.0413 & 0.0180 & 0.0410 & 0.0161 & 0.6817 & 0.7810 & 0.6149 & 0.4299 & 0.5957 & 0.3401 & 0.7637 & 0.8844 \\
+& ERQ         & 0.0335 & 0.0162 & 0.0363 & 0.0156 & \textbf{0.7183} & \textbf{0.8077} & 0.5705 & 0.4403 & 0.6088 & 0.3654 & 0.7564 & 0.8681 \\
+& GPTQ        & 0.0213 & 0.0088 & 0.0355 & 0.0167 & 0.6880 & 0.7905 & 0.3718 & 0.2787 & 0.5056 & 0.3292 & 0.7836 & 0.8808 \\
+& SmoothQuant & 0.0230 & 0.0091 & 0.0367 & 0.0170 & 0.6859 & 0.7867 & 0.3525 & 0.2628 & 0.4647 & 0.3018 & 0.7997 & 0.8879 \\
+& QuantVGGT   & 0.0205 & 0.0082 & 0.0338 & 0.0173 & 0.6745 & 0.7619 & 0.2908 & 0.1990 & 0.3650 & 0.2275 & 0.8422 & 0.9345 \\
+\rowcolor{yellow!15}
+& \taptq{}    & 0.0182 & \textbf{0.0074} & 0.0311 & \textbf{0.0152} & 0.6897 & 0.7926 & \textbf{0.2743} & \textbf{0.1691} & 0.3146 & \textbf{0.1795} & 0.8455 & 0.9468 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+FP is an independent reference group. Within each W4A8, W6A6, and W8A8 group, boldface marks the best quantized result in each metric column; FP is excluded from this selection. For 7Scenes and ETH3D, QuantVGGT is evaluated with the same full-resolution input construction, frozen frame map, Sim(3)+ICP point-cloud alignment, and Acc./Comp./N.C. computation as the unified evaluator.
+
+\paragraph{ETH3D protocol.}
+ETH3D uses the repaired Pi3-compatible 13-sequence dataset with frozen $k_f=5$ frame indices and complete RGB/depth/camera triplets. The FP mean Acc. is 0.2909, close to the expected 0.2933 reference scale. Each ETH3D TAPTQ entry uses the selected setting for its bit-width; the corresponding configuration is listed in Table~\ref{tab:eth3d_channelwise}. The W6A6/W8A8 configurations use freshly calibrated checkpoints, not historical records.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{VGGT.pdf}
+  \vspace{0.6em}
+  \includegraphics[width=\columnwidth]{Pi3.pdf}
+  \caption{Qualitative reconstruction comparisons under W6A6. The top panel shows VGGT and the bottom panel shows Pi3; each panel compares the full-precision reference with TAPTQ and representative PTQ baselines.}
+  \label{fig:combined_qualitative}
+\end{figure}
+
+The combined qualitative figure complements the aggregate metrics by showing the preservation of surface continuity and geometric structures under low-bit inference across both VGGT and Pi3.
+
+\subsection{C. Cross-Model Transfer}
+
+We next evaluate whether the proposed calibration-and-compensation recipe transfers beyond VGGT. Table~\ref{tab:cross_model_transfer} reports FP and \taptq{} for each additional model. The rows use each model's validated preprocessing and module scope, so the table is a transferability check within model families rather than a strict ranking across architectures.
+
+\begin{table*}[t]
+\caption{Cross-model transfer under W4A8 on 7Scenes dense. Results are mean/median Acc., Comp., and N.C. under the E1 full18 evaluator. All reported rows include both mean and median values.}
+\label{tab:cross_model_transfer}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\renewcommand{\arraystretch}{1.05}
+\begin{tabular}{@{}clrrrrrr@{}}
+\toprule
+\multirow{2}{*}{Model} & \multirow{2}{*}{Method}
+& \multicolumn{2}{c}{Acc.$\downarrow$}
+& \multicolumn{2}{c}{Comp.$\downarrow$}
+& \multicolumn{2}{c}{N.C.$\uparrow$} \\
+\cmidrule(lr){3-4}
+\cmidrule(lr){5-6}
+\cmidrule(lr){7-8}
+& & Mean & Med. & Mean & Med. & Mean & Med. \\
+\midrule
+Pi3 & FP & 0.015044 & 0.013594 & 0.022652 & 0.020248 & 0.685400 & 0.675094 \\
+Pi3 & \taptq{} & 0.015167 & 0.013515 & 0.019217 & 0.017985 & 0.647290 & 0.642528 \\
+\midrule
+DUSt3R & FP & 0.019343 & 0.017784 & 0.029319 & 0.023575 & 0.680308 & 0.678517 \\
+DUSt3R & \taptq{} & 0.023192 & 0.020138 & 0.027874 & 0.022460 & 0.674361 & 0.667755 \\
+\midrule
+MASt3R & FP & 0.025488 & 0.018195 & 0.031090 & 0.024432 & 0.665829 & 0.664456 \\
+MASt3R & \taptq{} & 0.032244 & 0.025711 & 0.028564 & 0.022799 & 0.654313 & 0.651454 \\
+\midrule
+OpenD4RT & FP & 0.039151 & 0.015880 & 0.049335 & 0.018543 & 0.647854 & 0.729544 \\
+OpenD4RT & \taptq{} & 0.039429 & 0.016178 & 0.048970 & 0.018367 & 0.645904 & 0.726407 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+The cross-model results support transferability, but also show that the Acc./Comp./N.C. trade-off is architecture-dependent. We therefore avoid presenting a single setting as universally optimal across all model families.
+
+\subsection{D. Ablation Study}
+
+\paragraph{Effect of Calibration Set Construction.}
+Table~\ref{tab:calib_ablation_7scenes} compares calibration-set construction strategies on 7Scenes under W4A8, using the same initial pool of 20 DTU training samples. ``All samples'' uses all 20 samples as a high-cost reference, while ``rand'' reports representative random draws. ``Stability score'' filters unstable samples before proportional $k$-means selection. The proposed construction is evaluated at budgets of 4 and 8 samples.
+
+\begin{table}[t]
+\caption{Ablation on calibration-set construction. All methods select samples from the same initial pool of 20 DTU training samples. Values are mean/median Acc., Comp., and N.C. on 7Scenes dense.}
+\label{tab:calib_ablation_7scenes}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.2pt}
+\begin{tabular}{@{}clrrrrrr@{}}
+\toprule
+Size & Method & \multicolumn{2}{c}{Acc.$\downarrow$} & \multicolumn{2}{c}{Comp.$\downarrow$} & \multicolumn{2}{c}{N.C.$\uparrow$} \\
+\cmidrule(lr){3-4}\cmidrule(lr){5-6}\cmidrule(lr){7-8}
+& & Mean & Med. & Mean & Med. & Mean & Med. \\
+\midrule
+20 & All samples & 0.0236 & 0.0094 & 0.0361 & 0.0143 & 0.6899 & 0.7930 \\
+\midrule
+\multirow{6}{*}{4}
+& rand (case1) & 0.0370 & 0.0146 & 0.0580 & 0.0241 & 0.6842 & 0.7835 \\
+& rand (case2) & 0.0354 & 0.0158 & 0.0495 & 0.0198 & 0.6864 & 0.7863 \\
+& rand (case3) & 0.0332 & 0.0134 & 0.0508 & 0.0178 & 0.6851 & 0.7856 \\
+& rand (case4) & 0.0307 & 0.0122 & 0.0468 & 0.0165 & 0.6836 & 0.7819 \\
+& Stability score & 0.0291 & 0.0122 & 0.0470 & 0.0161 & 0.6851 & 0.7852 \\
+& \textbf{TAPTQ} & 0.0295 & 0.0121 & 0.0460 & 0.0166 & 0.6868 & 0.7875 \\
+\midrule
+\multirow{5}{*}{8}
+& rand (case1) & 0.0300 & 0.0131 & 0.0496 & 0.0177 & 0.6868 & 0.7884 \\
+& rand (case2) & 0.0342 & 0.0139 & 0.0449 & 0.0158 & 0.6818 & 0.7806 \\
+& rand (case3) & 0.0318 & 0.0134 & 0.0478 & 0.0169 & 0.6842 & 0.7841 \\
+& Stability score & 0.0330 & 0.0137 & \textbf{0.0436} & 0.0164 & 0.6811 & 0.7805 \\
+& \textbf{TAPTQ} & \textbf{0.0189} & \textbf{0.0081} & \textbf{0.0359} & \textbf{0.0140} & \textbf{0.6943} & \textbf{0.7983} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Effect of the Compensation Threshold $\tau$.}
+We investigate the threshold used by the TRE-guided compensation module. The W4A8 one-factor sensitivity analysis uses $\rho=0.1$, $\tau=0.007$, and $r=128$, consistently with the W4A8 main-comparison setting. Increasing $\tau$ reduces the number of compensated modules, creating a fidelity--overhead trade-off rather than a universal optimum for every metric.
+
+\paragraph{Effect of Ternary Search and Compensation.}
+Table~\ref{tab:ternary_comp_ablation_7scenes} evaluates ternary search and module-wise compensation under W6A6. Ternary search reduces calibration time while preserving comparable reconstruction quality, and module-wise compensation provides an additional improvement.
+
+\begin{table}[t]
+\caption{Effect of ternary search and module-wise compensation under W6A6 on 7Scenes dense. Values are means; time denotes calibration time.}
+\label{tab:ternary_comp_ablation_7scenes}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{ccccc}
+\toprule
+Ternary search & Compensation & Acc.$\downarrow$ & Comp.$\downarrow$ & N.C.$\uparrow$ / Time \\
+\midrule
+Yes & Yes & 0.021 & 0.035 & 0.692 / 168.7 min \\
+Yes & No & 0.023 & 0.040 & 0.688 / 161.5 min \\
+No & Yes & 0.020 & 0.036 & 0.691 / 529.7 min \\
+No & No & 0.023 & 0.039 & 0.690 / 522.6 min \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Additional Module-Selection and Rank Analysis.}
+For completeness, the later artifact-backed analysis compares fixed-budget module selection and the effects of $\rho$, $\tau$, and rank. These results are reported separately from the main-comparison settings and use the explicitly stated fixed values for each one-factor sweep.
+
+\begin{table*}[t]
+\caption{\textbf{Matched-budget module selection on VGGT W4A8.} Results on 7Scenes dense (mean; lower Acc./Comp. and higher N.C. are better). All rows use the same quant-only checkpoint, DTU-8 calibration, $\rho=0.1$, and $r=128$. The default $\tau=0.007$ selects 62/144 modules; the other budgets use fixed-budget top-$K$ selection. Random uses seed 42. Bold indicates the best value within each budget and metric.}
+\label{tab:gate_ablation}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{5.5pt}
+\renewcommand{\arraystretch}{1.06}
+\begin{tabular}{c l c c c}
+\toprule
+Compensated modules & Selection criterion & Acc.$\downarrow$ & Comp.$\downarrow$ & N.C.$\uparrow$ \\
+\midrule
+\multirow{4}{*}{24/144 (16.7\%)}
+& TRE (ours) & \textbf{0.025874} & \textbf{0.044597} & 0.688276 \\
+& MSE        & 0.030371 & 0.045536 & 0.687632 \\
+& Hessian    & 0.030503 & 0.046976 & 0.685933 \\
+& Random     & 0.030941 & 0.046923 & \textbf{0.688319} \\
+\midrule
+\multirow{4}{*}{48/144 (33.3\%)}
+& TRE (ours) & \textbf{0.021498} & \textbf{0.038211} & \textbf{0.692796} \\
+& MSE        & 0.022470 & 0.038236 & 0.691454 \\
+& Hessian    & 0.024763 & 0.040115 & 0.689811 \\
+& Random     & 0.022949 & 0.039355 & 0.689175 \\
+\midrule
+\multirow{4}{*}{\textbf{62/144 (43.1\%)}} 
+& \textbf{TRE (ours; $\tau=0.007$)} & \textbf{0.019822} & 0.036430 & \textbf{0.695265} \\
+& MSE        & 0.022227 & 0.037820 & 0.690148 \\
+& Hessian    & 0.020257 & \textbf{0.035947} & 0.692438 \\
+& Random     & 0.022525 & 0.040430 & 0.691274 \\
+\midrule
+\multirow{4}{*}{72/144 (50.0\%)}
+& TRE (ours) & 0.019895 & \textbf{0.035862} & 0.694169 \\
+& MSE        & 0.020140 & 0.037739 & 0.692988 \\
+& Hessian    & \textbf{0.019011} & 0.036116 & \textbf{0.694760} \\
+& Random     & 0.021396 & 0.038489 & 0.691965 \\
+\midrule
+\multirow{4}{*}{96/144 (66.7\%)}
+& TRE (ours) & 0.019795 & \textbf{0.034718} & \textbf{0.694900} \\
+& MSE        & \textbf{0.019551} & 0.036839 & 0.692821 \\
+& Hessian    & 0.020036 & 0.036529 & 0.692752 \\
+& Random     & 0.024370 & 0.042894 & 0.689881 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+The matched-budget study reports all five completed budgets. TRE is strongest at the reported 48/144 and default 62/144 budgets, while the single-metric optimum can vary at larger budgets; the appropriate conclusion is therefore a favorable accuracy--geometry trade-off rather than universal dominance. The three one-factor hyperparameter sweeps are reported separately in Appendix~\ref{app:hyper_ablation}. Each table states the fixed values used for the other two hyperparameters; the results should therefore be read as independent sensitivity analyses rather than as a full factorial design. ETH3D ablations will be regenerated only after the Pi3-compatible dense-depth evaluation pipeline has been validated.
+
+\subsection{E. Deployment}
+
+We report end-to-end deployment measurements for the VGGT-1B aggregator on an NVIDIA B200. Each run processes eight $518^2$ frames, uses five warm-up iterations followed by 25 timed iterations, and measures latency with CUDA events. The W8A8 path uses the same \texttt{int8\_weight\_only} backend (torchao and \texttt{torch.compile(dynamic=True)}) as the low-rank compensation branch. These measurements are reported separately from the algorithmic reconstruction tables.
+
+\begin{table}[t]
+\caption{End-to-end VGGT-1B deployment on NVIDIA B200 with eight $518^2$ frames. Latency is measured after five warm-up iterations over 25 timed iterations using CUDA events. $W$ denotes quantized weight storage and Peak denotes peak GPU memory.}
+\label{tab:deployment}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lcccc}
+\toprule
+Configuration & Latency (ms) & Relative to FP & $W$ (GB) & Peak (GB) \\
+\midrule
+FP32 baseline & 401 & $1.00\times$ & 5.0 & 9.9 \\
+W8A8 static + compile & \textbf{74} & \textbf{5.42$\times$} & 1.7 & 4.1 \\
+W8-Abf16 + compile & 81 & $4.95\times$ & \textbf{1.4} & \textbf{3.8} \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+The low-rank compensation branch is deployed in the same \texttt{int8\_weight\_only} backend. Its per-module overhead is 0.041\,ms, corresponding to approximately 2.6\% of total latency for the typical 51 compensated modules and 7.5\% in the worst-case forced 144-module configuration. Thus, the compensation module is not merely a calibration-time artifact; its inference overhead remains bounded in the deployed implementation.
+
+\appendices
+\section{Implementation Details}
+\label{app:implementation_details}
+
+The appendix discloses the architecture-specific settings used in the experiments. For VGGT, all methods use the DTU-8 calibration set with a 4096-token budget. The ETH3D main-table TAPTQ rows use the selected bit-width-specific configuration listed in Table~\ref{tab:eth3d_channelwise}. The complete mapping from configuration to calibration protocol and result artifact is recorded in the experiment manifest.
+
+\subsection{Supplementary DTU and Configuration Results}
+
+Table~\ref{tab:dtu_supplementary} archives the DTU validation results formerly shown in the main table. They are retained as supplementary evidence because the repaired ETH3D $k_f=5$ protocol is used for the main cross-method comparison.
+
+\begin{table*}[t]
+\caption{Supplementary DTU validation results for VGGT. Each entry reports mean/median. Lower Acc./Comp. and higher N.C. are better.}
+\label{tab:dtu_supplementary}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{clrrrrrr}
+\toprule
+Bit & Method & \multicolumn{2}{c}{Acc.$\downarrow$} & \multicolumn{2}{c}{Comp.$\downarrow$} & \multicolumn{2}{c}{N.C.$\uparrow$} \\
+\cmidrule(lr){3-4}\cmidrule(lr){5-6}\cmidrule(lr){7-8}
+& & Mean & Med. & Mean & Med. & Mean & Med. \\
+\midrule
+\multirow{9}{*}{W4A8}
+& FP & 1.1855 & 0.7145 & 2.2195 & 1.3003 & 0.6893 & 0.7733 \\
+& RTN & 1.1822 & 0.6338 & 2.2015 & 0.7478 & 0.6843 & 0.7762 \\
+& PTQ4ViT & 1.1089 & 0.5998 & 1.9479 & 0.7466 & 0.6836 & 0.7741 \\
+& RepQ-ViT & 6.9974 & 4.8927 & 11.2423 & 3.6770 & 0.6555 & 0.7268 \\
+& ERQ & 1.0439 & 0.5682 & 1.8350 & 0.7284 & 0.6841 & 0.7735 \\
+& GPTQ & 1.0436 & 0.6059 & 1.8580 & 0.8658 & 0.6893 & 0.7793 \\
+& SmoothQuant & 1.2738 & 0.6459 & 2.1866 & 0.7530 & 0.6849 & 0.7778 \\
+& QuantVGGT & 1.3056 & 1.1314 & 1.4199 & 0.8459 & 0.5289 & 0.4952 \\
+& \taptq{} & 1.1573 & 0.6669 & 2.2094 & 1.0938 & 0.6826 & 0.7686 \\
+\midrule
+\multirow{9}{*}{W6A6}
+& FP & 1.1855 & 0.7145 & 2.2195 & 1.3003 & 0.6893 & 0.7733 \\
+& RTN & 1.0875 & 0.5961 & 1.9859 & 0.7216 & 0.6836 & 0.7754 \\
+& PTQ4ViT & 1.2467 & 0.7020 & 2.2082 & 0.9631 & 0.6780 & 0.7659 \\
+& RepQ-ViT & 1.0501 & 0.5669 & 1.7998 & 0.7705 & 0.6856 & 0.7762 \\
+& ERQ & 1.1166 & 0.6510 & 1.8507 & 0.8603 & 0.6872 & 0.7779 \\
+& GPTQ & 1.1084 & 0.6017 & 1.9216 & 0.7564 & 0.6849 & 0.7771 \\
+& SmoothQuant & 1.0757 & 0.5948 & 2.0171 & 0.8664 & 0.6937 & 0.7853 \\
+& QuantVGGT & 1.2870 & 1.1282 & 1.4357 & 0.8295 & 0.5286 & 0.5013 \\
+& \taptq{} & 1.2694 & 0.7349 & 2.0161 & 1.0425 & 0.6775 & 0.7635 \\
+\midrule
+\multirow{9}{*}{W8A8}
+& FP & 1.1855 & 0.7145 & 2.2195 & 1.3003 & 0.6893 & 0.7733 \\
+& RTN & 1.1386 & 0.6696 & 2.2208 & 1.1332 & 0.6885 & 0.7745 \\
+& PTQ4ViT & 1.1634 & 0.6921 & 2.0825 & 1.1920 & 0.6882 & 0.7726 \\
+& RepQ-ViT & 1.0263 & 0.5870 & 1.7704 & 0.8771 & 0.6902 & 0.7792 \\
+& ERQ & 1.0668 & 0.6092 & 1.9684 & 1.0211 & 0.6887 & 0.7757 \\
+& GPTQ & 1.1317 & 0.6596 & 2.1534 & 1.1241 & 0.6888 & 0.7751 \\
+& SmoothQuant & 1.1214 & 0.6456 & 2.0736 & 1.1374 & 0.6899 & 0.7764 \\
+& QuantVGGT & 1.2829 & 1.1240 & 1.4370 & 0.8564 & 0.5295 & 0.5004 \\
+& \taptq{} & 1.1649 & 0.6913 & 2.0890 & 1.1890 & 0.6917 & 0.7757 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{table*}[t]
+\caption{ETH3D comparison under the repaired 13-sequence $k_f=5$ protocol. Baselines use their standard implementations. For TAPTQ, each bit-width reports a reference and a selected hyperparameter configuration; the selected row is used in the main table. Lower Acc./Comp. and higher N.C. are better. W6A6/W8A8 selected configurations use freshly calibrated protocol-matched checkpoints; the invalid historical W6A6 record is excluded.}
+\label{tab:eth3d_channelwise}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{clrrrrrr}
+\toprule
+Bit & Method / TAPTQ configuration & \multicolumn{2}{c}{Acc.$\downarrow$} & \multicolumn{2}{c}{Comp.$\downarrow$} & \multicolumn{2}{c}{N.C.$\uparrow$} \\
+\cmidrule(lr){3-4}\cmidrule(lr){5-6}\cmidrule(lr){7-8}
+& & Mean & Med. & Mean & Med. & Mean & Med. \\
+\midrule
+\multirow{10}{*}{W4A8}
+& FP & 0.2909 & 0.1985 & 0.3628 & 0.2266 & 0.8433 & 0.9359 \\
+& RTN & 0.5522 & 0.4284 & 0.6585 & 0.4059 & 0.7456 & 0.8581 \\
+& PTQ4ViT & 0.5813 & 0.4490 & 0.7346 & 0.4119 & 0.7290 & 0.8403 \\
+& RepQ-ViT & 0.8464 & 0.7299 & 2.0768 & 1.5578 & 0.5511 & 0.5829 \\
+& ERQ & 0.5867 & 0.4540 & 0.7044 & 0.3986 & 0.7388 & 0.8470 \\
+& GPTQ & 0.4322 & 0.3052 & 0.5030 & 0.3082 & 0.7779 & 0.8947 \\
+& SmoothQuant & 0.6618 & 0.5428 & 0.8113 & 0.5057 & 0.7167 & 0.8182 \\
+& QuantVGGT & \textbf{0.2765} & 0.1978 & 0.3557 & 0.2339 & \textbf{0.8405} & 0.9364 \\
+\rowcolor{yellow!15}
+& \taptq{} reference ($\rho=.1,\tau=.007,r=256$) & 0.3608 & 0.2499 & 0.3947 & 0.2059 & 0.8079 & 0.9256 \\
+\rowcolor{yellow!15}
+& \taptq{} selected ($\rho=.01,\tau=.005,r=128$) & 0.2816 & \textbf{0.1929} & \textbf{0.3457} & \textbf{0.1921} & 0.8371 & \textbf{0.9367} \\
+\midrule
+\multirow{10}{*}{W6A6}
+& FP & 0.2909 & 0.1985 & 0.3628 & 0.2266 & 0.8433 & 0.9359 \\
+& RTN & 0.5261 & 0.4035 & 0.6172 & 0.3913 & 0.7581 & 0.8597 \\
+& PTQ4ViT & 0.4036 & 0.2869 & 0.4991 & 0.3136 & 0.7886 & 0.8951 \\
+& RepQ-ViT & 0.5841 & 0.4404 & 0.6938 & 0.3752 & 0.7406 & 0.8457 \\
+& ERQ & 0.5614 & 0.4335 & 0.6615 & 0.3596 & 0.7558 & 0.8631 \\
+& GPTQ & 0.4758 & 0.3594 & 0.6833 & 0.4487 & 0.7518 & 0.8518 \\
+& SmoothQuant & 0.6009 & 0.4515 & 0.7800 & 0.4911 & 0.7280 & 0.8258 \\
+& QuantVGGT & 0.2929 & 0.2035 & 0.3674 & 0.2321 & \textbf{0.8434} & 0.9363 \\
+\rowcolor{yellow!15}
+& \taptq{} reference ($\rho=.1,\tau=.007,r=16$) & 0.3870 & 0.2858 & 0.4463 & 0.2750 & 0.8003 & 0.9035 \\
+\rowcolor{yellow!15}
+& \taptq{} selected ($\rho=.01,\tau=.005,r=256$) & \textbf{0.2811} & \textbf{0.1814} & \textbf{0.3287} & \textbf{0.1955} & \textbf{0.8434} & \textbf{0.9441} \\
+\midrule
+\multirow{10}{*}{W8A8}
+& FP & 0.2909 & 0.1985 & 0.3628 & 0.2266 & 0.8433 & 0.9359 \\
+& RTN & 0.3572 & 0.2593 & 0.5105 & 0.3423 & 0.7844 & 0.8819 \\
+& PTQ4ViT & 0.2759 & 0.1779 & \textbf{0.3111} & 0.1863 & \textbf{0.8456} & \textbf{0.9470} \\
+& RepQ-ViT & 0.6149 & 0.4299 & 0.5957 & 0.3401 & 0.7637 & 0.8844 \\
+& ERQ & 0.5705 & 0.4403 & 0.6088 & 0.3654 & 0.7564 & 0.8681 \\
+& GPTQ & 0.3718 & 0.2787 & 0.5056 & 0.3292 & 0.7836 & 0.8808 \\
+& SmoothQuant & 0.3525 & 0.2628 & 0.4647 & 0.3018 & 0.7997 & 0.8879 \\
+& QuantVGGT & 0.2908 & 0.1990 & 0.3650 & 0.2275 & 0.8422 & 0.9345 \\
+\rowcolor{yellow!15}
+& \taptq{} reference ($\rho=.1,\tau=.007,r=16$) & 0.2786 & 0.1788 & 0.3127 & 0.1875 & 0.8443 & 0.9452 \\
+\rowcolor{yellow!15}
+& \taptq{} selected ($\rho=.01,\tau=.005,r=256$) & \textbf{0.2743} & \textbf{0.1691} & 0.3146 & \textbf{0.1795} & 0.8455 & 0.9468 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Hyperparameter Ablations}
+\label{app:hyper_ablation}
+
+We report the three hyperparameter sweeps as separate one-factor analyses. Each table changes only its first-column variable and fixes the other two VGGT TAPTQ settings in the caption. All entries are evaluated on 7Scenes dense under W4A8; lower Acc./Comp. and higher N.C. are better. The bold parameter value denotes the default value used by the verified ablation suite, while bold metrics denote the best value in that column.
+
+\begin{table}[t]
+\caption{\textbf{Ablation on tail ratio $\rho$ under W4A8.} Results on 7Scenes. Fixed $\tau=0.007$ and $r=128$.}
+\label{tab:rho_ablation}
+\centering
+\small
+\setlength{\tabcolsep}{3.2pt}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{c|cc cc cc}
+\toprule
+$\rho$ & \multicolumn{2}{c}{Acc.$\downarrow$} & \multicolumn{2}{c}{Comp.$\downarrow$} & \multicolumn{2}{c}{N.C.$\uparrow$} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
+ & Mean & Med. & Mean & Med. & Mean & Med. \\
+\midrule
+0.001 & 0.027630 & 0.011376 & 0.045169 & 0.015677 & 0.688565 & 0.789571 \\
+0.005 & 0.023311 & 0.009792 & 0.040084 & 0.014786 & 0.691024 & 0.793678 \\
+0.010 & 0.021955 & 0.009290 & 0.038935 & 0.015268 & 0.691973 & 0.794978 \\
+0.020 & 0.021063 & 0.008780 & 0.037502 & 0.014833 & 0.693023 & 0.796225 \\
+0.050 & 0.019664 & 0.008336 & \textbf{0.035320} & 0.014718 & 0.693997 & 0.797692 \\
+\textbf{0.100} & \textbf{0.018886} & \textbf{0.008108} & 0.035867 & \textbf{0.014019} & \textbf{0.694326} & \textbf{0.798332} \\
+0.500 & 0.020496 & 0.008527 & 0.037225 & 0.014545 & 0.692837 & 0.796400 \\
+1.000 & 0.023659 & 0.009530 & 0.039429 & 0.014456 & 0.689799 & 0.792253 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\begin{table}[t]
+\caption{\textbf{Ablation on compensation threshold $\tau$ under W4A8.} Results on 7Scenes. Fixed $\rho=0.1$ and $r=128$.}
+\label{tab:tau_ablation}
+\centering
+\small
+\setlength{\tabcolsep}{3.2pt}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{c|cc cc cc}
+\toprule
+$\tau$ & \multicolumn{2}{c}{Acc.$\downarrow$} & \multicolumn{2}{c}{Comp.$\downarrow$} & \multicolumn{2}{c}{N.C.$\uparrow$} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
+ & Mean & Med. & Mean & Med. & Mean & Med. \\
+\midrule
+0.001 & 0.020537 & 0.008571 & 0.037564 & \textbf{0.013989} & 0.692441 & 0.795647 \\
+0.003 & 0.022116 & 0.009014 & 0.037901 & 0.014260 & 0.692979 & 0.796600 \\
+0.005 & 0.020684 & 0.008571 & 0.037720 & 0.014213 & 0.693967 & 0.797300 \\
+\textbf{0.007} & \textbf{0.018886} & \textbf{0.008108} & \textbf{0.035867} & 0.014019 & \textbf{0.694326} & \textbf{0.798332} \\
+0.010 & 0.020896 & 0.008649 & 0.037935 & 0.014396 & 0.692245 & 0.795451 \\
+0.020 & 0.028973 & 0.012740 & 0.048458 & 0.017451 & 0.685754 & 0.785780 \\
+0.050 & 0.028466 & 0.012369 & 0.049936 & 0.017173 & 0.690080 & 0.790282 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\begin{table}[t]
+\caption{\textbf{Ablation on low-rank dimension $r$ under W4A8.} Results on 7Scenes. Fixed $\rho=0.1$ and $\tau=0.007$.}
+\label{tab:rank_ablation}
+\centering
+\small
+\setlength{\tabcolsep}{3.2pt}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{c|cc cc cc}
+\toprule
+Rank $r$ & \multicolumn{2}{c}{Acc.$\downarrow$} & \multicolumn{2}{c}{Comp.$\downarrow$} & \multicolumn{2}{c}{N.C.$\uparrow$} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
+ & Mean & Med. & Mean & Med. & Mean & Med. \\
+\midrule
+8 & 0.027066 & 0.011533 & 0.045646 & 0.016145 & 0.690162 & 0.791503 \\
+16 & 0.025325 & 0.010828 & 0.045779 & 0.016523 & 0.691264 & 0.792966 \\
+32 & 0.020863 & 0.008915 & 0.039108 & 0.015731 & 0.692756 & 0.795568 \\
+64 & 0.019590 & 0.008517 & 0.037044 & 0.014933 & 0.692338 & 0.795237 \\
+\textbf{128} & 0.018886 & \textbf{0.008108} & 0.035867 & \textbf{0.014019} & 0.694326 & \textbf{0.798332} \\
+256 & \textbf{0.018472} & 0.008117 & \textbf{0.033707} & 0.014021 & \textbf{0.694432} & 0.798279 \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+The tail-ratio and rank sweeps favor larger compensation capacity in this artifact-backed setting, while the threshold sweep exposes the expected fidelity--coverage trade-off: $\tau=0.005$ improves Acc./Comp., whereas the default $\tau=0.007$ gives the highest N.C. These sensitivity results are not used to replace the main-comparison settings without a protocol-level revalidation.
+
+\end{document}

@@ -53,7 +53,8 @@ def get_args_parser():
     parser.add_argument("--freeze", action="store_true")
     parser.add_argument("--use_proj", action="store_true")
     parser.add_argument("--kf", type=int, default=2, help="key frame")
-    parser.add_argument('--dataset', type=str, default='7s', help='Dataset type: 7s or nr')
+    parser.add_argument('--dataset', type=str, default='7s', help='Dataset type: 7s, nr, dtu, or eth3d')
+    parser.add_argument('--seq_id_map', type=str, default=None, help='Frozen sequence-to-frame mapping required for ETH3D')
     parser.add_argument('--dataset_path', type=str, default="Null", help='Dataset path for 7s or nr')
 
     parser.add_argument('--class_mode', type=str, default='all', help='Only for the categories when selecting CO3D as the calibration set')
@@ -537,7 +538,8 @@ def main(args):
     dtype = torch.bfloat16 if torch.cuda.is_available() and torch.cuda.get_device_capability()[0] >= 8 else torch.float16
 
 
-    from eval.data import SevenScenes, NRGBD
+    from eval.data import SevenScenes, NRGBD, DTU
+    from eval.eth3d_data import ETH3D
     from eval.utils import accuracy, completion
     if args.size == 512:
         resolution = (512, 384)
@@ -569,6 +571,29 @@ def main(args):
             kf_every=args.kf,
         ),
         }
+    elif args.dataset == "dtu":
+        datasets_all = {
+            "DTU": DTU(
+            split="test",
+            ROOT=args.dataset_path,
+            resolution=resolution,
+            kf_every=args.kf,
+            ),
+        }
+    elif args.dataset == "eth3d":
+        if args.seq_id_map is None:
+            raise ValueError("ETH3D requires --seq_id_map")
+        datasets_all = {
+            "ETH3D": ETH3D(
+                split="test",
+                ROOT=args.dataset_path,
+                seq_id_map=args.seq_id_map,
+                resolution=resolution,
+            ),
+        }
+    else:
+
+        raise ValueError(f"Unsupported dataset: {args.dataset}")
 
     SEEN_CATEGORIES = ["apple"]
     if args.class_mode == "apple":
@@ -800,20 +825,6 @@ def main(args):
                 pts_gt_all_masked = pts_gt_all_masked.reshape(-1, 3)
                 images_all_masked = images_all_masked.reshape(-1, 3)
 
-                # If number of points exceeds threshold, sample by points
-                if pts_all_masked.shape[0] > 999999:
-                    sample_indices = np.random.choice(
-                        pts_all_masked.shape[0], 999999, replace=False
-                    )
-                    pts_all_masked = pts_all_masked[sample_indices]
-                    images_all_masked = images_all_masked[sample_indices]
-
-                # Apply the same sampling to GT point cloud
-                if pts_gt_all_masked.shape[0] > 999999:
-                    sample_indices_gt = np.random.choice(
-                        pts_gt_all_masked.shape[0], 999999, replace=False
-                    )
-                    pts_gt_all_masked = pts_gt_all_masked[sample_indices_gt]
 
                 if args.use_proj:
 

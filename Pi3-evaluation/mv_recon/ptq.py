@@ -2,7 +2,6 @@ import os
 import json
 import torch
 import numpy as np
-import open3d as o3d
 import os.path as osp
 import hydra
 import logging
@@ -995,6 +994,8 @@ def generate_compensation_model_from_module(q_model, calib_loader, seq_id_map):
     return q_model
 
 def evaluation(hydra_cfg, model, logger):
+    import open3d as o3d
+
     all_eval_datasets: DictConfig = hydra_cfg.eval_datasets  # see configs/evaluation/mv_recon.yaml
     all_data_info: DictConfig     = hydra_cfg.data           # see configs/data
 
