@@ -1,67 +1,75 @@
 # TAPTQ — Tail-Aware Post-Training Quantization for 3D Reconstruction
 
-TAPTQ 是一套面向 3D 几何模型（以 VGGT 为代表的多视图重建 Transformer）的
-**尾部分布感知训练后量化（Post-Training Quantization）**框架，并配套一套统一的
-多视图重建（multi-view reconstruction, MV-Recon）评测与对比基线。
+English | [简体中文](README.zh-CN.md)
 
-核心特点：
+TAPTQ is a **tail-aware post-training quantization (PTQ)** framework for 3D geometry
+models, including multi-view reconstruction Transformers such as VGGT. It includes
+a unified multi-view reconstruction (MV-Recon) evaluation pipeline and baseline
+implementations.
 
-- **统一量化层**：`PTQ/quant_layers` 同时支持 W4A8 / W6A6 / W8A8，并可在
-  per-tensor / per-channel / **per-output-channel（channel-wise）** 多种量化粒度间切换。
-- **QwT 动态补偿**：`mv_recon/taptq.py` 在冻结校准参数之上做模块级尾部补偿
-  （tail-aware compensation），缓解低比特下的几何退化。
-- **统一评测协议**：`mv_recon/eval.py` 对 7-Scenes（dense, `kf=40`）与 ETH3D
-  （13 sequences, `kf=5`）使用一致的 frozen frame-map、Sim(3)+ICP 点云对齐，以及
-  Acc. / Comp. / N.C. 计算，保证不同方法公平可比。
-- **多基线对齐**：`mv_recon/external_baselines.py` 与 `quant_layers` 内集成了
-  RTN、PTQ4ViT、RepQ-ViT、ERQ、GPTQ、SmoothQuant、SVDQuant 与 QuantVGGT 的
-  同协议实现。
+Key features:
+
+- **Unified quantization layers**: `PTQ/quant_layers` supports W4A8, W6A6, and W8A8,
+  with configurable per-tensor, per-channel, and **per-output-channel (channel-wise)**
+  quantization.
+- **QwT compensation**: `mv_recon/taptq.py` applies module-wise tail-aware
+  compensation with the calibration parameters held fixed to reduce geometric
+  degradation at low bit widths.
+- **Unified evaluation protocol**: `mv_recon/eval.py` evaluates 7-Scenes
+  (dense, `kf=40`) and ETH3D (13 sequences, `kf=5`) using fixed frame maps,
+  Sim(3)+ICP point-cloud alignment, and consistent Acc. / Comp. / N.C. computation
+  for fair comparisons across methods.
+- **Baselines under a shared protocol**: `mv_recon/external_baselines.py` and
+  `quant_layers` integrate RTN, PTQ4ViT, RepQ-ViT, ERQ, GPTQ, SmoothQuant,
+  SVDQuant, and QuantVGGT under the same evaluation protocol.
 
 ---
 
-## 仓库结构
+## Repository Structure
 
 ```
 TAPTQ/
-├── Pi3-evaluation/            # 主代码（统一评测 + TAPTQ 量化/补偿）
-│   ├── mv_recon/              # 多视图重建评测与 TAPTQ 主流程
-│   │   ├── taptq.py          # 校准 / 量化评估 / QwT 补偿 / e2e
-│   │   ├── eval.py           # 统一 Acc./Comp./N.C. 评测
-│   │   ├── ptq.py            # 量化模型构建
-│   │   ├── baseline_quant.py # 各基线量化封装
-│   │   └── external_*.py     # 外部基线 / 基础模型对接
-│   ├── PTQ/                   # 量化层与校准工具
-│   │   ├── quant_layers/     # linear/conv 与 baseline 量化器
-│   │   ├── vggt/             # VGGT 模型接入
-│   │   └── utils/            # Hessian 校准、baseline 校准
-│   ├── configs/              # Hydra 配置（保持入库）
-│   ├── datasets/             # 预处理脚本与 seq-id maps
-│   └── deployment/           # W4A8(int8) / W8A8(triton) 部署与验证
-├── projects/QuantVGGT/        # QuantVGGT 同协议评测对接
-├── third_party/              # 外部基线源码（各自独立 git，默认不入库）
-├── vendor/                   # 第三方数据/代码（默认不入库）
-├── doc/                      # 实验计划、论文草稿、结果清单与 manifest
-└── scripts/                  # 批量实验脚本
+├── Pi3-evaluation/             # Main code: unified evaluation and TAPTQ quantization/compensation
+│   ├── mv_recon/               # Multi-view reconstruction evaluation and TAPTQ workflow
+│   │   ├── taptq.py            # Calibration / quantized evaluation / QwT compensation / e2e
+│   │   ├── eval.py             # Unified Acc./Comp./N.C. evaluation
+│   │   ├── ptq.py              # Quantized model construction
+│   │   ├── baseline_quant.py   # Quantization wrappers for baselines
+│   │   └── external_*.py       # External baseline and base model integration
+│   ├── PTQ/                   # Quantization layers and calibration utilities
+│   │   ├── quant_layers/      # Linear/conv quantizers and baseline quantizers
+│   │   ├── vggt/              # VGGT model integration
+│   │   └── utils/             # Hessian-based and baseline calibration
+│   ├── configs/               # Hydra configurations tracked in Git
+│   ├── datasets/              # Preprocessing scripts and sequence ID maps
+│   └── deployment/            # W4A8 (int8) / W8A8 (Triton) deployment and validation
+├── projects/QuantVGGT/         # QuantVGGT integration with the shared evaluation protocol
+├── third_party/               # External baseline repositories, excluded from Git by default
+├── vendor/                    # Third-party data/code, excluded from Git by default
+├── doc/                       # Experiment plans, paper drafts, result inventories, and manifests
+└── scripts/                   # Batch experiment scripts
 ```
 
-> 说明：`third_party/` 与 `vendor/` 内为各自带独立 git 仓库的外部基线，已在
-> `.gitignore` 中排除，克隆后需自行放置；它们不是 TAPTQ 主体代码的一部分。
+> External baselines in `third_party/` and `vendor/` have their own Git repositories
+> and are excluded by `.gitignore`. Add them separately after cloning; they are not
+> part of the TAPTQ core code.
 
 ---
 
-## 快速开始
+## Quick Start
 
 ```bash
 cd Pi3-evaluation
 
-# 1) 校准并保存量化参数（通常只需一次）
+# 1) Calibrate and save quantization parameters (usually needed only once)
 python mv_recon/taptq.py \
   ++mode=calib \
   ptq.bit=[8,8] ptq.search_mode=ternary ptq.linear_channelwise=true \
   'optim_datasets=[DTU_train_8]' \
   ckpt.fmt=pt ckpt.path=/path/to/ckpt.pt
 
-# 2) 复用已有校准，做 QwT 补偿后评测（适合反复对比）
+# 2) Reuse calibration parameters, apply QwT compensation, and evaluate
+#    (useful for repeated comparisons)
 python mv_recon/taptq.py \
   ++mode=compensate_eval \
   'eval_datasets=[ETH3D]' \
@@ -71,48 +79,56 @@ python mv_recon/taptq.py \
   ++compensate.strategy=module ++compensate.tail_ratio=0.01 \
   ++compensate.tau_thr=0.005 ++compensate.rank=256
 
-# 3) 仅加载量化参数做纯量化评估（补偿前对照）
+# 3) Load quantization parameters and evaluate without compensation
 python mv_recon/taptq.py ++mode=test 'eval_datasets=[ETH3D]' ...
 ```
 
-可用 `mode`：
+Available `mode` values:
 
-| mode | 行为 |
+| Mode | Behavior |
 |---|---|
-| `calib` | 校准并保存量化参数，不评估、不补偿 |
-| `calib_compensate` | 校准 + QwT 补偿并保存，不评估 |
-| `compensate_eval` | 加载已有参数，补偿后评估 |
-| `test` | 加载已有参数，直接量化评估 |
-| `e2e` | 校准 → 量化评估 → 补偿 → 补偿后评估并保存 |
+| `calib` | Calibrate and save quantization parameters, without evaluation or compensation |
+| `calib_compensate` | Calibrate, apply QwT compensation, and save, without evaluation |
+| `compensate_eval` | Load saved parameters, apply compensation, and evaluate |
+| `test` | Load saved parameters and evaluate the quantized model directly |
+| `e2e` | Calibrate → evaluate the quantized model → compensate → evaluate and save the compensated model |
 
 ---
 
-## 量化粒度 / 超参约定
+## Quantization Granularity and Hyperparameters
 
-ETH3D 主表采用各 bit-width 的**选定配置**（超参列于论文附录，不在此展开粒度术语）：
+The main ETH3D results use the **selected configuration** for each bit width.
+Hyperparameters are listed in the paper appendix; quantization granularity
+terminology is not detailed here.
 
-| 位宽 | 参考配置 `(ρ, τ, r)` | 选定配置 `(ρ, τ, r)` |
+| Bit Width | Reference Configuration `(ρ, τ, r)` | Selected Configuration `(ρ, τ, r)` |
 |---|---|---|
 | W4A8 | (0.1, 0.007, 256) | (0.01, 0.005, 128) |
 | W6A6 | (0.1, 0.007, 16)  | (0.01, 0.005, 256) |
 | W8A8 | (0.1, 0.007, 16)  | (0.01, 0.005, 256) |
 
-> 历史非协议匹配的 W6A6 量化记录已废弃，当前 W6A6 / W8A8 channel-wise 结果均来自
-> 与 W8A8 同一链路（`DTU_train_8 + ternary + channel-wise`）重新校准的 checkpoint。
+> Earlier W6A6 quantization records that did not follow the shared protocol are
+> deprecated. The current channel-wise W6A6 and W8A8 results use checkpoints
+> recalibrated with the same pipeline as W8A8:
+> `DTU_train_8 + ternary + channel-wise`.
 
 ---
 
-## 数据集与产物
+## Datasets and Artifacts
 
-- 校准集：`DTU_train_8`（8 scans × 10 frames，4096-token 预算）。
-- 评测集：7-Scenes dense（`kf=40`）、ETH3D（13 sequences，`kf=5`，Pi3 兼容冻结帧表）。
-- 模型权重、大规模点云与 `.pth/.pt/.ply/.npy` 等数据文件已被 `.gitignore` 排除，
-  评测产物与中间数据请放置于本地或外部存储（如 CephFS），不要入库。
+- **Calibration**: `DTU_train_8` (8 scans × 10 frames, with a 4096-token budget).
+- **Evaluation**: 7-Scenes dense (`kf=40`) and ETH3D (13 sequences, `kf=5`),
+  using Pi3-compatible fixed frame maps.
+- Model weights, large point clouds, and data files such as `.pth`, `.pt`, `.ply`,
+  and `.npy` are excluded by `.gitignore`. Store evaluation outputs and intermediate
+  data locally or on external storage such as CephFS, and keep them out of Git.
 
 ---
 
-## 结果
+## Results
 
-主实验结果（含 ETH3D 选定配置、各基线同协议对齐）记录在
-`doc/TMM_EXPERIMENTS_RESTRUCTURE_DRAFT.tex` 与 `doc/tmm_*_manifest.json`。
-每个实验的（配置 → 校准协议 → 结果产物）映射由 manifest 完整留存，便于复现。
+The main experimental results, including the selected ETH3D configurations and
+baseline comparisons under the shared protocol, are recorded in
+`doc/TMM_EXPERIMENTS_RESTRUCTURE_DRAFT.tex` and `doc/tmm_*_manifest.json`.
+The manifests record the configuration, calibration protocol, and output artifacts
+for each experiment to support reproducibility.
